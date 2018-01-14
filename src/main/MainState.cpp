@@ -1,0 +1,94 @@
+// Copyright 2010 Google Code project roguedm development team.
+
+// This file is part of RogueDM.
+//
+// RogueDM is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// RogueDM is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * \file MainState.cpp
+ * \brief File containing the MainState class definitions.
+ */
+
+#include "MainState.hpp"
+
+namespace roguedm_main {
+
+MainState::MainState() {
+  status = 0;
+}
+
+MainState::~MainState() {}
+
+roguedm::StateInterface* MainState::execute() {
+
+  // SDL init checks
+  if(-1==SDL_Init(SDL_INIT_VIDEO)) {
+    status = 1;
+    printf(_(RDM_STR_SDL_ERROR), SDL_GetError());
+    return RDM_STATE_NO_STATE;
+  }
+
+  Game *gameInstance = new Game();
+
+  roguedm::IOLocal *ioLocalInstance =
+    roguedm::IOLocal::instance(RDM_IOLOCAL_MODE_CREATE);
+  if(0!=ioLocalInstance->getErrorCode()) {
+    SDL_Quit();
+    status = ioLocalInstance->getErrorCode();
+    return RDM_STATE_NO_STATE;
+  }
+
+  roguedm::IORemote *ioRemoteInstance =
+    roguedm::IORemote::instance(RDM_IOREMOTE_MODE_CREATE);
+  if(0!=ioRemoteInstance->getErrorCode()) {
+    SDL_Quit();
+    status = ioRemoteInstance->getErrorCode();
+    return RDM_STATE_NO_STATE;
+  }
+
+
+  int update;
+  update = SDL_GetTicks();
+
+  int done = 0;
+  while(!done) {
+
+    // input checking and scene drawing (game loop)
+    if ((SDL_GetTicks() - update) > 33) {
+      update = SDL_GetTicks();
+      ioLocalInstance->update();
+      done = ioLocalInstance->mustHalt();
+      ioRemoteInstance->update();
+      gameInstance->update();
+    }
+
+  }
+
+  //Deletes
+  delete gameInstance;
+  roguedm::IORemote::instance(RDM_IOREMOTE_MODE_DELETE);
+  roguedm::IOLocal::instance(RDM_IOLOCAL_MODE_DELETE);
+
+  // Quit SDL
+  SDL_Quit();
+
+  return RDM_STATE_NO_STATE;
+
+}
+
+int MainState::getStatus() {
+  return status;
+}
+
+} // namespace roguedm_main

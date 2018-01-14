@@ -1,0 +1,45 @@
+// Copyright 2010 Google Code project roguedm development team.
+
+// This file is part of RogueDM.
+//
+// RogueDM is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// RogueDM is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * \file strings.hpp
+ * \brief File containing the strings used by the application.
+ * This file should be used to store all strings exposed to the user interface.
+ * By this way easing the translators job.
+ */
+
+#ifndef STRINGS_HPP
+#define STRINGS_HPP
+
+#include <locale>
+
+#define _ gettext
+
+#define RDM_STR_VERSION          "Rogue's Dungeon Master Version dev1"
+#define RDM_STR_USAGE_VERSION    "--version"
+#define RDM_STR_USAGE_HELP       "--help"
+#define RDM_STR_USAGE_LOCAL      "--local"
+#define RDM_STR_USAGE            "usage: %s [--version] [--help] [--local]"
+
+#define RDM_STR_USAGE_UKNOWN     "Uknown program argument: %s\n"
+
+#define RDM_STR_SDL_ERROR        "SDL error reported: %s\n"
+#define RDM_STR_SDL_NET_ERROR    "SDLNet error reported: %s\n"
+
+#define RDM_STR_NOT_NETWORKING   "Networking disabled...\n"
+
+#endif // STRINGS_HPP
