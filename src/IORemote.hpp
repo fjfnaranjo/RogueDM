@@ -34,8 +34,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_net.h>
 
-#include <cstdio>
-
 #define RDM_IOREMOTE_MODE_CREATE 0
 #define RDM_IOREMOTE_MODE_RESET 1
 #define RDM_IOREMOTE_MODE_DELETE 2

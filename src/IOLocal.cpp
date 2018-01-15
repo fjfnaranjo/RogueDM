@@ -67,7 +67,7 @@ void IOLocal::update() {
   eventsManager();
 
   // Repaint main interface
-  SDL_RenderPresent(renderer);
+  SDL_RenderClear(renderer);
 
   // Panels
   drawBox        (2,0,0,maxCols,maxRows);
@@ -313,24 +313,25 @@ IOLocal::IOLocal() {
   errorCode = 0;
   appDone = 0;
 
-  SDL_CreateWindowAndRenderer(
+  int createStatus = SDL_CreateWindowAndRenderer(
     800, 500,
-    0,
+	SDL_WINDOW_RESIZABLE,
     &window,
 	&renderer
   );
 
-  if(NULL==window) {
+  if(createStatus || NULL==window || NULL==renderer) {
     errorCode = 2;
-    printf(_(RDM_STR_SDL_ERROR), SDL_GetError());
+    SDL_LogError(
+      SDL_LOG_CATEGORY_APPLICATION,
+      _(RDM_STR_SDL_ERROR),
+	  SDL_GetError()
+	);
     return;
   }
 
-  if(NULL==renderer) {
-    errorCode = 2;
-    printf(_(RDM_STR_SDL_ERROR), SDL_GetError());
-    return;
-  }
+  // Clear color
+  SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
 
   // Words, comand line and history init
   initWordTypes();
@@ -852,7 +853,7 @@ void IOLocal::colorizeWordType(
   int bgg,
   int bgb)
 {
-  // TODO: SDL2 Removed colorization.
+  // TODO: SDL2Migration Add support for colorization
   return;
   int i;
   SDL_Color colors[256];
@@ -873,7 +874,7 @@ void IOLocal::colorizeWordType(
 
 // Recalculate window coords and zones after term resize
 void IOLocal::initScreenSize() {
-  // TODO: SDL2 Do this other way...
+  // TODO: Add support for window resizing
   int ww, wh;
   SDL_GetWindowSize(window, &ww, &wh);
   maxCols=floor(ww/txtCWidth)-1;
@@ -1049,8 +1050,8 @@ void IOLocal::stampChar(
   SDL_Rect dstrect;
   dstrect.x=dx*txtCWidth;
   dstrect.y=dy*txtCHeight;
-  dstrect.w=0;
-  dstrect.h=0;
+  dstrect.w=txtCWidth;
+  dstrect.h=txtCHeight;
   SDL_RenderCopy(renderer,wordTypes[wType].charsTexture,&srcrect,&dstrect);
 
 }
@@ -1074,16 +1075,13 @@ void IOLocal::eventsManager() {
 
 void IOLocal::processKey(SDL_Event* event) {
 
-  // TODO: SDL2 Removed key processing
   // TODO: Resolve substitution/replace mode
-  /*
+
   Word emptyWord;
   emptyWord.wordContent = RDM_WEMPTY;
   emptyWord.wordClass = RDM_WCLASS_NORMAL;
 
   SDL_KeyboardEvent kevent = event->key;
-
-  wint_t inputCh = kevent.keysym.unicode;
 
   switch(kevent.keysym.sym) {
     // Space
@@ -1284,14 +1282,10 @@ void IOLocal::processKey(SDL_Event* event) {
     // Disable modificators
     case SDLK_RSHIFT:
     case SDLK_LSHIFT:
-    case SDLK_RSUPER:
-    case SDLK_LSUPER:
     case SDLK_LALT:
     case SDLK_RALT:
     case SDLK_LCTRL:
     case SDLK_RCTRL:
-    case SDLK_LMETA:
-    case SDLK_RMETA:
     case SDLK_MODE:
     case SDLK_MENU:
     case SDLK_KP_ENTER:
@@ -1300,10 +1294,15 @@ void IOLocal::processKey(SDL_Event* event) {
 
     // Other wide characteres
     default:
+      // TODO: SDL2New Implement SDL2 text input support
+      char* key_char = (char*)SDL_GetKeyName(kevent.keysym.sym);
+      key_char[0] = tolower(key_char[0]);
+      wchar_t key_wchar;
+      mbstowcs(&key_wchar, key_char , 1);
       if(0==currentWord)
         commandLine[currentWord].wordClass = RDM_WCLASS_NORMAL;
       if(wordRShift==0) {
-        commandLine[currentWord].wordContent += inputCh;
+        commandLine[currentWord].wordContent += key_wchar;
       } else {
         std::wstring leftPart = commandLine[currentWord].wordContent.substr(
           0,
@@ -1314,14 +1313,14 @@ void IOLocal::processKey(SDL_Event* event) {
             wordRShift
         );
         commandLine[currentWord].wordContent = leftPart;
-        commandLine[currentWord].wordContent += inputCh;
+        commandLine[currentWord].wordContent += key_wchar;
         commandLine[currentWord].wordContent += rightPart;
       }
       historyCurrent = 0;
       break;
 
   }
-*/
+
 }
 
 void IOLocal::tryAutocompletion() {

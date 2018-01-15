@@ -33,9 +33,13 @@ MainState::~MainState() {}
 roguedm::StateInterface* MainState::execute() {
 
   // SDL init checks
-  if(-1==SDL_Init(SDL_INIT_VIDEO)) {
+  if(0!=SDL_Init(SDL_INIT_VIDEO)) {
     status = 1;
-    printf(_(RDM_STR_SDL_ERROR), SDL_GetError());
+    SDL_LogError(
+      SDL_LOG_CATEGORY_APPLICATION,
+      _(RDM_STR_SDL_ERROR),
+	  SDL_GetError()
+	);
     return RDM_STATE_NO_STATE;
   }
 
@@ -43,17 +47,19 @@ roguedm::StateInterface* MainState::execute() {
 
   roguedm::IOLocal *ioLocalInstance =
     roguedm::IOLocal::instance(RDM_IOLOCAL_MODE_CREATE);
-  if(0!=ioLocalInstance->getErrorCode()) {
+  int ioLocalErrorCode = ioLocalInstance->getErrorCode();
+  if(0!=ioLocalErrorCode) {
     SDL_Quit();
-    status = ioLocalInstance->getErrorCode();
+    status = ioLocalErrorCode;
     return RDM_STATE_NO_STATE;
   }
 
   roguedm::IORemote *ioRemoteInstance =
     roguedm::IORemote::instance(RDM_IOREMOTE_MODE_CREATE);
-  if(0!=ioRemoteInstance->getErrorCode()) {
+  int ioRemoteErrorCode = ioRemoteInstance->getErrorCode();
+  if(0!=ioRemoteErrorCode) {
     SDL_Quit();
-    status = ioRemoteInstance->getErrorCode();
+    status = ioRemoteErrorCode;
     return RDM_STATE_NO_STATE;
   }
 
@@ -68,6 +74,7 @@ roguedm::StateInterface* MainState::execute() {
     if ((SDL_GetTicks() - update) > 33) {
       update = SDL_GetTicks();
       ioLocalInstance->update();
+      // TODO: Check if remote and game instances should issue a 'done' also
       done = ioLocalInstance->mustHalt();
       ioRemoteInstance->update();
       gameInstance->update();

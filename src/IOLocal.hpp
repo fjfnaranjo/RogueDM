@@ -36,7 +36,6 @@
 #include <vector>
 #include <map>
 #include <cmath>
-#include <cstdio>
 
 #define RDM_IOLOCAL_MODE_CREATE 0
 #define RDM_IOLOCAL_MODE_RESET 1

@@ -32,14 +32,14 @@ IORemote::IORemote() {
   errorCode = 0;
 
   if(configuration->getDoNotUseNetworking()) {
-    printf(_(RDM_STR_NOT_NETWORKING));
+    SDL_Log(_(RDM_STR_NOT_NETWORKING));
     return;
   }
 
   // Init SDL Net
   if(-1==SDLNet_Init()) {
     errorCode = 3;
-    printf(_(RDM_STR_SDL_NET_ERROR), SDLNet_GetError());
+    SDL_Log(_(RDM_STR_SDL_NET_ERROR), SDLNet_GetError());
   }
 
 };
