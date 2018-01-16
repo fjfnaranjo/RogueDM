@@ -1065,6 +1065,13 @@ void IOLocal::eventsManager() {
       case SDL_QUIT:
         appDone = 1;
         break;
+      case SDL_WINDOWEVENT:
+        switch (event.window.event)  {
+          case SDL_WINDOWEVENT_SIZE_CHANGED:
+            initScreenSize();
+            break;
+        }
+        break;
       case SDL_KEYDOWN:
         processKey(&event);
         break;
