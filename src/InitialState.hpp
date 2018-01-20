@@ -1,4 +1,4 @@
-// Copyright 2010 Google Code project roguedm development team.
+// Copyright 2018 Fco. Jose Fdez. Naranjo AKA github.com/fjfnaranjo
 
 // This file is part of RogueDM.
 //
