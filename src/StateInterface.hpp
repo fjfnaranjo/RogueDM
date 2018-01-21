@@ -29,7 +29,7 @@
 /**
  * \brief Value to report that no more states should be executed.
  */
-#define RDM_STATE_NO_STATE 0
+#define RDM_STATE_NO_STATE nullptr
 
 namespace roguedm {
 
@@ -61,7 +61,7 @@ class StateInterface
   public:
 
     /** The state main code. */
-    virtual StateResponse execute() = 0;
+    virtual StateResponse execute() =0;
 
 };
 
