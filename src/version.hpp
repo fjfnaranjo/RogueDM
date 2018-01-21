@@ -18,6 +18,7 @@
 /**
  * \file version.hpp
  * \brief File containing the current version strings.
+ *
  * This file is used by the building chain to report build-time information
  * to the application final code.
  */
@@ -25,6 +26,7 @@
 #ifndef VERSION_HPP
 #define VERSION_HPP
 
+#define RDM_STR_VERSION_FULL    "1.0a1.dev9999"
 #define RDM_STR_VERSION_MAJOR   "1"
 #define RDM_STR_VERSION_MINOR   "0"
 #define RDM_STR_VERSION_PRE     "a1"
