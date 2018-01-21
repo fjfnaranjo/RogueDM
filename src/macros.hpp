@@ -41,8 +41,8 @@
     virtual ~ClassName() =default;                                    \
   protected :                                                         \
     ClassName() =default;                                             \
-    ClassName(const ClassName & ) =default;                           \
-    ClassName & operator = (const ClassName & ) { return *this ; }    \
+    ClassName(const ClassName & ) =delete;                            \
+    ClassName & operator = (const ClassName & ) =delete;              \
   private :
 
 #endif // MACROS_HPP
