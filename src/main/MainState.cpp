@@ -46,7 +46,7 @@ roguedm::StateResponse MainState::execute() {
   Game *gameInstance = new Game();
 
   roguedm::IOLocal *ioLocalInstance =
-    roguedm::IOLocal::instance(RDM_IOLOCAL_MODE_CREATE);
+    roguedm::IOLocal::instance(roguedm::IOLocal::SINGLETON_CREATE);
   int ioLocalErrorCode = ioLocalInstance->getErrorCode();
   if(0!=ioLocalErrorCode) {
     SDL_Quit();
@@ -55,7 +55,7 @@ roguedm::StateResponse MainState::execute() {
   }
 
   roguedm::IORemote *ioRemoteInstance =
-    roguedm::IORemote::instance(RDM_IOREMOTE_MODE_CREATE);
+    roguedm::IORemote::instance(roguedm::IORemote::SINGLETON_CREATE);
   int ioRemoteErrorCode = ioRemoteInstance->getErrorCode();
   if(0!=ioRemoteErrorCode) {
     SDL_Quit();
@@ -84,8 +84,8 @@ roguedm::StateResponse MainState::execute() {
 
   //Deletes
   delete gameInstance;
-  roguedm::IORemote::instance(RDM_IOREMOTE_MODE_DELETE);
-  roguedm::IOLocal::instance(RDM_IOLOCAL_MODE_DELETE);
+  roguedm::IORemote::instance(roguedm::IORemote::SINGLETON_DELETE);
+  roguedm::IOLocal::instance(roguedm::IOLocal::SINGLETON_DELETE);
 
   // Quit SDL
   SDL_Quit();

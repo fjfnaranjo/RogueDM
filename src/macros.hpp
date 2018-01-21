@@ -37,12 +37,61 @@
  * interfaces.
  */
 #define RDM_DECLARE_CLASS_AS_INTERFACE(ClassName)                     \
-  public :                                                            \
+  public:                                                             \
     virtual ~ClassName() =default;                                    \
-  protected :                                                         \
+  protected:                                                          \
     ClassName() =default;                                             \
     ClassName(const ClassName & ) =delete;                            \
     ClassName & operator = (const ClassName & ) =delete;              \
-  private :
+  private:
+
+// Inspired by the previous one...
+
+/**
+ * \brief Class-as-singleton macro for declaration.
+ *
+ * This is a macro used to protect some methods in classes intended as
+ * singletons.
+ */
+#define RDM_DECLARE_CLASS_AS_SINGLETON(ClassName)                     \
+  public:                                                             \
+    static ClassName* instance(const int instanceMode) {              \
+      static ClassName *instance;                                     \
+      if(instance) {                                                  \
+        switch(instanceMode) {                                        \
+          case SINGLETON_RESET:                                       \
+            delete instance;                                          \
+            instance = new ClassName();                               \
+            break;                                                    \
+          case SINGLETON_DELETE:                                      \
+            delete instance;                                          \
+          case SINGLETON_CREATE:                                      \
+            break;                                                    \
+          default:                                                    \
+            return 0;                                                 \
+            break;                                                    \
+        }                                                             \
+      } else {                                                        \
+        switch(instanceMode) {                                        \
+          case SINGLETON_CREATE:                                      \
+            instance = new ClassName();                               \
+            break;                                                    \
+          case SINGLETON_DELETE:                                      \
+          case SINGLETON_RESET:                                       \
+          default:                                                    \
+            return 0;                                                 \
+            break;                                                    \
+        }                                                             \
+      }                                                               \
+      return instance;                                                \
+    }                                                                 \
+    static const int SINGLETON_CREATE = 1;                            \
+    static const int SINGLETON_RESET = 2;                             \
+    static const int SINGLETON_DELETE = 3;                            \
+  private:                                                            \
+    ClassName();                                                      \
+    ~ClassName();                                                     \
+    ClassName(const ClassName & ) =delete;                            \
+    ClassName & operator = (const ClassName & ) =delete;
 
 #endif // MACROS_HPP

@@ -29,43 +29,7 @@ Config::Config() {
   doNotUseNetworking = 0;
 }
 
-Config::~Config() {}
-
-// Singleton instance manager.
-Config* Config::instance(int instanceMode) {
-
-  static Config *instance;
-
-  if(instance) {
-    switch(instanceMode) {
-      case RDM_CONFIG_MODE_RESET:
-        delete instance;
-        instance = new Config();
-        break;
-      case RDM_CONFIG_MODE_DELETE:
-        delete instance;
-      case RDM_CONFIG_MODE_CREATE:
-        break;
-      default:
-        return 0;
-        break;
-    }
-  } else {
-    switch(instanceMode) {
-      case RDM_CONFIG_MODE_CREATE:
-        instance = new Config();
-        break;
-      case RDM_CONFIG_MODE_DELETE:
-      case RDM_CONFIG_MODE_RESET:
-      default:
-        return 0;
-        break;
-    }
-  }
-
-  return instance;
-
-}
+Config::~Config() =default;
 
 const int Config::getConfigurationStatus() {
   return configurationStatus;

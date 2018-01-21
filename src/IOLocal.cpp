@@ -24,42 +24,6 @@
 
 namespace roguedm {
 
-// Singleton instance manager.
-IOLocal* IOLocal::instance(int instanceMode) {
-
-  static IOLocal *instance;
-
-  if(instance) {
-    switch(instanceMode) {
-      case RDM_IOLOCAL_MODE_RESET:
-        delete instance;
-        instance = new IOLocal();
-        break;
-      case RDM_IOLOCAL_MODE_DELETE:
-        delete instance;
-      case RDM_IOLOCAL_MODE_CREATE:
-        break;
-      default:
-        return 0;
-        break;
-    }
-  } else {
-    switch(instanceMode) {
-      case RDM_IOLOCAL_MODE_CREATE:
-        instance = new IOLocal();
-        break;
-      case RDM_IOLOCAL_MODE_DELETE:
-      case RDM_IOLOCAL_MODE_RESET:
-      default:
-        return 0;
-        break;
-    }
-  }
-
-  return instance;
-
-}
-
 // Repaint window
 void IOLocal::update() {
 
@@ -204,6 +168,8 @@ void IOLocal::update() {
       }
 
       dest.y = (dialogText.y+(dialogText.h)-cStart)*txtCHeight;
+      dest.w = txtCWidth;
+      dest.h = txtCHeight;
       if(c==currentWord) {
         if(wordRShift==0) {
           dest.x =
@@ -360,7 +326,7 @@ IOLocal::~IOLocal() {
   if(0!=errorCode)
     return;
 
- // Clear word type textures
+  // Clear word type textures
   SDL_DestroyTexture(ipI);
   SDL_DestroyTexture(wordTypes[RDM_WCLASS_NORMAL].charsTexture);
   SDL_DestroyTexture(wordTypes[RDM_WCLASS_COMMAND].charsTexture);
@@ -377,6 +343,9 @@ IOLocal::~IOLocal() {
   SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_SET].charsTexture);
   SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_UNIQ].charsTexture);
   SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_EPIC].charsTexture);
+
+  SDL_DestroyRenderer(renderer);
+  SDL_DestroyWindow(window);
 
 }
 
@@ -1057,6 +1026,8 @@ void IOLocal::stampChar(
 }
 // Process the user keyboard input
 void IOLocal::eventsManager() {
+
+  // TODO: Fix memory leak with event
 
   SDL_Event event;
 

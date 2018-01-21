@@ -23,6 +23,8 @@
 #ifndef IOLOCAL_HPP
 #define IOLOCAL_HPP
 
+#include "macros.hpp"
+
 #include "CommandHandlerInterface.hpp"
 #include "GameComponentInterface.hpp"
 
@@ -38,10 +40,6 @@
 #include <vector>
 #include <map>
 #include <cmath>
-
-#define RDM_IOLOCAL_MODE_CREATE 0
-#define RDM_IOLOCAL_MODE_RESET 1
-#define RDM_IOLOCAL_MODE_DELETE 2
 
 // Max command history lines..
 #define RDM_CL_MAX_HISTORY         128
@@ -79,13 +77,9 @@ struct Player {
 class IOLocal : CommandHandlerInterface, GameComponentInterface
 {
 
-  public:
+  RDM_DECLARE_CLASS_AS_SINGLETON(IOLocal)
 
-    /**
-     * Singleton instance management.
-     * \param instanceMode Concrete request for the instance manager.
-     */
-    static IOLocal* instance(int instanceMode);
+  public:
 
     /**
      * Method used when the main app has time to allow a network management
@@ -144,18 +138,6 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     int mustHalt();
 
   private:
-
-    /** Private constructor to Singleton isolation. */
-    IOLocal();
-
-    /** Private destructor to Singleton isolation. */
-    ~IOLocal();
-
-    /** Copy operator (private because is disabled by default). */
-    IOLocal(const IOLocal&);
-
-    /** Assing operator (private because is disabled by default). */
-    void operator=(const IOLocal&);
 
     /**
      * Method internally called to manage the SDL event queque.
@@ -303,10 +285,10 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     std::map<wchar_t,int> transUtf8;
 
     /** SDL window */
-    SDL_Window *window;
+    SDL_Window *window = nullptr;
 
     /** SDL main rendering surface */
-    SDL_Renderer *renderer;
+    SDL_Renderer *renderer = nullptr;
 
     /** The current command line contents. */
     Sentence commandLine;

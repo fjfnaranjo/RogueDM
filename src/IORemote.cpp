@@ -28,7 +28,7 @@ namespace roguedm {
 IORemote::IORemote() {
 
   // Scope configuration to check if network must be disabled.
-  configuration = Config::instance(RDM_CONFIG_MODE_CREATE);
+  configuration = Config::instance(Config::SINGLETON_CREATE);
   errorCode = 0;
 
   if(configuration->getDoNotUseNetworking()) {
@@ -55,42 +55,6 @@ IORemote::~IORemote() {
     SDLNet_Quit();
 
 };
-
-// Singleton instance manager.
-IORemote* IORemote::instance(int instanceMode) {
-
-  static IORemote *instance;
-
-  if(instance) {
-    switch(instanceMode) {
-      case RDM_IOREMOTE_MODE_RESET:
-        delete instance;
-        instance = new IORemote();
-        break;
-      case RDM_IOREMOTE_MODE_DELETE:
-        delete instance;
-      case RDM_IOREMOTE_MODE_CREATE:
-        break;
-      default:
-        return 0;
-        break;
-    }
-  } else {
-    switch(instanceMode) {
-      case RDM_IOREMOTE_MODE_CREATE:
-        instance = new IORemote();
-        break;
-      case RDM_IOREMOTE_MODE_DELETE:
-      case RDM_IOREMOTE_MODE_RESET:
-      default:
-        return 0;
-        break;
-    }
-  }
-
-  return instance;
-
-}
 
 int IORemote::getErrorCode() {
   return errorCode;

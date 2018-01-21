@@ -23,9 +23,7 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
-#define RDM_CONFIG_MODE_CREATE 0
-#define RDM_CONFIG_MODE_RESET 1
-#define RDM_CONFIG_MODE_DELETE 2
+#include "macros.hpp"
 
 namespace roguedm {
 
@@ -39,13 +37,9 @@ namespace roguedm {
 class Config
 {
 
-  public:
+  RDM_DECLARE_CLASS_AS_SINGLETON(Config)
 
-    /**
-     * Singleton instance management.
-     * \param instanceMode Concrete request for the instance manager.
-     */
-    static Config* instance(int instanceMode);
+  public:
 
     /**
      * Gets the current configuration status code
@@ -66,18 +60,6 @@ class Config
     void setDoNotUseNetworking(int newVal);
 
   private:
-
-    /** Private constructor to Singleton isolation. */
-    Config();
-
-    /** Private destructor to Singleton isolation. */
-    ~Config();
-
-    /** Copy operator (private because is disabled by default). */
-    Config(const Config&);
-
-    /** Assing operator (private because is disabled by default). */
-    void operator=(const Config&);
 
     /** Configuration staus to detect errors. */
     int configurationStatus;

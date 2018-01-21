@@ -36,7 +36,7 @@ int RogueDM::run(int argc, char *argv[]) {
   setlocale(LC_ALL, "");
 
   // Load the configuration.
-  Config *configuration = Config::instance(RDM_CONFIG_MODE_CREATE);
+  Config *configuration = Config::instance(Config::SINGLETON_CREATE);
 
   // Prints usage and/or version information when requested (GNU compliant).
   for(int c = argc; c > 1 && !abortLaunch; c--) {
@@ -79,7 +79,7 @@ int RogueDM::run(int argc, char *argv[]) {
   }
 
   // Unload the configuration.
-  configuration = Config::instance(RDM_CONFIG_MODE_DELETE);
+  configuration = Config::instance(Config::SINGLETON_DELETE);
 
   return status;
 

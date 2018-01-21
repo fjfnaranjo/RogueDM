@@ -23,6 +23,8 @@
 #ifndef IOREMOTE_HPP
 #define IOREMOTE_HPP
 
+#include "macros.hpp"
+
 #include "CommandHandlerInterface.hpp"
 #include "GameComponentInterface.hpp"
 
@@ -36,10 +38,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_net.h>
 
-#define RDM_IOREMOTE_MODE_CREATE 0
-#define RDM_IOREMOTE_MODE_RESET 1
-#define RDM_IOREMOTE_MODE_DELETE 2
-
 namespace roguedm {
 
 /**
@@ -52,13 +50,9 @@ namespace roguedm {
 class IORemote : CommandHandlerInterface, GameComponentInterface
 {
 
-  public:
+  RDM_DECLARE_CLASS_AS_SINGLETON(IORemote)
 
-    /**
-     * Singleton instance management.
-     * \param instanceMode Concrete request for the instance manager.
-     */
-    static IORemote* instance(int instanceMode);
+  public:
 
     /**
      * Method used when the main app has time to allow a network management
@@ -92,18 +86,6 @@ class IORemote : CommandHandlerInterface, GameComponentInterface
     int getErrorCode();
 
   private:
-
-    /** Private constructor to Singleton isolation. */
-    IORemote();
-
-    /** Private destructor to Singleton isolation. */
-    ~IORemote();
-
-    /** Copy operator (private because is disabled by default). */
-    IORemote(const IORemote&);
-
-    /** Assing operator (private because is disabled by default). */
-    void operator=(const IORemote&);
 
     /** Error code */
     int errorCode;
