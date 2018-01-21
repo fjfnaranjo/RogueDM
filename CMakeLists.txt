@@ -20,7 +20,7 @@ cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)
 
 # Project basic definitions
 project(roguedm VERSION 1.0 LANGUAGES C CXX)
-set(CMAKE_CXX_STANDARD 11)
+add_compile_options(-std=c++11)
 
 # Verbose version
 set(roguedm_VERSION_MAJOR 1)
@@ -31,6 +31,7 @@ set(roguedm_VERSION_DEV dev0)
 # Pass information to code
 configure_file("${roguedm_SOURCE_DIR}/src/version.hpp.in"
                "${roguedm_BINARY_DIR}/src/version.hpp")
+include_directories(BEFORE ${roguedm_BINARY_DIR}/src)
 
 # Path for CMake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${roguedm_SOURCE_DIR}/cmake")
