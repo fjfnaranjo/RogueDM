@@ -30,7 +30,7 @@ MainState::MainState() {
 
 MainState::~MainState() {}
 
-roguedm::StateInterface* MainState::execute() {
+roguedm::StateResponse MainState::execute() {
 
   // SDL init checks
   if(0!=SDL_Init(SDL_INIT_VIDEO)) {
@@ -40,7 +40,7 @@ roguedm::StateInterface* MainState::execute() {
       _(RDM_STR_SDL_ERROR),
 	  SDL_GetError()
 	);
-    return RDM_STATE_NO_STATE;
+    return {status, RDM_STATE_NO_STATE};
   }
 
   Game *gameInstance = new Game();
@@ -51,7 +51,7 @@ roguedm::StateInterface* MainState::execute() {
   if(0!=ioLocalErrorCode) {
     SDL_Quit();
     status = ioLocalErrorCode;
-    return RDM_STATE_NO_STATE;
+    return {status, RDM_STATE_NO_STATE};
   }
 
   roguedm::IORemote *ioRemoteInstance =
@@ -60,7 +60,7 @@ roguedm::StateInterface* MainState::execute() {
   if(0!=ioRemoteErrorCode) {
     SDL_Quit();
     status = ioRemoteErrorCode;
-    return RDM_STATE_NO_STATE;
+    return {status, RDM_STATE_NO_STATE};
   }
 
 
@@ -90,12 +90,8 @@ roguedm::StateInterface* MainState::execute() {
   // Quit SDL
   SDL_Quit();
 
-  return RDM_STATE_NO_STATE;
+  return {status, RDM_STATE_NO_STATE};
 
-}
-
-int MainState::getStatus() {
-  return status;
 }
 
 } // namespace roguedm_main

@@ -18,25 +18,26 @@
 /**
  * \file main.cpp
  * \brief File containing the application entry point.
+ *
+ * This file only holds the C++ main() function and delegates all the control
+ * to a class. This emulates how Java's main() method force the class
+ * paradigm even on application start.
  */
 
 // Main application class.
 #include "RogueDM.hpp"
 
-#include <cstdlib>
-
 /**
- * \brief Common C/C++ application entry point.
+ * \brief Common C++ application entry point.
  *
- * The main method only load the initial class of the application, named
- * RogueDM. RogueDM do the param check, language initializacion, creates,
- * and calls the state machine game class.
+ * The main method only loads the initial class of the application, named
+ * RogueDM. RogueDM will do the arguments parsing, the locale initialization
+ * and the creation of the game main state machine.
  */
 int main(int argc, char *argv[]) {
 
-  roguedm::RogueDM *app = new roguedm::RogueDM(argc,argv);
-  int exitcode = app->getStatus();
-  delete app;
+  roguedm::RogueDM app = roguedm::RogueDM();
+  int exitcode = app.run(argc, argv);
   exit(exitcode);
 
 }

@@ -23,6 +23,9 @@
 #ifndef GAMECOMPONENTINTERFACE_HPP
 #define GAMECOMPONENTINTERFACE_HPP
 
+// Useful macros.
+#include "macros.hpp"
+
 namespace roguedm {
 
 /**
@@ -31,33 +34,18 @@ namespace roguedm {
  *        inside the game main state loop and related.
  *
  * This interface declare the members required by the game states loop
- * to work propertly. It includes the update() method.
- *
+ * to work properly. It includes the update() method.
  * \see update()
  */
 class GameComponentInterface
 {
 
+  RDM_DECLARE_CLASS_AS_INTERFACE(GameComponentInterface);
+
   public:
 
-    /** Used by gamne loops to update a game component. */
+    /** Used by main loops to update a component. */
     virtual void update() =0;
-
-  protected:
-
-    /** Cleared constructor to avoid interface use as a class. */
-    GameComponentInterface() {};
-
-    /** Cleared destructor to avoid interface use as a class. */
-    virtual ~GameComponentInterface() {};
-
-  private:
-
-    /** Copy operator (private because is disabled by default). */
-    GameComponentInterface(const GameComponentInterface&);
-
-    /** Assing operator (private because is disabled by default). */
-    void operator=(const GameComponentInterface&);
 
 };
 

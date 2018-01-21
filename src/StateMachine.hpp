@@ -23,25 +23,32 @@
 #ifndef STATEMACHINE_HPP
 #define STATEMACHINE_HPP
 
+// Includes related to the state machine.
 #include "StateInterface.hpp"
 #include "InitialState.hpp"
 
 namespace roguedm {
 
 /**
- * \brief State machine class.
+ * \brief A simple state machine.
  *
- * This class is used to manage the different states for the game. A state, is
- * a moment of the execution with a determined group of classes working inside
- * the game loop.
+ * This class is used to manage the different states of the application.
  *
- * The class acting as a state, must extends the StateInterface interface.
- * Also, because this class only calls the execute method in the states classes,
- * any class should implement their own game loop or time management mechanism.
+ * Each state provides specific behavior and features.
  *
- * The machine deletes the state classes, don't store/use references outside
- * this class.
+ * Simple states execute single tasks and finish. Other states may interact
+ * with the user interactively using the CLI interface. A more complex state
+ * will define a particular group of classes working as actor/entities inside
+ * an main loop controlled by the state itself and provide a game-like rich
+ * graphical interface.
  *
+ * The class acting as a state must extend the StateInterface interface.
+ * The machine just calls the execute method in the state classes and delegate
+ * all the control to them. So, each state should implement their own game
+ * loop or similar time management mechanism if they are interactive.
+ *
+ * The state machine deletes the state classes when they finish, don't
+ * store/use references to the states outside this class.
  * \see StateInterface
  * \see StateInterface.execute()
  */
@@ -51,58 +58,37 @@ class StateMachine
   public:
 
     /**
-     * Sets the first state to be executed.
-     *
-     * \param firstState This parameter should be use to set the first
-     *                   state to be executed.
+     * Constructor to start an empty state machine. A new InitialState will
+     * be created and used as first state.
+     */
+    StateMachine();
+
+    /**
+     * Constructor to start the state machine with a particular first state to
+     * be executed.
+     * \param firstState The first state to be executed.
      */
     StateMachine(StateInterface* firstState);
 
     /**
-     * Default destructor (project guidelines requires always a destructor,
-     * even if it will be empty).
+     * Start the state machine.
      */
-    virtual ~StateMachine();
-
-    /**
-     * \brief Method used by the main application class to start the state
-     *        machine.
-     *
-     * As stated before, the machine deletes the state classes, don't store/use
-     * references outside this class.
-     */
-    void start();
-
-    /**
-     * Get the state machine application exit status code.
-     * \return Status code to be returned with cstdlib exit().
-     */
-    int getStatus();
+    int run();
 
   protected:
 
   private:
 
-    /** Copy operator (private because is disabled by default). */
-    StateMachine(const StateMachine&);
-
-    /** Assing operator (private because is disabled by default). */
-    void operator=(const StateMachine&);
-
-    /** Field to store the current machine state. */
-    StateInterface* currentState;
-
     /**
      * Specify the next state to be managed (launched when the method
      * start its called the first time or when another state finish their own
      * execute method).
-     * \see StateMachine.start()
      * \see StateInterface.execute()
      */
     StateInterface* nextState;
 
-    /** Status return code for state machine */
-    int status;
+    /** Status return code for state machine. */
+    StateResponse lastResponse;
 
 };
 

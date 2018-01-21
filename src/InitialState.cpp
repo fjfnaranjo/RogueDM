@@ -32,12 +32,8 @@ InitialState::InitialState() {
 InitialState::~InitialState() {}
 
 // Currently, this state only serve as a transition to the main state.
-StateInterface* InitialState::execute() {
-  return new roguedm_main::MainState();
-}
-
-int InitialState::getStatus() {
-  return status;
+StateResponse InitialState::execute() {
+  return {status, new roguedm_main::MainState()};
 }
 
 } // namespace roguedm

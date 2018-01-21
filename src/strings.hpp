@@ -17,25 +17,26 @@
 
 /**
  * \file strings.hpp
- * \brief File containing the strings used by the application.
- * This file should be used to store all strings exposed to the user interface.
- * By this way easing the translators job.
+ * \brief File containing the strings used by the application CLI.
+ *
+ * This file should be used to store all strings and templates exposed to the
+ * application CLI interface. For convenience, it also defines the gettext
+ * macro.
  */
 
 #ifndef STRINGS_HPP
 #define STRINGS_HPP
 
-#include <locale>
+// Extra strings with the actual version information.
+#include "version.hpp"
 
-#define _ gettext
-
-#define RDM_STR_VERSION          "Rogue's Dungeon Master Version dev1"
+#define RDM_STR_VERSION_STRING   "Rogue's Dungeon Master Version "
 #define RDM_STR_USAGE_VERSION    "--version"
 #define RDM_STR_USAGE_HELP       "--help"
 #define RDM_STR_USAGE_LOCAL      "--local"
 #define RDM_STR_USAGE            "usage: %s [--version] [--help] [--local]"
 
-#define RDM_STR_USAGE_UKNOWN     "Uknown program argument: %s\n"
+#define RDM_STR_USAGE_UKNOWN     "Unknown program argument: %s\n"
 
 #define RDM_STR_SDL_ERROR        "SDL error reported: %s\n"
 #define RDM_STR_SDL_NET_ERROR    "SDLNet error reported: %s\n"

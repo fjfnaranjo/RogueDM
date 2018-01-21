@@ -23,60 +23,41 @@
 #ifndef ROGUEDM_HPP
 #define ROGUEDM_HPP
 
-// Gettext alias and predefined strings for CLI interface and game.
+// Predefined strings for the CLI interface and game.
 #include "strings.hpp"
 
-// Game state machine related includes
-#include "StateMachine.hpp"
-#include "InitialState.hpp"
+// Gettext alias.
+#include "gettext.hpp"
 
+// State machine.
+#include "StateMachine.hpp"
+
+// Configuration system.
 #include "Config.hpp"
 
+// Standard includes.
 #include <cstdio>
 #include <cstring>
 
 namespace roguedm {
 
 /**
- * \brief Application management class.
+ * \brief Main application class.
  *
- * This class is used to manage the program arguments and all the generic steps
- * an application need to manage (sets I18N, ...).
+ * This class is used to parse the program arguments and do all the generic
+ * steps expected for a CLI application launch (help text, I18N init, ...).
  */
 class RogueDM {
 
   public:
 
     /**
-     * This constructor handles base application related tasks like the program
-     * arguments. Also call the state machine and lets it to manage the rest.
-     * \param argc Number of program arguments (copy from main()).
-     * \param argv Value of program arguments (copy from main()).
+     * Run the main application code.
+     * \param argc Number of program arguments (copied from main()).
+     * \param argv Value of program arguments (copied from main()).
+     * \return Status code to be returned with exit().
      */
-    RogueDM(int argc, char *argv[]);
-
-    /**
-     * Default destructor (project guidelines requires always a destructor,
-     * even if it will be empty).
-     */
-    virtual ~RogueDM();
-
-    /**
-     * Get the right application exit status code.
-     * \return Status code to be returned with cstdlib exit().
-     */
-    int getStatus();
-
-  private:
-
-    /** Copy operator (private because is disabled by default). */
-    RogueDM(const RogueDM&);
-
-    /** Assing operator (private because is disabled by default). */
-    void operator=(const RogueDM&);
-
-    /** Member to store the desired application exit code. */
-    int status;
+    int run(int argc, char *argv[]);
 
 };
 

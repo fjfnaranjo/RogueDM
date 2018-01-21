@@ -24,31 +24,27 @@
 
 namespace roguedm {
 
-StateMachine::StateMachine(StateInterface* firstState = RDM_STATE_NO_STATE) {
-  status = 0;
-  nextState = RDM_STATE_NO_STATE;
-  currentState = firstState;
+StateMachine::StateMachine() {
+  lastResponse = {0, RDM_STATE_NO_STATE};
+  StateInterface *initState = new InitialState();
+  nextState = initState;
 }
 
-StateMachine::~StateMachine() {}
+StateMachine::StateMachine(StateInterface* firstState) {
+  lastResponse = {0, RDM_STATE_NO_STATE};
+  nextState = firstState;
+}
 
-// Iterate throught states until one of them return RDM_STATE_NO_STATE.
+// Iterate through states until one of them return RDM_STATE_NO_STATE.
 // The value returned by the states is taken as the next desired state.
 // Also fetch the state result code for application returned value.
-void StateMachine::start() {
-  nextState = currentState->execute();
-  status = currentState->getStatus();
-  delete currentState;
-  while(RDM_STATE_NO_STATE!=nextState) {
-    currentState = nextState;
-    nextState = currentState->execute();
-    status = currentState->getStatus();
-    delete currentState;
-  }
-}
-
-int StateMachine::getStatus() {
-  return status;
+int StateMachine::run() {
+  do {
+    lastResponse = nextState->execute();
+    delete nextState;
+    nextState = lastResponse.nextState;
+  } while (RDM_STATE_NO_STATE!=nextState);
+  return lastResponse.status;
 }
 
 } // namespace roguedm

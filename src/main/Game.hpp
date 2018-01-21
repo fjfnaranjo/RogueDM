@@ -29,11 +29,11 @@
 namespace roguedm_main {
 
 /**
- * \brief Class for al game rules related tasks.
+ * \brief Class for all game rules related tasks.
  *
  * This class manages the game rules and anything related to it.
- * \see StateInterface
- * \see StateInterface.execute()
+ * \see roguedm::StateInterface
+ * \see roguedm::StateInterface.execute()
  */
 class Game :
   public roguedm::CommandHandlerInterface,
@@ -55,19 +55,19 @@ class Game :
 
     /**
      * Used by IOLocal to ask the command handler a response for a command.
-     * \see CommandHandlerInterface.processCommand()
+     * \see roguedm::CommandHandlerInterface.processCommand()
      */
     int processCommand(const roguedm::Sentence&);
 
     /**
      * Used by IOLocal to ask the command handler a autocomplete suggestion.
-     * \see CommandHandlerInterface.autocomplete()
+     * \see roguedm::CommandHandlerInterface.autocomplete()
      */
     const int autocomplete(roguedm::Sentence&);
 
     /**
      * Used by IOLocal to ask the command handler a autocomplete list.
-     * \see CommandHandlerInterface.autocompleteListOptions()
+     * \see roguedm::CommandHandlerInterface.autocompleteListOptions()
      */
     const std::vector<roguedm::Sentence>* autocompleteListOptions(
       const roguedm::Sentence&

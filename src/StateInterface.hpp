@@ -23,40 +23,45 @@
 #ifndef STATEINTERFACE_HPP
 #define STATEINTERFACE_HPP
 
+// Useful macros.
+#include "macros.hpp"
+
+/**
+ * \brief Value to report that no more states should be executed.
+ */
 #define RDM_STATE_NO_STATE 0
 
 namespace roguedm {
 
+// This is a forward declaration for usage in the StateResponse declaration.
+class StateInterface;
+
+/**
+ * \struct StateResponse
+ * \brief Response for states implementing the StateInterface.
+ * \see StateInterface
+ */
+struct StateResponse {
+  int status;
+  StateInterface* nextState;
+};
+
 /**
  * \interface StateInterface
- * \brief C++ interface for the state machine different states.
+ * \brief Interface for the different states used by the StateMachine class.
  *
- * This is the interface that every class must extends if it want to
- * work as state to StateMachine class.
+ * Every class must extends this interface if it wants to work as a state for
+ * the StateMachine class.
  */
 class StateInterface
 {
 
+  RDM_DECLARE_CLASS_AS_INTERFACE(StateInterface);
+
   public:
 
-    /** Contains the state relevant processes. */
-    virtual StateInterface* execute() =0;
-
-    /** Get the right application exit status code. */
-    virtual int getStatus() =0;
-
-  protected:
-
-    /** Cleared constructor to avoid interface use as a class. */
-    StateInterface() {};
-
-  private:
-
-    /** Copy operator (private because is disabled by default). */
-    StateInterface(const StateInterface&);
-
-    /** Assing operator (private because is disabled by default). */
-    void operator=(const StateInterface&);
+    /** The state main code. */
+    virtual StateResponse execute() = 0;
 
 };
 

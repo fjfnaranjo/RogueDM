@@ -46,8 +46,8 @@ namespace roguedm_main {
  * \brief The main state class.
  *
  * This state represents the game application behavior.
- * \see StateInterface
- * \see StateInterface.execute()
+ * \see roguedm::StateInterface
+ * \see roguedm::StateInterface.execute()
  */
 class MainState : public roguedm::StateInterface
 {
@@ -70,17 +70,11 @@ class MainState : public roguedm::StateInterface
      * \brief This method hold the main state tasks, this is, all the pure game
      *        related operations.
      *
-     * Overrided from StateInterface.
-     * \see StateInterface
-     * \see StateInterface.execute()
+     * Override from StateInterface.
+     * \see roguedm::StateInterface
+     * \see roguedm::StateInterface.execute()
      */
-    StateInterface* execute();
-
-    /**
-     * Get the right state exit status code.
-     * \return Status code to be returned with cstdlib exit().
-     */
-    int getStatus();
+    roguedm::StateResponse execute();
 
   private:
 

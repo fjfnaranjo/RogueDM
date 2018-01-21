@@ -23,6 +23,7 @@
 #ifndef INITIALSTATE_HPP
 #define INITIALSTATE_HPP
 
+// State interface and other states.
 #include "StateInterface.hpp"
 #include "main/MainState.hpp"
 
@@ -34,7 +35,7 @@ namespace roguedm {
  * Currently just a place holder only used to call the MainState state class.
  * \see StateInterface
  * \see StateInterface.execute()
- * \see MainState
+ * \see roguedm_main::MainState
  */
 class InitialState : public StateInterface
 {
@@ -60,15 +61,9 @@ class InitialState : public StateInterface
      * Overrided from StateInterface.
      * \see StateInterface
      * \see StateInterface.execute()
-     * \see MainState
+     * \see roguedm_main::MainState
      */
-    StateInterface* execute();
-
-    /**
-     * Get the right state exit status code.
-     * \return Status code to be returned with cstdlib exit().
-     */
-    int getStatus();
+    StateResponse execute();
 
   private:
 

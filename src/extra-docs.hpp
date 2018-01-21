@@ -25,20 +25,19 @@
 
 /**
  * \namespace roguedm
- * \brief General applicaction namespace to avoid general scope polution.
+ * \brief General namespace (for the local and network interfaces).
  *
  * This namespace is used for the general application operations and types.
- * Another namespaces must be created to contain game state specific stuff, like
- * roguedm_main. This namespace also includes local keyboar->display interaction
- * and multiplayer interaction.
+ * This namespace includes local keyboard->display interaction and multiplayer
+ * interaction. It also includes the code for the application state machine.
  */
 
 /**
  * \namespace roguedm_main
- * \brief Namespace for application main state (game) stuff.
+ * \brief Namespace for the application main state (the VTT itself).
  *
- * This is the namespace for the main state or the game itself. It contents all
- * the operations, references and types related with the game interaction.
+ * This is the namespace for the main state or the VTT itself. It contains
+ * all the operations and types related with the VTT behavior and features.
  */
 
 #endif // EXTRA_DOCS_HPP

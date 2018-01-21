@@ -23,6 +23,10 @@
 #ifndef COMMANDHANDLERINTERFACE_HPP
 #define COMMANDHANDLERINTERFACE_HPP
 
+// Useful macros.
+#include "macros.hpp"
+
+// Standard includes.
 #include <iostream>
 #include <vector>
 
@@ -72,11 +76,12 @@ typedef std::vector<Word> Sentence;
  * A vector of classes extending this interface is mantained inside the IOLocal
  * class. This classes are asked to solve the command by order, stopping in the
  * first that handle it correctly.
- *
- * \see roguedm::Sentence
+ * \see Sentence
  */
 class CommandHandlerInterface
 {
+
+  RDM_DECLARE_CLASS_AS_INTERFACE(CommandHandlerInterface);
 
   public:
 
@@ -86,8 +91,8 @@ class CommandHandlerInterface
      *
      * If a command proccesor returns 0, the command will be issued to other
      * command proccesor. If it returns 1, the command line will be reset.
-     * \return 0 or 1, see interface description.
      * \param s A reference to the current command line.
+     * \return 0 or 1, see interface description.
      */
     virtual int processCommand(const Sentence& s) =0;
 
@@ -98,8 +103,8 @@ class CommandHandlerInterface
      * This method modify the command line and complete it, returning 1 to
      * notify IOLocal that the work is done. If it can't do it, it will
      * return 0 and another command handler will try.
-     * \return 0 or 1, see interface description.
      * \param[out] s A reference to the current command line.
+     * \return 0 or 1, see interface description.
      */
     virtual const int autocomplete(Sentence& s) =0;
 
@@ -108,28 +113,12 @@ class CommandHandlerInterface
      *
      * This method build a autocomplete list for the current command or an empty
      * list if there is not valid complete options.
-     * \return The Sentence vector or an empty one.
      * \param s A reference to the current command line.
+     * \return The Sentence vector or an empty one.
      */
     virtual const std::vector<Sentence>* autocompleteListOptions(
       const Sentence& s
     ) =0;
-
-  protected:
-
-    /** Cleared constructor to avoid interface use as a class. */
-    CommandHandlerInterface() {};
-
-    /** Cleared destructor to avoid interface use as a class. */
-    virtual ~CommandHandlerInterface() {};
-
-  private:
-
-    /** Copy operator (private because is disabled by default). */
-    CommandHandlerInterface(const CommandHandlerInterface&);
-
-    /** Assing operator (private because is disabled by default). */
-    void operator=(const CommandHandlerInterface&);
 
 };
 
