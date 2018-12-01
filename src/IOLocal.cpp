@@ -1341,12 +1341,12 @@ void IOLocal::tryAutocompletion() {
   // check for empty line to list all commands
   if(commandLine.size()==1 && commandLine[0].wordContent.length()==0) {
 
-    for(auto commandHandler : commandHandlers) {
+    for(const auto & commandHandler : commandHandlers) {
 
       options = commandHandler->autocompleteListOptions(commandLine);
 
       if(!options->empty()) {
-        for(auto option : *options)
+        for(const auto & option : *options)
           consoleHistory.push_back(option);
       }
 
@@ -1355,7 +1355,7 @@ void IOLocal::tryAutocompletion() {
   }
 
   // Process action
-  for(auto commandHandler : commandHandlers) {
+  for(const auto & commandHandler : commandHandlers) {
 
     if(1==commandHandler->autocomplete(commandLine))
       break;
@@ -1363,7 +1363,7 @@ void IOLocal::tryAutocompletion() {
     options = commandHandler->autocompleteListOptions(commandLine);
 
     if(!options->empty()) {
-      for(auto option : *options)
+      for(const auto & option : *options)
         consoleHistory.push_back(option);
       break;
     }
@@ -1388,7 +1388,7 @@ void IOLocal::processLine() {
       commandLine.insert(commandLine.begin(),defaultWord);
 
     // Process action
-    for(auto commandHandler : commandHandlers)
+    for(const auto & commandHandler : commandHandlers)
       if(1==commandHandler->processCommand(commandLine))
         break;
 
