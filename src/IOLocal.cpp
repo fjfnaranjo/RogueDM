@@ -870,7 +870,6 @@ void IOLocal::colorizeWordType(
 
 // Recalculate window coords and zones after term resize
 void IOLocal::initScreenSize() {
-  // TODO: Add support for window resizing
   int ww, wh;
   SDL_GetWindowSize(window, &ww, &wh);
   maxCols=floor(ww/txtCWidth)-1;
@@ -1295,6 +1294,8 @@ void IOLocal::processKey(SDL_Event* event) {
     case SDLK_MENU:
     case SDLK_KP_ENTER:
     case SDLK_ESCAPE:
+    case SDLK_LGUI:
+    case SDLK_RGUI:
       break;
 
     // Other wide characteres
