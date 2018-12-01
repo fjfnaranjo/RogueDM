@@ -22,6 +22,20 @@
 
 #include "MainState.hpp"
 
+#include <cstdio>
+#include <locale>
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_net.h>
+
+#include "Game.hpp"
+#include "../gettext.hpp"
+#include "../strings.hpp"
+#include "../Config.hpp"
+#include "../IOLocal.hpp"
+#include "../IORemote.hpp"
+
 namespace roguedm_main {
 
 MainState::MainState() {

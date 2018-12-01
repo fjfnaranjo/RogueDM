@@ -22,9 +22,7 @@
 
 #pragma once
 
-// Includes related to the state machine.
 #include "StateInterface.hpp"
-#include "InitialState.hpp"
 
 namespace roguedm {
 

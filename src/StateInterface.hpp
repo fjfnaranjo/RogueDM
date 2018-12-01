@@ -22,7 +22,6 @@
 
 #pragma once
 
-// Useful macros.
 #include "macros.hpp"
 
 /**

@@ -22,7 +22,4 @@
 
 #pragma once
 
-// Standard includes.
-#include <locale>
-
 #define _ gettext

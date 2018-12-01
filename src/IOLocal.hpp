@@ -22,23 +22,13 @@
 
 #pragma once
 
-#include "macros.hpp"
+#include <iostream>
+#include <map>
+
+#include <SDL2/SDL.h>
 
 #include "CommandHandlerInterface.hpp"
 #include "GameComponentInterface.hpp"
-
-#include "strings.hpp"
-
-#include "gettext.hpp"
-
-// SDL
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-
-#include <iostream>
-#include <vector>
-#include <map>
-#include <cmath>
 
 // Max command history lines..
 #define RDM_CL_MAX_HISTORY         128

@@ -22,6 +22,15 @@
 
 #include "RogueDM.hpp"
 
+#include <cstdio>
+#include <cstring>
+#include <locale>
+
+#include "gettext.hpp"
+#include "strings.hpp"
+#include "Config.hpp"
+#include "StateMachine.hpp"
+
 namespace roguedm {
 
 int RogueDM::run(int argc, char *argv[]) {

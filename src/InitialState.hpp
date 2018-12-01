@@ -22,9 +22,7 @@
 
 #pragma once
 
-// State interface and other states.
 #include "StateInterface.hpp"
-#include "main/MainState.hpp"
 
 namespace roguedm {
 

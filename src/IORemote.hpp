@@ -23,19 +23,9 @@
 #pragma once
 
 #include "macros.hpp"
-
 #include "CommandHandlerInterface.hpp"
-#include "GameComponentInterface.hpp"
-
 #include "Config.hpp"
-
-#include "strings.hpp"
-
-#include "gettext.hpp"
-
-// SDL
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_net.h>
+#include "GameComponentInterface.hpp"
 
 namespace roguedm {
 

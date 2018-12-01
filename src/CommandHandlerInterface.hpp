@@ -22,12 +22,10 @@
 
 #pragma once
 
-// Useful macros.
-#include "macros.hpp"
-
-// Standard includes.
 #include <iostream>
 #include <vector>
+
+#include "macros.hpp"
 
 // Word types (from 0 to n).
 #define RDM_WCLASS_NORMAL          0

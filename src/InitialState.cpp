@@ -20,8 +20,9 @@
  * \brief File containing the InitialState class definitions.
  */
 
-// Game state machine related includes
 #include "InitialState.hpp"
+
+#include "main/MainState.hpp"
 
 namespace roguedm {
 

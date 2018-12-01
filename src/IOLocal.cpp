@@ -22,6 +22,16 @@
 
 #include "IOLocal.hpp"
 
+#include <cmath>
+#include <locale>
+#include <vector>
+
+#include <SDL2/SDL_image.h>
+
+#include "macros.hpp"
+#include "gettext.hpp"
+#include "strings.hpp"
+
 namespace roguedm {
 
 // Repaint window

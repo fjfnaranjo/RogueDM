@@ -22,6 +22,8 @@
 
 #include "StateMachine.hpp"
 
+#include "InitialState.hpp"
+
 namespace roguedm {
 
 StateMachine::StateMachine() {

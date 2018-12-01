@@ -24,8 +24,9 @@
  * paradigm even on application start.
  */
 
-// Main application class.
 #include "RogueDM.hpp"
+
+#include <cstdlib>
 
 /**
  * \brief Common C++ application entry point.

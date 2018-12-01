@@ -22,22 +22,6 @@
 
 #pragma once
 
-// Predefined strings for the CLI interface and game.
-#include "strings.hpp"
-
-// Gettext alias.
-#include "gettext.hpp"
-
-// State machine.
-#include "StateMachine.hpp"
-
-// Configuration system.
-#include "Config.hpp"
-
-// Standard includes.
-#include <cstdio>
-#include <cstring>
-
 namespace roguedm {
 
 /**

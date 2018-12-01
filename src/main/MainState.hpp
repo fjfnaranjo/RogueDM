@@ -22,22 +22,7 @@
 
 #pragma once
 
-#include "Game.hpp"
-#include "../IOLocal.hpp"
-#include "../IORemote.hpp"
-
 #include "../StateInterface.hpp"
-
-#include "../Config.hpp"
-
-#include "../strings.hpp"
-
-// SDL
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_net.h>
-
-#include <cstdio>
 
 namespace roguedm_main {
 

@@ -26,7 +26,6 @@
 
 #pragma once
 
-// Extra strings with the actual version information.
 #include "version.hpp"
 
 #define RDM_STR_VERSION_STRING   "Rogue's Dungeon Master Version "
