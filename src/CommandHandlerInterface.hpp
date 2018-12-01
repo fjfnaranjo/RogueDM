@@ -61,6 +61,9 @@ struct Word {
 /** \brief Word's vector to contain full sentences. */
 typedef std::vector<Word> Sentence;
 
+/** \brief Senteces's vector to contain a list of sentences. */
+typedef std::vector<Sentence> SentenceList;
+
 /**
  * \interface CommandHandlerInterface
  * \brief C++ interface for any IOLocal command/messages procesor.
@@ -113,7 +116,7 @@ class CommandHandlerInterface
      * \param s A reference to the current command line.
      * \return The Sentence vector or an empty one.
      */
-    virtual const std::vector<Sentence>* autocompleteListOptions(
+    virtual const SentenceList* autocompleteListOptions(
       const Sentence& s
     ) =0;
 

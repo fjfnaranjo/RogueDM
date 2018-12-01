@@ -30,7 +30,7 @@ Game::~Game() {}
 
 int Game::processCommand(const roguedm::Sentence&) { return 0; }
 const int Game::autocomplete(roguedm::Sentence&) { return 0; };
-const std::vector<roguedm::Sentence>* Game::autocompleteListOptions(const roguedm::Sentence&) { return new std::vector<roguedm::Sentence>; };
+const roguedm::SentenceList* Game::autocompleteListOptions(const roguedm::Sentence&) { return new std::vector<roguedm::Sentence>; };
 
 void Game::update() {}
 

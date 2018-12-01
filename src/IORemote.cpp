@@ -75,10 +75,10 @@ int IORemote::processCommand(const Sentence& a) {
 const int IORemote::autocomplete(Sentence& a) {
   return 0;
 }
-const std::vector<Sentence>* IORemote::autocompleteListOptions(
+const SentenceList* IORemote::autocompleteListOptions(
   const Sentence& a
 ) {
-  return new std::vector<Sentence>;
+  return new SentenceList;
 }
 
 } // namespace roguedm

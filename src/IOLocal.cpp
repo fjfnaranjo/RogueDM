@@ -251,7 +251,7 @@ const int IOLocal::autocomplete(Sentence& a) {
   return 0;
 
 }
-const std::vector<Sentence>* IOLocal::autocompleteListOptions(const Sentence& a)
+const SentenceList* IOLocal::autocompleteListOptions(const Sentence& a)
 {
 
   Word psayCmd;
@@ -264,7 +264,7 @@ const std::vector<Sentence>* IOLocal::autocompleteListOptions(const Sentence& a)
 
   if(a.size()==1 && a[0].wordContent.length()==0) {
 
-    std::vector<Sentence> *l = new std::vector<Sentence>;
+    SentenceList *l = new SentenceList;
 
     Sentence *o = new Sentence;
 
@@ -280,7 +280,7 @@ const std::vector<Sentence>* IOLocal::autocompleteListOptions(const Sentence& a)
 
   }
 
-  return new std::vector<Sentence>;
+  return new SentenceList;
 
 }
 

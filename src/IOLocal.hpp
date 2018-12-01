@@ -93,7 +93,7 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
      * Used by IOLocal to ask the command handler a autocomplete list.
      * \see CommandHandlerInterface.autocompleteListOptions()
      */
-    const std::vector<Sentence>* autocompleteListOptions(const Sentence&);
+    const SentenceList* autocompleteListOptions(const Sentence&);
 
     /**
      * Get the error code value (detecting contruction failures).
@@ -286,10 +286,10 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     int historyCurrent;
 
     /** The current command line contents. */
-    std::vector<Sentence> consoleHistory;
+    SentenceList consoleHistory;
 
     /** Sentences vector for the history. */
-    std::vector<Sentence> history;
+    SentenceList history;
 
     /**
      * Sentence currently written when the player starts using the history

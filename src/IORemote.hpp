@@ -66,7 +66,7 @@ class IORemote : CommandHandlerInterface, GameComponentInterface
      * Used by IOLocal to ask the command handler a autocomplete list.
      * \see CommandHandlerInterface.autocompleteListOptions()
      */
-    const std::vector<Sentence>* autocompleteListOptions(const Sentence&);
+    const SentenceList* autocompleteListOptions(const Sentence&);
 
     /**
      * Get the error code value (detecting contruction failures).
