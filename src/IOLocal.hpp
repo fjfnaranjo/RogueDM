@@ -130,6 +130,11 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
   private:
 
     /**
+     * Keep the SDL_GetTicks return value to implement a FPS lock.
+     */
+    int ticks;
+
+    /**
      * Method internally called to manage the SDL event queque.
      */
     void eventsManager();

@@ -26,10 +26,6 @@
 #include <memory>
 #include <locale>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_net.h>
-
 #include "Game.hpp"
 #include "../gettext.hpp"
 #include "../strings.hpp"
@@ -46,17 +42,6 @@ MainState::MainState() {
 MainState::~MainState() {}
 
 roguedm::StateResponse MainState::execute() {
-
-  // SDL init checks
-  if(0!=SDL_Init(SDL_INIT_VIDEO)) {
-    status = 1;
-    SDL_LogError(
-      SDL_LOG_CATEGORY_APPLICATION,
-      _(RDM_STR_SDL_ERROR),
-	  SDL_GetError()
-	);
-    return {status, RDM_STATE_NO_STATE};
-  }
 
   auto gameInstance = std::make_unique<Game>();
 
@@ -76,27 +61,17 @@ roguedm::StateResponse MainState::execute() {
     return {status, RDM_STATE_NO_STATE};
   }
 
-
-  int update;
-  update = SDL_GetTicks();
-
+  // input checking and scene drawing (game loop)
   int done = 0;
   while(!done) {
-
-    // input checking and scene drawing (game loop)
-    if ((SDL_GetTicks() - update) > 33) {
-      update = SDL_GetTicks();
-      ioLocalInstance->update();
-      // TODO: Check if remote and game instances should issue a 'done' also
-      done = ioLocalInstance->mustHalt();
-      ioRemoteInstance->update();
-      gameInstance->update();
-    }
-
+    ioLocalInstance->update();
+    done = ioLocalInstance->mustHalt();
+    ioRemoteInstance->update();
+    // TODO: Check if remote and game instances should issue a 'done' also
+    // done = ioRemoteInstance->mustHalt();
+    gameInstance->update();
+    // done = gameInstance->mustHalt();
   }
-
-  // Quit SDL
-  SDL_Quit();
 
   return {status, RDM_STATE_NO_STATE};
 

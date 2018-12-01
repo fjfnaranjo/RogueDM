@@ -38,6 +38,11 @@ namespace roguedm {
 // Repaint window
 void IOLocal::update() {
 
+  // FPS lock
+  if ((SDL_GetTicks() - ticks) < 33)
+    return;
+  ticks = SDL_GetTicks();
+
   // Process all events
   eventsManager();
 
@@ -288,6 +293,17 @@ IOLocal::IOLocal() {
   errorCode = 0;
   appDone = 0;
 
+  // SDL init checks
+  if(0!=SDL_Init(SDL_INIT_VIDEO)) {
+    errorCode = 1;
+    SDL_LogError(
+      SDL_LOG_CATEGORY_APPLICATION,
+      _(RDM_STR_SDL_ERROR),
+      SDL_GetError()
+    );
+    return;
+  }
+
   int createStatus = SDL_CreateWindowAndRenderer(
     800, 500,
 	SDL_WINDOW_RESIZABLE,
@@ -327,6 +343,7 @@ IOLocal::IOLocal() {
   // More SDL Init
   initScreenSize();
   SDL_ShowCursor(true);
+  ticks = SDL_GetTicks();
 
 }
 
@@ -355,6 +372,7 @@ IOLocal::~IOLocal() {
 
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
+  SDL_Quit();
 
 }
 
