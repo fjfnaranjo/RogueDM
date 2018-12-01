@@ -68,7 +68,7 @@ class Game :
      * Used by IOLocal to ask the command handler a autocomplete list.
      * \see roguedm::CommandHandlerInterface.autocompleteListOptions()
      */
-    const roguedm::SentenceList* autocompleteListOptions(
+    const roguedm::SentenceListReference autocompleteListOptions(
       const roguedm::Sentence&
     );
 

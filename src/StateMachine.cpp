@@ -22,19 +22,20 @@
 
 #include "StateMachine.hpp"
 
+#include <memory>
+
 #include "InitialState.hpp"
 
 namespace roguedm {
 
 StateMachine::StateMachine() {
   lastResponse = {0, RDM_STATE_NO_STATE};
-  StateInterface *initState = new InitialState();
-  nextState = initState;
+  nextState = std::make_shared<InitialState>();
 }
 
-StateMachine::StateMachine(StateInterface* firstState) {
+StateMachine::StateMachine(StateInterfaceReference firstState) {
   lastResponse = {0, RDM_STATE_NO_STATE};
-  nextState = firstState;
+  nextState = std::move(firstState);
 }
 
 // Iterate through states until one of them return RDM_STATE_NO_STATE.
@@ -43,7 +44,6 @@ StateMachine::StateMachine(StateInterface* firstState) {
 int StateMachine::run() {
   do {
     lastResponse = nextState->execute();
-    delete nextState;
     nextState = lastResponse.nextState;
   } while (RDM_STATE_NO_STATE!=nextState);
   return lastResponse.status;

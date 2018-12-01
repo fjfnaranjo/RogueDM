@@ -22,6 +22,8 @@
 
 #include "InitialState.hpp"
 
+#include <memory>
+
 #include "main/MainState.hpp"
 
 namespace roguedm {
@@ -34,7 +36,7 @@ InitialState::~InitialState() {}
 
 // Currently, this state only serve as a transition to the main state.
 StateResponse InitialState::execute() {
-  return {status, new roguedm_main::MainState()};
+  return {status, std::make_shared<roguedm_main::MainState>()};
 }
 
 } // namespace roguedm

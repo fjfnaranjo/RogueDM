@@ -251,7 +251,7 @@ const int IOLocal::autocomplete(Sentence& a) {
   return 0;
 
 }
-const SentenceList* IOLocal::autocompleteListOptions(const Sentence& a)
+const SentenceListReference IOLocal::autocompleteListOptions(const Sentence& a)
 {
 
   Word psayCmd;
@@ -264,9 +264,9 @@ const SentenceList* IOLocal::autocompleteListOptions(const Sentence& a)
 
   if(a.size()==1 && a[0].wordContent.length()==0) {
 
-    SentenceList *l = new SentenceList;
+    SentenceListReference l = std::make_shared<SentenceList>();
 
-    Sentence *o = new Sentence;
+    SentenceReference o = std::make_shared<Sentence>();
 
     o->push_back(psayCmd);
     l->push_back(*o);
@@ -274,13 +274,11 @@ const SentenceList* IOLocal::autocompleteListOptions(const Sentence& a)
     o->push_back(quitCmd);
     l->push_back(*o);
 
-    delete o;
-
     return l;
 
   }
 
-  return new SentenceList;
+  return std::make_shared<SentenceList>();
 
 }
 
@@ -1318,7 +1316,7 @@ void IOLocal::tryAutocompletion() {
   emptyWord.wordContent = RDM_WEMPTY;
   emptyWord.wordClass = RDM_WCLASS_NORMAL;
 
-  const std::vector<Sentence> *options;
+  SentenceListReference options;
 
   // check for empty line to list all commands
   if(commandLine.size()==1 && commandLine[0].wordContent.length()==0) {
@@ -1330,7 +1328,6 @@ void IOLocal::tryAutocompletion() {
       if(!options->empty()) {
         for(int counter = 0, max = options->size() ; counter<max ; counter++)
           consoleHistory.push_back(options->at(counter));
-        delete options;
       }
 
     }
@@ -1348,7 +1345,6 @@ void IOLocal::tryAutocompletion() {
     if(!options->empty()) {
       for(int counter = 0, max = options->size() ; counter<max ; counter++)
         consoleHistory.push_back(options->at(counter));
-      delete options;
       break;
     }
 

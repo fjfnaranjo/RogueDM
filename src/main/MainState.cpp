@@ -23,6 +23,7 @@
 #include "MainState.hpp"
 
 #include <cstdio>
+#include <memory>
 #include <locale>
 
 #include <SDL2/SDL.h>
@@ -57,10 +58,9 @@ roguedm::StateResponse MainState::execute() {
     return {status, RDM_STATE_NO_STATE};
   }
 
-  Game *gameInstance = new Game();
+  std::unique_ptr<Game> gameInstance = std::make_unique<Game>();
 
-  roguedm::IOLocal *ioLocalInstance =
-    roguedm::IOLocal::instance(roguedm::IOLocal::SINGLETON_CREATE);
+  roguedm::IOLocalReference ioLocalInstance = roguedm::IOLocal::instance();
   int ioLocalErrorCode = ioLocalInstance->getErrorCode();
   if(0!=ioLocalErrorCode) {
     SDL_Quit();
@@ -68,8 +68,7 @@ roguedm::StateResponse MainState::execute() {
     return {status, RDM_STATE_NO_STATE};
   }
 
-  roguedm::IORemote *ioRemoteInstance =
-    roguedm::IORemote::instance(roguedm::IORemote::SINGLETON_CREATE);
+  roguedm::IORemoteReference ioRemoteInstance = roguedm::IORemote::instance();
   int ioRemoteErrorCode = ioRemoteInstance->getErrorCode();
   if(0!=ioRemoteErrorCode) {
     SDL_Quit();
@@ -95,11 +94,6 @@ roguedm::StateResponse MainState::execute() {
     }
 
   }
-
-  //Deletes
-  delete gameInstance;
-  roguedm::IORemote::instance(roguedm::IORemote::SINGLETON_DELETE);
-  roguedm::IOLocal::instance(roguedm::IOLocal::SINGLETON_DELETE);
 
   // Quit SDL
   SDL_Quit();

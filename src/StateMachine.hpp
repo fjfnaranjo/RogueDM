@@ -65,7 +65,7 @@ class StateMachine
      * be executed.
      * \param firstState The first state to be executed.
      */
-    StateMachine(StateInterface* firstState);
+    StateMachine(StateInterfaceReference firstState);
 
     /**
      * Start the state machine.
@@ -82,7 +82,7 @@ class StateMachine
      * execute method).
      * \see StateInterface.execute()
      */
-    StateInterface* nextState;
+    StateInterfaceReference nextState;
 
     /** Status return code for state machine. */
     StateResponse lastResponse;

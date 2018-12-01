@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include "macros.hpp"
 #include "CommandHandlerInterface.hpp"
 #include "Config.hpp"
@@ -66,7 +68,7 @@ class IORemote : CommandHandlerInterface, GameComponentInterface
      * Used by IOLocal to ask the command handler a autocomplete list.
      * \see CommandHandlerInterface.autocompleteListOptions()
      */
-    const SentenceList* autocompleteListOptions(const Sentence&);
+    const SentenceListReference autocompleteListOptions(const Sentence&);
 
     /**
      * Get the error code value (detecting contruction failures).
@@ -80,8 +82,10 @@ class IORemote : CommandHandlerInterface, GameComponentInterface
     int errorCode;
 
     /** Link to configuration class */
-    Config *configuration;
+    ConfigReference configuration;
 
 };
+
+typedef std::shared_ptr<IORemote> IORemoteReference;
 
 } // namespace roguedm

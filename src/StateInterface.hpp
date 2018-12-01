@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include "macros.hpp"
 
 /**
@@ -31,8 +33,14 @@
 
 namespace roguedm {
 
-// This is a forward declaration for usage in the StateResponse declaration.
+// This is a forward declaration for usage in the StateInterfaceReference
+// declaration.
 class StateInterface;
+
+/**
+ * \brief Shared pointer to a state machine.
+ */
+typedef std::shared_ptr<StateInterface> StateInterfaceReference;
 
 /**
  * \struct StateResponse
@@ -41,7 +49,7 @@ class StateInterface;
  */
 struct StateResponse {
   int status;
-  StateInterface* nextState;
+  StateInterfaceReference nextState;
 };
 
 /**

@@ -36,7 +36,7 @@ namespace roguedm {
 IORemote::IORemote() {
 
   // Scope configuration to check if network must be disabled.
-  configuration = Config::instance(Config::SINGLETON_CREATE);
+  configuration = Config::instance();
   errorCode = 0;
 
   if(configuration->getDoNotUseNetworking()) {
@@ -75,10 +75,10 @@ int IORemote::processCommand(const Sentence& a) {
 const int IORemote::autocomplete(Sentence& a) {
   return 0;
 }
-const SentenceList* IORemote::autocompleteListOptions(
+const SentenceListReference IORemote::autocompleteListOptions(
   const Sentence& a
 ) {
-  return new SentenceList;
+  return std::make_shared<SentenceList>();
 }
 
 } // namespace roguedm

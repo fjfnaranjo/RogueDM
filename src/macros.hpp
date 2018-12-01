@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <memory>
+
 // Interface declaration macro.
 //
 // By:  paercebal - Raoul Borges - http://www.linkedin.com/in/raoulborges -
@@ -54,40 +56,13 @@
  */
 #define RDM_DECLARE_CLASS_AS_SINGLETON(ClassName)                     \
   public:                                                             \
-    static ClassName* instance(const int instanceMode) {              \
-      static ClassName *instance;                                     \
-      if(instance) {                                                  \
-        switch(instanceMode) {                                        \
-          case SINGLETON_RESET:                                       \
-            delete instance;                                          \
-            instance = new ClassName();                               \
-            break;                                                    \
-          case SINGLETON_DELETE:                                      \
-            delete instance;                                          \
-          case SINGLETON_CREATE:                                      \
-            break;                                                    \
-          default:                                                    \
-            return 0;                                                 \
-            break;                                                    \
-        }                                                             \
-      } else {                                                        \
-        switch(instanceMode) {                                        \
-          case SINGLETON_CREATE:                                      \
-            instance = new ClassName();                               \
-            break;                                                    \
-          case SINGLETON_DELETE:                                      \
-          case SINGLETON_RESET:                                       \
-          default:                                                    \
-            return 0;                                                 \
-            break;                                                    \
-        }                                                             \
+    static std::shared_ptr<ClassName> instance() {                    \
+      static std::shared_ptr<ClassName> instance;                     \
+      if(!instance) {                                                 \
+        instance = std::make_shared<ClassName>();                     \
       }                                                               \
       return instance;                                                \
     }                                                                 \
-    static const int SINGLETON_CREATE = 1;                            \
-    static const int SINGLETON_RESET = 2;                             \
-    static const int SINGLETON_DELETE = 3;                            \
-  private:                                                            \
     ClassName();                                                      \
     ~ClassName();                                                     \
     ClassName(const ClassName & ) =delete;                            \

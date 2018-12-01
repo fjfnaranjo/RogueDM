@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include "macros.hpp"
 
 namespace roguedm {
@@ -67,5 +69,7 @@ class Config
     int doNotUseNetworking;
 
 };
+
+typedef std::shared_ptr<Config> ConfigReference;
 
 } // namespace roguedm

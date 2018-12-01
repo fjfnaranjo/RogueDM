@@ -22,6 +22,8 @@
 
 #include "Game.hpp"
 
+#include <memory>
+
 namespace roguedm_main {
 
 Game::Game() {}
@@ -30,7 +32,12 @@ Game::~Game() {}
 
 int Game::processCommand(const roguedm::Sentence&) { return 0; }
 const int Game::autocomplete(roguedm::Sentence&) { return 0; };
-const roguedm::SentenceList* Game::autocompleteListOptions(const roguedm::Sentence&) { return new std::vector<roguedm::Sentence>; };
+
+const roguedm::SentenceListReference Game::autocompleteListOptions(
+  const roguedm::Sentence&
+) {
+  return std::make_shared<roguedm::SentenceList>();
+};
 
 void Game::update() {}
 

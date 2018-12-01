@@ -20,7 +20,7 @@ cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)
 
 # Project basic definitions
 project(roguedm VERSION 1.0 LANGUAGES C CXX)
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++14)
 
 # Verbose version
 set(roguedm_VERSION_MAJOR 1)

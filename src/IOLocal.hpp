@@ -24,6 +24,7 @@
 
 #include <iostream>
 #include <map>
+#include <memory>
 
 #include <SDL2/SDL.h>
 
@@ -93,7 +94,7 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
      * Used by IOLocal to ask the command handler a autocomplete list.
      * \see CommandHandlerInterface.autocompleteListOptions()
      */
-    const SentenceList* autocompleteListOptions(const Sentence&);
+    const SentenceListReference autocompleteListOptions(const Sentence&);
 
     /**
      * Get the error code value (detecting contruction failures).
@@ -355,5 +356,7 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     SDL_Rect dialogText;
 
 };
+
+typedef std::shared_ptr<IOLocal> IOLocalReference;
 
 } // namespace roguedm
