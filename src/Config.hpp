@@ -20,8 +20,7 @@
  * \brief File containing the configuration management class declarations.
  */
 
-#ifndef CONFIG_HPP
-#define CONFIG_HPP
+#pragma once
 
 #include "macros.hpp"
 
@@ -70,5 +69,3 @@ class Config
 };
 
 } // namespace roguedm
-
-#endif // CONFIG_HPP

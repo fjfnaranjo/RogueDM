@@ -20,8 +20,7 @@
  * \brief File containing the Game class declarations.
  */
 
-#ifndef GAME_HPP
-#define GAME_HPP
+#pragma once
 
 #include "../CommandHandlerInterface.hpp"
 #include "../GameComponentInterface.hpp"
@@ -90,5 +89,3 @@ class Game :
 };
 
 } // namespace roguedm
-
-#endif // GAME_HPP

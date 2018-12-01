@@ -20,8 +20,7 @@
  * \brief File containing the MainState class declarations.
  */
 
-#ifndef MAINSTATE_HPP
-#define MAINSTATE_HPP
+#pragma once
 
 #include "Game.hpp"
 #include "../IOLocal.hpp"
@@ -90,5 +89,3 @@ class MainState : public roguedm::StateInterface
 };
 
 } // namespace roguedm_main
-
-#endif // MAINSTATE_HPP

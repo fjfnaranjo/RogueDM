@@ -20,8 +20,7 @@
  * \brief File used to contain the StateInterface interface.
  */
 
-#ifndef STATEINTERFACE_HPP
-#define STATEINTERFACE_HPP
+#pragma once
 
 // Useful macros.
 #include "macros.hpp"
@@ -66,5 +65,3 @@ class StateInterface
 };
 
 } // namespace roguedm
-
-#endif // STATEINTERFACE_HPP

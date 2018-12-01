@@ -20,8 +20,7 @@
  * \brief File containing the InitialState class declarations.
  */
 
-#ifndef INITIALSTATE_HPP
-#define INITIALSTATE_HPP
+#pragma once
 
 // State interface and other states.
 #include "StateInterface.hpp"
@@ -79,5 +78,3 @@ class InitialState : public StateInterface
 };
 
 } // namespace roguedm
-
-#endif // INITIALSTATE_HPP

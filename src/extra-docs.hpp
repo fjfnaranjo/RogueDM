@@ -20,8 +20,7 @@
  * \brief File used to document the namespaces and store Doxygen's extra docs.
  */
 
-#ifndef EXTRA_DOCS_HPP
-#define EXTRA_DOCS_HPP
+#pragma once
 
 /**
  * \namespace roguedm
@@ -39,5 +38,3 @@
  * This is the namespace for the main state or the VTT itself. It contains
  * all the operations and types related with the VTT behavior and features.
  */
-
-#endif // EXTRA_DOCS_HPP

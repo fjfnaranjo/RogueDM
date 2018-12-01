@@ -20,8 +20,7 @@
  * \brief File used to contain the CommandHandlerInterface interface.
  */
 
-#ifndef COMMANDHANDLERINTERFACE_HPP
-#define COMMANDHANDLERINTERFACE_HPP
+#pragma once
 
 // Useful macros.
 #include "macros.hpp"
@@ -123,5 +122,3 @@ class CommandHandlerInterface
 };
 
 } // namespace roguedm
-
-#endif // COMMANDHANDLERINTERFACE_HPP

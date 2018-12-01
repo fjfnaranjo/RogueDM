@@ -24,8 +24,7 @@
  * macro.
  */
 
-#ifndef STRINGS_HPP
-#define STRINGS_HPP
+#pragma once
 
 // Extra strings with the actual version information.
 #include "version.hpp"
@@ -42,5 +41,3 @@
 #define RDM_STR_SDL_NET_ERROR    "SDLNet error reported: %s\n"
 
 #define RDM_STR_NOT_NETWORKING   "Networking disabled...\n"
-
-#endif // STRINGS_HPP

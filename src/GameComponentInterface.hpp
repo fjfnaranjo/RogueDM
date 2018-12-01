@@ -20,8 +20,7 @@
  * \brief File used to contain the GameComponentInterface interface.
  */
 
-#ifndef GAMECOMPONENTINTERFACE_HPP
-#define GAMECOMPONENTINTERFACE_HPP
+#pragma once
 
 // Useful macros.
 #include "macros.hpp"
@@ -50,5 +49,3 @@ class GameComponentInterface
 };
 
 } // namespace roguedm
-
-#endif // GAMECOMPONENTINTERFACE_HPP

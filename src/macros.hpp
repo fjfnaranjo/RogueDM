@@ -20,8 +20,7 @@
  * \brief File used for common define macros.
  */
 
-#ifndef MACROS_HPP
-#define MACROS_HPP
+#pragma once
 
 // Interface declaration macro.
 //
@@ -93,5 +92,3 @@
     ~ClassName();                                                     \
     ClassName(const ClassName & ) =delete;                            \
     ClassName & operator = (const ClassName & ) =delete;
-
-#endif // MACROS_HPP

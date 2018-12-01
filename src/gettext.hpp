@@ -20,12 +20,9 @@
  * \brief File containing the gettext alias.
  */
 
-#ifndef GETTEXT_HPP
-#define GETTEXT_HPP
+#pragma once
 
 // Standard includes.
 #include <locale>
 
 #define _ gettext
-
-#endif // GETTEXT_HPP

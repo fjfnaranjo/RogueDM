@@ -20,8 +20,7 @@
  * \brief File containing the main application class (RogueDM) declarations.
  */
 
-#ifndef ROGUEDM_HPP
-#define ROGUEDM_HPP
+#pragma once
 
 // Predefined strings for the CLI interface and game.
 #include "strings.hpp"
@@ -62,5 +61,3 @@ class RogueDM {
 };
 
 } // namespace roguedm
-
-#endif // ROGUEDM_HPP

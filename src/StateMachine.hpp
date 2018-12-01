@@ -20,8 +20,7 @@
  * \brief File used to hold the StateMachine class declarations.
  */
 
-#ifndef STATEMACHINE_HPP
-#define STATEMACHINE_HPP
+#pragma once
 
 // Includes related to the state machine.
 #include "StateInterface.hpp"
@@ -93,5 +92,3 @@ class StateMachine
 };
 
 } // namespace roguedm
-
-#endif // STATEMACHINE_HPP

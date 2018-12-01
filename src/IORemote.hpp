@@ -20,8 +20,7 @@
  * \brief File containing the IORemote class declarations.
  */
 
-#ifndef IOREMOTE_HPP
-#define IOREMOTE_HPP
+#pragma once
 
 #include "macros.hpp"
 
@@ -96,5 +95,3 @@ class IORemote : CommandHandlerInterface, GameComponentInterface
 };
 
 } // namespace roguedm
-
-#endif // IOREMOTE_HPP

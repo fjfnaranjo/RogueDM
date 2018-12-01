@@ -20,8 +20,7 @@
  * \brief File containing the IOLocal class declarations.
  */
 
-#ifndef IOLOCAL_HPP
-#define IOLOCAL_HPP
+#pragma once
 
 #include "macros.hpp"
 
@@ -368,5 +367,3 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
 };
 
 } // namespace roguedm
-
-#endif // IOLOCAL_HPP
