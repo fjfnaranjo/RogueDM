@@ -48,7 +48,6 @@ roguedm::StateResponse MainState::execute() {
   auto ioLocalInstance = roguedm::IOLocal::instance();
   int ioLocalErrorCode = ioLocalInstance->getErrorCode();
   if(0!=ioLocalErrorCode) {
-    SDL_Quit();
     status = ioLocalErrorCode;
     return {status, RDM_STATE_NO_STATE};
   }
@@ -56,7 +55,6 @@ roguedm::StateResponse MainState::execute() {
   auto ioRemoteInstance = roguedm::IORemote::instance();
   int ioRemoteErrorCode = ioRemoteInstance->getErrorCode();
   if(0!=ioRemoteErrorCode) {
-    SDL_Quit();
     status = ioRemoteErrorCode;
     return {status, RDM_STATE_NO_STATE};
   }

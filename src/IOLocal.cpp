@@ -318,6 +318,7 @@ IOLocal::IOLocal() {
       _(RDM_STR_SDL_ERROR),
 	  SDL_GetError()
 	);
+    SDL_Quit();
     return;
   }
 
@@ -341,9 +342,9 @@ IOLocal::IOLocal() {
   registerCommandHandler(this);
 
   // More SDL Init
+  ticks = SDL_GetTicks();
   initScreenSize();
   SDL_ShowCursor(true);
-  ticks = SDL_GetTicks();
 
 }
 
@@ -874,7 +875,6 @@ void IOLocal::initScreenSize() {
   SDL_GetWindowSize(window, &ww, &wh);
   maxCols=floor(ww/txtCWidth)-1;
   maxRows=floor(wh/txtCHeight)-1;
-  update();
 }
 
 void IOLocal::drawBox(
