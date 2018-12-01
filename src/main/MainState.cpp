@@ -58,9 +58,9 @@ roguedm::StateResponse MainState::execute() {
     return {status, RDM_STATE_NO_STATE};
   }
 
-  std::unique_ptr<Game> gameInstance = std::make_unique<Game>();
+  auto gameInstance = std::make_unique<Game>();
 
-  roguedm::IOLocalReference ioLocalInstance = roguedm::IOLocal::instance();
+  auto ioLocalInstance = roguedm::IOLocal::instance();
   int ioLocalErrorCode = ioLocalInstance->getErrorCode();
   if(0!=ioLocalErrorCode) {
     SDL_Quit();
@@ -68,7 +68,7 @@ roguedm::StateResponse MainState::execute() {
     return {status, RDM_STATE_NO_STATE};
   }
 
-  roguedm::IORemoteReference ioRemoteInstance = roguedm::IORemote::instance();
+  auto ioRemoteInstance = roguedm::IORemote::instance();
   int ioRemoteErrorCode = ioRemoteInstance->getErrorCode();
   if(0!=ioRemoteErrorCode) {
     SDL_Quit();
