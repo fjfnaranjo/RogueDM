@@ -57,10 +57,8 @@
 #define RDM_DECLARE_CLASS_AS_SINGLETON(ClassName)                     \
   public:                                                             \
     static std::shared_ptr<ClassName> instance() {                    \
-      static std::shared_ptr<ClassName> instance;                     \
-      if(!instance) {                                                 \
+      static std::shared_ptr<ClassName> instance =                    \
         instance = std::make_shared<ClassName>();                     \
-      }                                                               \
       return instance;                                                \
     }                                                                 \
     ClassName();                                                      \
