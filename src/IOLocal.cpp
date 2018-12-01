@@ -22,6 +22,7 @@
 
 #include "IOLocal.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <locale>
 #include <vector>
@@ -1321,13 +1322,13 @@ void IOLocal::tryAutocompletion() {
   // check for empty line to list all commands
   if(commandLine.size()==1 && commandLine[0].wordContent.length()==0) {
 
-    for(int count = 0, max = commandHandlers.size(); count<max ; count++) {
+    for(auto commandHandler : commandHandlers) {
 
-      options = commandHandlers[count]->autocompleteListOptions(commandLine);
+      options = commandHandler->autocompleteListOptions(commandLine);
 
       if(!options->empty()) {
-        for(int counter = 0, max = options->size() ; counter<max ; counter++)
-          consoleHistory.push_back(options->at(counter));
+        for(auto option : *options)
+          consoleHistory.push_back(option);
       }
 
     }
@@ -1335,16 +1336,16 @@ void IOLocal::tryAutocompletion() {
   }
 
   // Process action
-  for(int count = 0, max = commandHandlers.size(); count<max ; count++) {
+  for(auto commandHandler : commandHandlers) {
 
-    if(1==commandHandlers[count]->autocomplete(commandLine))
+    if(1==commandHandler->autocomplete(commandLine))
       break;
 
-    options = commandHandlers[count]->autocompleteListOptions(commandLine);
+    options = commandHandler->autocompleteListOptions(commandLine);
 
     if(!options->empty()) {
-      for(int counter = 0, max = options->size() ; counter<max ; counter++)
-        consoleHistory.push_back(options->at(counter));
+      for(auto option : *options)
+        consoleHistory.push_back(option);
       break;
     }
 
@@ -1368,8 +1369,8 @@ void IOLocal::processLine() {
       commandLine.insert(commandLine.begin(),defaultWord);
 
     // Process action
-    for(int count = 0, max = commandHandlers.size(); count<max ; count++)
-      if(1==commandHandlers[count]->processCommand(commandLine))
+    for(auto commandHandler : commandHandlers)
+      if(1==commandHandler->processCommand(commandLine))
         break;
 
     // Push the command in the historic
@@ -1402,9 +1403,10 @@ void IOLocal::registerCommandHandler(CommandHandlerInterface *c) {
 }
 
 void IOLocal::unregisterCommandHandler(CommandHandlerInterface *c) {
-  for(int counter=0,max=commandHandlers.size();counter<max;counter++)
-    if(commandHandlers[counter]==c)
-      commandHandlers.erase(commandHandlers.begin()+counter);
+  commandHandlers.erase(
+    std::remove(commandHandlers.begin(), commandHandlers.end(), c),
+    commandHandlers.end()
+  );
 }
 
 } // namespace roguedm
