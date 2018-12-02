@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)
+add_executable (roguedm_test test.cpp)
+target_link_libraries(roguedm_test roguedm_lib)
 
-add_subdirectory(src)
+enable_testing()
+add_test(NAME MyTest COMMAND Test)
