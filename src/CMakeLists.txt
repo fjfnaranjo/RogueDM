@@ -50,4 +50,6 @@ target_link_libraries(roguedm_lib ${SDL2_LIBRARY}
                                   ${SDL2_NET_LIBRARIES})
 target_link_libraries(roguedm_app roguedm_lib)
 
-add_subdirectory(roguedm_test)
+if(ROGUEDM_TESTING)
+  add_subdirectory(roguedm_test)
+endif()
