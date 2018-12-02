@@ -15,8 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-add_executable (roguedm_test test.cpp)
-target_link_libraries(roguedm_test roguedm_lib)
-
 enable_testing()
+
+add_subdirectory("${roguedm_SOURCE_DIR}/roguedm_test/googletest/"
+                 "${roguedm_BINARY_DIR}/roguedm_test/googletest-build")
+
+add_executable (roguedm_test test.cpp)
+
+target_link_libraries(roguedm_test roguedm_lib gtest)
+
 add_test(NAME MyTest COMMAND Test)

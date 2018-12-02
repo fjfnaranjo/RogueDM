@@ -2,4 +2,5 @@
 /env/share/imgs
 /.cproject
 /.project
-/.settings/
+/.settings
+/src/roguedm_test/googletest
