@@ -194,7 +194,7 @@ void IOLocal::update() {
                 dialogText.x+cLineLenght+wordL-
                   wordTypes[commandLine[c].wordClass].rDecorator.length()
               )*txtCWidth
-            )-(txtCWidth/2);
+            );
           SDL_RenderCopy(renderer,ipI,NULL,&dest);
         } else if (wordRShift==(int)commandLine[c].wordContent.length()) {
           dest.x =
@@ -203,7 +203,7 @@ void IOLocal::update() {
                 dialogText.x+cLineLenght+
                   wordTypes[commandLine[c].wordClass].lDecorator.length()
               )*txtCWidth
-            )-(txtCWidth/2);
+            );
           SDL_RenderCopy(renderer,ipI,NULL,&dest);
         } else {
           dest.x =
@@ -212,7 +212,7 @@ void IOLocal::update() {
                 dialogText.x+cLineLenght+wordL-wordRShift-
                   wordTypes[commandLine[c].wordClass].rDecorator.length()
               )*txtCWidth
-            )-(txtCWidth/2);
+            );
           SDL_RenderCopy(renderer,ipI,NULL,&dest);
         }
       }
@@ -395,11 +395,11 @@ void IOLocal::initWordTypes() {
 
   // Load base texture
   SDL_Surface *baseTexture;
-  baseTexture = IMG_Load("env/share/imgs/page850bw.gif");
+  baseTexture = IMG_Load("env/share/imgs/codepage-850-9-14.png");
 
   // Insertion point rects
   SDL_Rect orig, dest;
-  orig.x=84; orig.y=98; orig.w=7; orig.h=14;
+  orig.x=279; orig.y=28; orig.w=9; orig.h=14;
   dest.x=0;dest.y=0;
 
   // Insertion point surface creation
@@ -412,11 +412,11 @@ void IOLocal::initWordTypes() {
   ipI = SDL_CreateTextureFromSurface(renderer, ipI_surface);
 
   // Texture data
-  txtCpr=16;
+  txtCpr=32;
   txtHeight=112;
-  txtWidth=224;
+  txtWidth=288;
   txtCHeight=14;
-  txtCWidth=7;
+  txtCWidth=9;
   txtHSep=0;
   txtWSep=0;
   txtHStart=0;
