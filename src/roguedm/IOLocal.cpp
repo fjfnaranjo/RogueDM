@@ -306,9 +306,9 @@ IOLocal::IOLocal() {
 
   int createStatus = SDL_CreateWindowAndRenderer(
     800, 500,
-	SDL_WINDOW_RESIZABLE,
+    SDL_WINDOW_RESIZABLE,
     &window,
-	&renderer
+    &renderer
   );
 
   if(createStatus || NULL==window || NULL==renderer) {
@@ -316,8 +316,8 @@ IOLocal::IOLocal() {
     SDL_LogError(
       SDL_LOG_CATEGORY_APPLICATION,
       _(RDM_STR_SDL_ERROR),
-	  SDL_GetError()
-	);
+      SDL_GetError()
+    );
     SDL_Quit();
     return;
   }
