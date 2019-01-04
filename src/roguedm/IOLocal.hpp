@@ -35,8 +35,8 @@
 #define RDM_CL_MAX_HISTORY         128
 
 // Command's words.
-#define RDM_CMD_QUIT         L"quit"       // End app.
-#define RDM_CMD_PSAY         L"psay"       // Player say to all.
+#define RDM_CMD_QUIT         u8"quit"       // End app.
+#define RDM_CMD_PSAY         u8"psay"       // Player say to all.
 
 namespace roguedm {
 
@@ -44,14 +44,14 @@ namespace roguedm {
 struct WordClass {
   SDL_Color color;
   SDL_Color clearColor;
-  std::wstring lDecorator;
-  std::wstring rDecorator;
+  char[] lDecorator;
+  char[] rDecorator;
   SDL_Texture *charsTexture;
 };
 
 /** \brief Struct Player for the name and so. */
 struct Player {
-  std::wstring name;
+  char[] name;
   WordClass word;
 };
 
@@ -220,11 +220,11 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     );
 
     /**
-     * Translate a wchar to the ASCII 850 corresponding code.
-     * \param c The wide character.
-     * \return The ASCII position.
+     * Translate a UTF-8 encoded character to the ASCII 850 position.
+     * \param c The UTF-8 encoded character.
+     * \return The ASCII 850 position.
      */
-    int transChar(wchar_t c);
+    int transChar(char[] c);
 
     /**
      * Write a 850 ASCII char in the interface.
@@ -277,7 +277,7 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     WordClass wordTypes[RDM_WCLASS_TOTAL];
 
     /** Table used to translate a UTF-8 input character to a ASCII 850 */
-    std::map<wchar_t,int> transUtf8;
+    std::map<char[],int> transUtf8;
 
     /** SDL window */
     SDL_Window *window = nullptr;

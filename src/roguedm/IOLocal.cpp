@@ -383,7 +383,7 @@ int IOLocal::getErrorCode() {
 
 void IOLocal::resetLine() {
   Word emptyWord;
-  emptyWord.wordContent = L"";
+  emptyWord.wordContent = u8"";
   emptyWord.wordClass = RDM_WCLASS_NORMAL;
   commandLine.clear();
   commandLine.push_back(emptyWord);
@@ -429,8 +429,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NORMAL].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NORMAL].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NORMAL].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NORMAL].lDecorator = L"";
-  wordTypes[RDM_WCLASS_NORMAL].rDecorator = L"";
+  wordTypes[RDM_WCLASS_NORMAL].lDecorator = u8"";
+  wordTypes[RDM_WCLASS_NORMAL].rDecorator = u8"";
   wordTypes[RDM_WCLASS_NORMAL].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -448,8 +448,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_COMMAND].clearColor.r = 0;
   wordTypes[RDM_WCLASS_COMMAND].clearColor.g = 0;
   wordTypes[RDM_WCLASS_COMMAND].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_COMMAND].lDecorator = L"\\";
-  wordTypes[RDM_WCLASS_COMMAND].rDecorator = L"";
+  wordTypes[RDM_WCLASS_COMMAND].lDecorator = u8"\\";
+  wordTypes[RDM_WCLASS_COMMAND].rDecorator = u8"";
   wordTypes[RDM_WCLASS_COMMAND].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -467,8 +467,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_ALLIED].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_ALLIED].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_ALLIED].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED].lDecorator = L"'";
-  wordTypes[RDM_WCLASS_NPC_ALLIED].rDecorator = L"'";
+  wordTypes[RDM_WCLASS_NPC_ALLIED].lDecorator = u8"'";
+  wordTypes[RDM_WCLASS_NPC_ALLIED].rDecorator = u8"'";
   wordTypes[RDM_WCLASS_NPC_ALLIED].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -486,8 +486,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].lDecorator = L"'";
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].rDecorator = L"'";
+  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].lDecorator = u8"'";
+  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].rDecorator = u8"'";
   wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -505,8 +505,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_NEUTRAL].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_NEUTRAL].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_NEUTRAL].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].lDecorator = L"";
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].rDecorator = L"?";
+  wordTypes[RDM_WCLASS_NPC_NEUTRAL].lDecorator = u8"";
+  wordTypes[RDM_WCLASS_NPC_NEUTRAL].rDecorator = u8"?";
   wordTypes[RDM_WCLASS_NPC_NEUTRAL].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -524,8 +524,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].lDecorator = L"";
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].rDecorator = L"?";
+  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].lDecorator = u8"";
+  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].rDecorator = u8"?";
   wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -543,8 +543,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_ENEMY].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_ENEMY].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_ENEMY].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY].lDecorator = L"";
-  wordTypes[RDM_WCLASS_NPC_ENEMY].rDecorator = L"!!";
+  wordTypes[RDM_WCLASS_NPC_ENEMY].lDecorator = u8"";
+  wordTypes[RDM_WCLASS_NPC_ENEMY].rDecorator = u8"!!";
   wordTypes[RDM_WCLASS_NPC_ENEMY].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -562,8 +562,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].lDecorator = L"";
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].rDecorator = L"!";
+  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].lDecorator = u8"";
+  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].rDecorator = u8"!";
   wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -581,8 +581,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].lDecorator = L"";
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].rDecorator = L"!!!";
+  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].lDecorator = u8"";
+  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].rDecorator = u8"!!!";
   wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -600,8 +600,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_PLACE].clearColor.r = 0;
   wordTypes[RDM_WCLASS_PLACE].clearColor.g = 0;
   wordTypes[RDM_WCLASS_PLACE].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_PLACE].lDecorator = L"[";
-  wordTypes[RDM_WCLASS_PLACE].rDecorator = L"]";
+  wordTypes[RDM_WCLASS_PLACE].lDecorator = u8"[";
+  wordTypes[RDM_WCLASS_PLACE].rDecorator = u8"]";
   wordTypes[RDM_WCLASS_PLACE].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -619,8 +619,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_OBJECT].clearColor.r = 0;
   wordTypes[RDM_WCLASS_OBJECT].clearColor.g = 0;
   wordTypes[RDM_WCLASS_OBJECT].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT].lDecorator = L"{";
-  wordTypes[RDM_WCLASS_OBJECT].rDecorator = L"}";
+  wordTypes[RDM_WCLASS_OBJECT].lDecorator = u8"{";
+  wordTypes[RDM_WCLASS_OBJECT].rDecorator = u8"}";
   wordTypes[RDM_WCLASS_OBJECT].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -638,8 +638,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_OBJECT_MAGIC].clearColor.r = 0;
   wordTypes[RDM_WCLASS_OBJECT_MAGIC].clearColor.g = 0;
   wordTypes[RDM_WCLASS_OBJECT_MAGIC].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].lDecorator = L"{";
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].rDecorator = L"}*";
+  wordTypes[RDM_WCLASS_OBJECT_MAGIC].lDecorator = u8"{";
+  wordTypes[RDM_WCLASS_OBJECT_MAGIC].rDecorator = u8"}*";
   wordTypes[RDM_WCLASS_OBJECT_MAGIC].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -657,8 +657,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_OBJECT_SET].clearColor.r = 0;
   wordTypes[RDM_WCLASS_OBJECT_SET].clearColor.g = 0;
   wordTypes[RDM_WCLASS_OBJECT_SET].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_SET].lDecorator = L"{";
-  wordTypes[RDM_WCLASS_OBJECT_SET].rDecorator = L"}s";
+  wordTypes[RDM_WCLASS_OBJECT_SET].lDecorator = u8"{";
+  wordTypes[RDM_WCLASS_OBJECT_SET].rDecorator = u8"}s";
   wordTypes[RDM_WCLASS_OBJECT_SET].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -676,8 +676,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_OBJECT_UNIQ].clearColor.r = 0;
   wordTypes[RDM_WCLASS_OBJECT_UNIQ].clearColor.g = 0;
   wordTypes[RDM_WCLASS_OBJECT_UNIQ].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].lDecorator = L"{";
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].rDecorator = L"}**";
+  wordTypes[RDM_WCLASS_OBJECT_UNIQ].lDecorator = u8"{";
+  wordTypes[RDM_WCLASS_OBJECT_UNIQ].rDecorator = u8"}**";
   wordTypes[RDM_WCLASS_OBJECT_UNIQ].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -695,8 +695,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_OBJECT_EPIC].clearColor.r = 0;
   wordTypes[RDM_WCLASS_OBJECT_EPIC].clearColor.g = 0;
   wordTypes[RDM_WCLASS_OBJECT_EPIC].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].lDecorator = L"{";
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].rDecorator = L"}***";
+  wordTypes[RDM_WCLASS_OBJECT_EPIC].lDecorator = u8"{";
+  wordTypes[RDM_WCLASS_OBJECT_EPIC].rDecorator = u8"}***";
   wordTypes[RDM_WCLASS_OBJECT_EPIC].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -717,127 +717,127 @@ void IOLocal::initWordTypes() {
 
 void IOLocal::initTransTable() {
 
-  transUtf8[L' '] = 32;
-  transUtf8[L'!'] = 33;
-  transUtf8[L'\"']= 34;
-  transUtf8[L'#'] = 35;
-  transUtf8[L'$'] = 36;
-  transUtf8[L'%'] = 37;
-  transUtf8[L'&'] = 38;
-  transUtf8[L'\''] = 39;
-  transUtf8[L'('] = 40;
-  transUtf8[L')'] = 41;
-  transUtf8[L'*'] = 42;
-  transUtf8[L'+'] = 43;
-  transUtf8[L','] = 44;
-  transUtf8[L'-'] = 45;
-  transUtf8[L'.'] = 46;
-  transUtf8[L'/'] = 47;
+  transUtf8[u8" "] = 32;
+  transUtf8[u8"!"] = 33;
+  transUtf8[u8"\""]= 34;
+  transUtf8[u8"#"] = 35;
+  transUtf8[u8"$"] = 36;
+  transUtf8[u8"%"] = 37;
+  transUtf8[u8"&"] = 38;
+  transUtf8[u8"'"] = 39;
+  transUtf8[u8"("] = 40;
+  transUtf8[u8")"] = 41;
+  transUtf8[u8"*"] = 42;
+  transUtf8[u8"+"] = 43;
+  transUtf8[u8","] = 44;
+  transUtf8[u8"-"] = 45;
+  transUtf8[u8"."] = 46;
+  transUtf8[u8"/"] = 47;
 
-  transUtf8[L'0'] = 48;
-  transUtf8[L'1'] = 49;
-  transUtf8[L'2'] = 50;
-  transUtf8[L'3'] = 51;
-  transUtf8[L'4'] = 52;
-  transUtf8[L'5'] = 53;
-  transUtf8[L'6'] = 54;
-  transUtf8[L'7'] = 55;
-  transUtf8[L'8'] = 56;
-  transUtf8[L'9'] = 57;
-  transUtf8[L':'] = 58;
-  transUtf8[L';'] = 59;
-  transUtf8[L'<'] = 60;
-  transUtf8[L'='] = 61;
-  transUtf8[L'>'] = 62;
-  transUtf8[L'?'] = 63;
+  transUtf8[u8"0"] = 48;
+  transUtf8[u8"1"] = 49;
+  transUtf8[u8"2"] = 50;
+  transUtf8[u8"3"] = 51;
+  transUtf8[u8"4"] = 52;
+  transUtf8[u8"5"] = 53;
+  transUtf8[u8"6"] = 54;
+  transUtf8[u8"7"] = 55;
+  transUtf8[u8"8"] = 56;
+  transUtf8[u8"9"] = 57;
+  transUtf8[u8":"] = 58;
+  transUtf8[u8";"] = 59;
+  transUtf8[u8"<"] = 60;
+  transUtf8[u8"="] = 61;
+  transUtf8[u8">"] = 62;
+  transUtf8[u8"?"] = 63;
 
-  transUtf8[L'@'] = 64;
-  transUtf8[L'A'] = 65;
-  transUtf8[L'B'] = 66;
-  transUtf8[L'C'] = 67;
-  transUtf8[L'D'] = 68;
-  transUtf8[L'E'] = 69;
-  transUtf8[L'F'] = 70;
-  transUtf8[L'G'] = 71;
-  transUtf8[L'H'] = 72;
-  transUtf8[L'I'] = 73;
-  transUtf8[L'J'] = 74;
-  transUtf8[L'K'] = 75;
-  transUtf8[L'L'] = 76;
-  transUtf8[L'M'] = 77;
-  transUtf8[L'N'] = 78;
-  transUtf8[L'O'] = 79;
+  transUtf8[u8"@"] = 64;
+  transUtf8[u8"A"] = 65;
+  transUtf8[u8"B"] = 66;
+  transUtf8[u8"C"] = 67;
+  transUtf8[u8"D"] = 68;
+  transUtf8[u8"E"] = 69;
+  transUtf8[u8"F"] = 70;
+  transUtf8[u8"G"] = 71;
+  transUtf8[u8"H"] = 72;
+  transUtf8[u8"I"] = 73;
+  transUtf8[u8"J"] = 74;
+  transUtf8[u8"K"] = 75;
+  transUtf8[u8"L"] = 76;
+  transUtf8[u8"M"] = 77;
+  transUtf8[u8"N"] = 78;
+  transUtf8[u8"O"] = 79;
 
-  transUtf8[L'P'] = 80;
-  transUtf8[L'Q'] = 81;
-  transUtf8[L'R'] = 82;
-  transUtf8[L'S'] = 83;
-  transUtf8[L'T'] = 84;
-  transUtf8[L'U'] = 85;
-  transUtf8[L'V'] = 86;
-  transUtf8[L'W'] = 87;
-  transUtf8[L'X'] = 88;
-  transUtf8[L'Y'] = 89;
-  transUtf8[L'Z'] = 90;
-  transUtf8[L'['] = 91;
-  transUtf8[L'\\']= 92;
-  transUtf8[L']'] = 93;
-  transUtf8[L'^'] = 94;
-  transUtf8[L'_'] = 95;
+  transUtf8[u8"P"] = 80;
+  transUtf8[u8"Q"] = 81;
+  transUtf8[u8"R"] = 82;
+  transUtf8[u8"S"] = 83;
+  transUtf8[u8"T"] = 84;
+  transUtf8[u8"U"] = 85;
+  transUtf8[u8"V"] = 86;
+  transUtf8[u8"W"] = 87;
+  transUtf8[u8"X"] = 88;
+  transUtf8[u8"Y"] = 89;
+  transUtf8[u8"Z"] = 90;
+  transUtf8[u8"["] = 91;
+  transUtf8[u8"\\"]= 92;
+  transUtf8[u8"]"] = 93;
+  transUtf8[u8"^"] = 94;
+  transUtf8[u8"_"] = 95;
 
-  transUtf8[L'`'] = 96;
-  transUtf8[L'a'] = 97;
-  transUtf8[L'b'] = 98;
-  transUtf8[L'c'] = 99;
-  transUtf8[L'd'] = 100;
-  transUtf8[L'e'] = 101;
-  transUtf8[L'f'] = 102;
-  transUtf8[L'g'] = 103;
-  transUtf8[L'h'] = 104;
-  transUtf8[L'i'] = 105;
-  transUtf8[L'j'] = 106;
-  transUtf8[L'k'] = 107;
-  transUtf8[L'l'] = 108;
-  transUtf8[L'm'] = 109;
-  transUtf8[L'n'] = 110;
-  transUtf8[L'o'] = 111;
+  transUtf8[u8"`"] = 96;
+  transUtf8[u8"a"] = 97;
+  transUtf8[u8"b"] = 98;
+  transUtf8[u8"c"] = 99;
+  transUtf8[u8"d"] = 100;
+  transUtf8[u8"e"] = 101;
+  transUtf8[u8"f"] = 102;
+  transUtf8[u8"g"] = 103;
+  transUtf8[u8"h"] = 104;
+  transUtf8[u8"i"] = 105;
+  transUtf8[u8"j"] = 106;
+  transUtf8[u8"k"] = 107;
+  transUtf8[u8"l"] = 108;
+  transUtf8[u8"m"] = 109;
+  transUtf8[u8"n"] = 110;
+  transUtf8[u8"o"] = 111;
 
-  transUtf8[L'p'] = 112;
-  transUtf8[L'q'] = 113;
-  transUtf8[L'r'] = 114;
-  transUtf8[L's'] = 115;
-  transUtf8[L't'] = 116;
-  transUtf8[L'u'] = 117;
-  transUtf8[L'v'] = 118;
-  transUtf8[L'w'] = 119;
-  transUtf8[L'x'] = 120;
-  transUtf8[L'y'] = 121;
-  transUtf8[L'z'] = 122;
-  transUtf8[L'{'] = 123;
-  transUtf8[L'|'] = 124;
-  transUtf8[L'}'] = 125;
-  transUtf8[L'~'] = 126;
+  transUtf8[u8"p"] = 112;
+  transUtf8[u8"q"] = 113;
+  transUtf8[u8"r"] = 114;
+  transUtf8[u8"s"] = 115;
+  transUtf8[u8"t"] = 116;
+  transUtf8[u8"u"] = 117;
+  transUtf8[u8"v"] = 118;
+  transUtf8[u8"w"] = 119;
+  transUtf8[u8"x"] = 120;
+  transUtf8[u8"y"] = 121;
+  transUtf8[u8"z"] = 122;
+  transUtf8[u8"{"] = 123;
+  transUtf8[u8"|"] = 124;
+  transUtf8[u8"}"] = 125;
+  transUtf8[u8"~"] = 126;
 
-  transUtf8[L'\U00c7'] = 128;
-  transUtf8[L'\U00fc'] = 129;
-  transUtf8[L'\U00e9'] = 130;
-  transUtf8[L'\U00e7'] = 135;
-  transUtf8[L'\U00c9'] = 144;
-  transUtf8[L'\U00e1'] = 160;
-  transUtf8[L'\U00ed'] = 161;
-  transUtf8[L'\U00f3'] = 162;
-  transUtf8[L'\U00fa'] = 163;
-  transUtf8[L'\U00f1'] = 164;
-  transUtf8[L'\U00d1'] = 165;
-  transUtf8[L'\U00aa'] = 166;
-  transUtf8[L'\U00ba'] = 167;
-  transUtf8[L'\U00bf'] = 168;
-  transUtf8[L'\U00a1'] = 173;
-  transUtf8[L'\U00c1'] = 181;
-  transUtf8[L'\U20ac'] = 213;
-  transUtf8[L'\U00cd'] = 214;
-  transUtf8[L'\U00d3'] = 224;
-  transUtf8[L'\U00da'] = 233;
+  transUtf8[u8"\U00c7"] = 128;
+  transUtf8[u8"\U00fc"] = 129;
+  transUtf8[u8"\U00e9"] = 130;
+  transUtf8[u8"\U00e7"] = 135;
+  transUtf8[u8"\U00c9"] = 144;
+  transUtf8[u8"\U00e1"] = 160;
+  transUtf8[u8"\U00ed"] = 161;
+  transUtf8[u8"\U00f3"] = 162;
+  transUtf8[u8"\U00fa"] = 163;
+  transUtf8[u8"\U00f1"] = 164;
+  transUtf8[u8"\U00d1"] = 165;
+  transUtf8[u8"\U00aa"] = 166;
+  transUtf8[u8"\U00ba"] = 167;
+  transUtf8[u8"\U00bf"] = 168;
+  transUtf8[u8"\U00a1"] = 173;
+  transUtf8[u8"\U00c1"] = 181;
+  transUtf8[u8"\U20ac"] = 213;
+  transUtf8[u8"\U00cd"] = 214;
+  transUtf8[u8"\U00d3"] = 224;
+  transUtf8[u8"\U00da"] = 233;
 
 }
 
@@ -1014,9 +1014,9 @@ void IOLocal::drawCross(
   stampChar((t==0||t==1)?197:206,0,x,y);
 }
 
-int IOLocal::transChar(wchar_t c) {
+int IOLocal::transChar(char[] c) {
 
-  std::map<wchar_t,int>::iterator tItt;
+  std::map<char[],int>::iterator tItt;
   tItt = transUtf8.find(c);
   if (tItt!=transUtf8.end())
     return transUtf8[c];
@@ -1298,28 +1298,25 @@ void IOLocal::processKey(SDL_Event* event) {
     case SDLK_RGUI:
       break;
 
-    // Other wide characteres
+    // Other utf8 characteres
     default:
       // TODO: SDL2New Implement SDL2 text input support
-      char* key_char = (char*)SDL_GetKeyName(kevent.keysym.sym);
-      key_char[0] = tolower(key_char[0]);
-      wchar_t key_wchar;
-      mbstowcs(&key_wchar, key_char , 1);
+      char[] key_char = SDL_GetKeyName(kevent.keysym.sym);
       if(0==currentWord)
         commandLine[currentWord].wordClass = RDM_WCLASS_NORMAL;
       if(wordRShift==0) {
-        commandLine[currentWord].wordContent += key_wchar;
+        commandLine[currentWord].wordContent += key_char;
       } else {
-        std::wstring leftPart = commandLine[currentWord].wordContent.substr(
+        char[] leftPart = commandLine[currentWord].wordContent.substr(
           0,
           commandLine[currentWord].wordContent.length()-wordRShift
         );
-        std::wstring rightPart = commandLine[currentWord].wordContent.substr(
+        char[] rightPart = commandLine[currentWord].wordContent.substr(
             commandLine[currentWord].wordContent.length()-wordRShift,
             wordRShift
         );
         commandLine[currentWord].wordContent = leftPart;
-        commandLine[currentWord].wordContent += key_wchar;
+        commandLine[currentWord].wordContent += key_char;
         commandLine[currentWord].wordContent += rightPart;
       }
       historyCurrent = 0;
