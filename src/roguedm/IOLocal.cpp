@@ -818,26 +818,26 @@ void IOLocal::initTransTable() {
   transUtf8[L'}'] = 125;
   transUtf8[L'~'] = 126;
 
-  transUtf8[L'Ç'] = 128;
-  transUtf8[L'ü'] = 129;
-  transUtf8[L'é'] = 130;
-  transUtf8[L'ç'] = 135;
-  transUtf8[L'É'] = 144;
-  transUtf8[L'á'] = 160;
-  transUtf8[L'í'] = 161;
-  transUtf8[L'ó'] = 162;
-  transUtf8[L'ú'] = 163;
-  transUtf8[L'ñ'] = 164;
-  transUtf8[L'Ñ'] = 165;
-  transUtf8[L'ª'] = 166;
-  transUtf8[L'º'] = 167;
-  transUtf8[L'¿'] = 168;
-  transUtf8[L'¡'] = 173;
-  transUtf8[L'Á'] = 181;
-  transUtf8[L'€'] = 213;
-  transUtf8[L'Í'] = 214;
-  transUtf8[L'Ó'] = 224;
-  transUtf8[L'Ú'] = 233;
+  transUtf8[L'\U00c7'] = 128;
+  transUtf8[L'\U00fc'] = 129;
+  transUtf8[L'\U00e9'] = 130;
+  transUtf8[L'\U00e7'] = 135;
+  transUtf8[L'\U00c9'] = 144;
+  transUtf8[L'\U00e1'] = 160;
+  transUtf8[L'\U00ed'] = 161;
+  transUtf8[L'\U00f3'] = 162;
+  transUtf8[L'\U00fa'] = 163;
+  transUtf8[L'\U00f1'] = 164;
+  transUtf8[L'\U00d1'] = 165;
+  transUtf8[L'\U00aa'] = 166;
+  transUtf8[L'\U00ba'] = 167;
+  transUtf8[L'\U00bf'] = 168;
+  transUtf8[L'\U00a1'] = 173;
+  transUtf8[L'\U00c1'] = 181;
+  transUtf8[L'\U20ac'] = 213;
+  transUtf8[L'\U00cd'] = 214;
+  transUtf8[L'\U00d3'] = 224;
+  transUtf8[L'\U00da'] = 233;
 
 }
 
@@ -1374,7 +1374,7 @@ void IOLocal::tryAutocompletion() {
 
 void IOLocal::processLine() {
 
-  // Ignoramos líneas vacias
+  // Ignore empty lines
   if(!commandLine.empty()) {
 
     // If first word is empty, inserts the say command
