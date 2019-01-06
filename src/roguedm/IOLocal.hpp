@@ -220,11 +220,11 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     );
 
     /**
-     * Translate a UTF-8 encoded character to the ASCII 850 position.
-     * \param c The UTF-8 encoded character.
+     * Translate a multibyte character to its ASCII 850 position.
+     * \param c The multibyte character.
      * \return The ASCII 850 position.
      */
-    int transChar(std::string c);
+    int transChar(std::string);
 
     /**
      * Write a 850 ASCII char in the interface.
@@ -264,11 +264,14 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     /** Try to find a valid autocompletion for the current command. */
     void tryAutocompletion();
 
-    /** Get the total character lenght in a std::string. */
-    std::size_t multibyteLenght(std::string);
+    /** Get the total character lenght in a std::string.
+     * \return The total number of complete characters in the string or the
+     *         error value returned by mbrtowc in its last failed operation.
+     */
+    std::size_t multibyteLenght(const std::string&);
 
     /** Get a particular character by index in a std::string. */
-    std::string multibyteCharacterByIndex(std::string, std::size_t);
+    std::string multibyteCharacterByIndex(const std::string&, const std::size_t);
 
     /** The default word to add when the user autocomplete with an empy line. */
     Word defaultWord;

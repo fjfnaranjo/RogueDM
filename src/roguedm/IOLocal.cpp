@@ -1017,14 +1017,11 @@ void IOLocal::drawCross(
 }
 
 int IOLocal::transChar(std::string c) {
-
-  std::map<std::string,int>::iterator tItt;
-  tItt = transUtf8.find(c);
-  if (tItt!=transUtf8.end())
-    return transUtf8[c];
-  else
+  for (auto const & entry : transUtf8)
+    if (0==c.compare(entry.first))
+      return entry.second;
+    // TODO: Remove magic constant
     return 254;
-
 }
 
 void IOLocal::stampChar(
@@ -1425,7 +1422,7 @@ void IOLocal::unregisterCommandHandler(CommandHandlerInterface *c) {
   );
 }
 
-std::size_t IOLocal::multibyteLenght(std::string string) {
+std::size_t IOLocal::multibyteLenght(const std::string &string) {
   std::size_t characterCount = 0;
   int currentShift = 0;
   int bytesReaded = 0;
@@ -1437,10 +1434,11 @@ std::size_t IOLocal::multibyteLenght(std::string string) {
   return (bytesReaded<0) ? bytesReaded : characterCount;
 }
 
-std::string IOLocal::multibyteCharacterByIndex(std::string string, std::size_t position) {
-  char *lastCharacterString[MB_CUR_MAX];
+std::string IOLocal::multibyteCharacterByIndex(const std::string &string, const std::size_t position) {
+  std::string lastCharacterString(MB_CUR_MAX, '\0');
   wchar_t lastCharacter;
   std::size_t characterCount = 0;
+  std::size_t characterSize = 0;
   int currentShift = 0;
   int bytesReaded = 0;
   do {
@@ -1448,13 +1446,12 @@ std::string IOLocal::multibyteCharacterByIndex(std::string string, std::size_t p
     bytesReaded = mbrtowc(&lastCharacter, &string[currentShift], MB_CUR_MAX, NULL);
     if(bytesReaded>0) characterCount++;
     if((characterCount-1)==position) {
-      wcrtomb(&lastCharacterString, lastCharacter, NULL);
-      std::cout << string << std::endl << position << std::endl << characterCount << std::endl;
-      std::cout << lastCharacterString << std::endl << lastCharacter << std::endl;
+      characterSize = wcrtomb(&lastCharacterString[0], lastCharacter, NULL);
+      lastCharacterString.resize(characterSize);
       return lastCharacterString;
     }
   } while (bytesReaded>0);
-  return "";
+  return u8"";
 }
 
 } // namespace roguedm
