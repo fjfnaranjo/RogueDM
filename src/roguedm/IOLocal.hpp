@@ -44,14 +44,14 @@ namespace roguedm {
 struct WordClass {
   SDL_Color color;
   SDL_Color clearColor;
-  char[] lDecorator;
-  char[] rDecorator;
+  std::string lDecorator;
+  std::string rDecorator;
   SDL_Texture *charsTexture;
 };
 
 /** \brief Struct Player for the name and so. */
 struct Player {
-  char[] name;
+  std::string name;
   WordClass word;
 };
 
@@ -224,7 +224,7 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
      * \param c The UTF-8 encoded character.
      * \return The ASCII 850 position.
      */
-    int transChar(char[] c);
+    int transChar(std::string c);
 
     /**
      * Write a 850 ASCII char in the interface.
@@ -252,6 +252,9 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
       int y
     );
 
+    /** Manage a text composition from the SDL events manager */
+    void processText(SDL_Event*);
+
     /** Manage a key senden from the SDL events manager */
     void processKey(SDL_Event*);
 
@@ -277,7 +280,7 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     WordClass wordTypes[RDM_WCLASS_TOTAL];
 
     /** Table used to translate a UTF-8 input character to a ASCII 850 */
-    std::map<char[],int> transUtf8;
+    std::map<std::string,int> transUtf8;
 
     /** SDL window */
     SDL_Window *window = nullptr;

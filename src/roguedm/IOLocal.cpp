@@ -151,7 +151,7 @@ void IOLocal::update() {
           ++it, ++xpos
         )
           stampChar(
-            transChar(wordTypes[commandLine[c].wordClass].lDecorator[it]),
+            transChar(wordTypes[commandLine[c].wordClass].lDecorator.substr(it, 1)),
             commandLine[c].wordClass,
             xpos,
             dialogText.y+(dialogText.h)-cStart
@@ -163,7 +163,7 @@ void IOLocal::update() {
           ++it, ++xpos
         )
           stampChar(
-            transChar(commandLine[c].wordContent[it]),
+            transChar(commandLine[c].wordContent.substr(it, 1)),
             commandLine[c].wordClass,
             xpos,
             dialogText.y+(dialogText.h)-cStart
@@ -175,7 +175,7 @@ void IOLocal::update() {
           ++it, ++xpos
         )
           stampChar(
-            transChar(wordTypes[commandLine[c].wordClass].rDecorator[it]),
+            transChar(wordTypes[commandLine[c].wordClass].rDecorator.substr(it, 1)),
             commandLine[c].wordClass,
             xpos,
             dialogText.y+(dialogText.h)-cStart
@@ -345,6 +345,7 @@ IOLocal::IOLocal() {
   ticks = SDL_GetTicks();
   initScreenSize();
   SDL_ShowCursor(true);
+  SDL_StartTextInput();
 
 }
 
@@ -818,26 +819,26 @@ void IOLocal::initTransTable() {
   transUtf8[u8"}"] = 125;
   transUtf8[u8"~"] = 126;
 
-  transUtf8[u8"\U00c7"] = 128;
-  transUtf8[u8"\U00fc"] = 129;
-  transUtf8[u8"\U00e9"] = 130;
-  transUtf8[u8"\U00e7"] = 135;
-  transUtf8[u8"\U00c9"] = 144;
-  transUtf8[u8"\U00e1"] = 160;
-  transUtf8[u8"\U00ed"] = 161;
-  transUtf8[u8"\U00f3"] = 162;
-  transUtf8[u8"\U00fa"] = 163;
-  transUtf8[u8"\U00f1"] = 164;
-  transUtf8[u8"\U00d1"] = 165;
-  transUtf8[u8"\U00aa"] = 166;
-  transUtf8[u8"\U00ba"] = 167;
-  transUtf8[u8"\U00bf"] = 168;
-  transUtf8[u8"\U00a1"] = 173;
-  transUtf8[u8"\U00c1"] = 181;
-  transUtf8[u8"\U20ac"] = 213;
-  transUtf8[u8"\U00cd"] = 214;
-  transUtf8[u8"\U00d3"] = 224;
-  transUtf8[u8"\U00da"] = 233;
+  transUtf8[u8"\u00c7"] = 128;
+  transUtf8[u8"\u00fc"] = 129;
+  transUtf8[u8"\u00e9"] = 130;
+  transUtf8[u8"\u00e7"] = 135;
+  transUtf8[u8"\u00c9"] = 144;
+  transUtf8[u8"\u00e1"] = 160;
+  transUtf8[u8"\u00ed"] = 161;
+  transUtf8[u8"\u00f3"] = 162;
+  transUtf8[u8"\u00fa"] = 163;
+  transUtf8[u8"\u00f1"] = 164;
+  transUtf8[u8"\u00d1"] = 165;
+  transUtf8[u8"\u00aa"] = 166;
+  transUtf8[u8"\u00ba"] = 167;
+  transUtf8[u8"\u00bf"] = 168;
+  transUtf8[u8"\u00a1"] = 173;
+  transUtf8[u8"\u00c1"] = 181;
+  transUtf8[u8"\u20ac"] = 213;
+  transUtf8[u8"\u00cd"] = 214;
+  transUtf8[u8"\u00d3"] = 224;
+  transUtf8[u8"\u00da"] = 233;
 
 }
 
@@ -1014,9 +1015,9 @@ void IOLocal::drawCross(
   stampChar((t==0||t==1)?197:206,0,x,y);
 }
 
-int IOLocal::transChar(char[] c) {
+int IOLocal::transChar(std::string c) {
 
-  std::map<char[],int>::iterator tItt;
+  std::map<std::string,int>::iterator tItt;
   tItt = transUtf8.find(c);
   if (tItt!=transUtf8.end())
     return transUtf8[c];
@@ -1069,6 +1070,9 @@ void IOLocal::eventsManager() {
             break;
         }
         break;
+      // TODO: Resolve substitution/replace mode
+      case SDL_TEXTINPUT:
+        processText(&event);
       case SDL_KEYDOWN:
         processKey(&event);
         break;
@@ -1077,9 +1081,73 @@ void IOLocal::eventsManager() {
 
 }
 
-void IOLocal::processKey(SDL_Event* event) {
+void IOLocal::processText(SDL_Event* event) {
 
-  // TODO: Resolve substitution/replace mode
+  Word emptyWord;
+  emptyWord.wordContent = RDM_WEMPTY;
+  emptyWord.wordClass = RDM_WCLASS_NORMAL;
+
+  std::string text = event->text.text;
+
+  if(text == u8"") {
+
+    // Space
+    if(wordRShift==0) {
+      commandLine.insert(
+        commandLine.begin()+currentWord+1,
+        emptyWord
+      );
+      currentWord++;
+    } else {
+      commandLine.insert(
+        commandLine.begin()+currentWord+1,
+        emptyWord
+      );
+      commandLine[currentWord+1].wordContent =
+        commandLine[currentWord].wordContent.substr(
+          commandLine[currentWord].wordContent.length()-
+            wordRShift,
+          wordRShift
+        );
+      commandLine[currentWord].wordContent =
+        commandLine[currentWord].wordContent.substr(
+          0,
+          commandLine[currentWord].wordContent.length()-wordRShift
+        );
+      commandLine[currentWord].wordClass = RDM_WCLASS_NORMAL;
+      currentWord++;
+      wordRShift = commandLine[currentWord].wordContent.length();
+
+    }
+    historyCurrent = 0;
+
+  } else {
+
+    // TODO: SDL2New Implement SDL2 text input support
+    if(0==currentWord)
+      commandLine[currentWord].wordClass = RDM_WCLASS_NORMAL;
+    if(wordRShift==0) {
+      commandLine[currentWord].wordContent += text;
+    } else {
+        std::string leftPart = commandLine[currentWord].wordContent.substr(
+        0,
+        commandLine[currentWord].wordContent.length()-wordRShift
+      );
+      std::string rightPart = commandLine[currentWord].wordContent.substr(
+          commandLine[currentWord].wordContent.length()-wordRShift,
+          wordRShift
+      );
+      commandLine[currentWord].wordContent = leftPart;
+      commandLine[currentWord].wordContent += text;
+      commandLine[currentWord].wordContent += rightPart;
+    }
+    historyCurrent = 0;
+
+  }
+
+}
+
+void IOLocal::processKey(SDL_Event* event) {
 
   Word emptyWord;
   emptyWord.wordContent = RDM_WEMPTY;
@@ -1088,37 +1156,6 @@ void IOLocal::processKey(SDL_Event* event) {
   SDL_KeyboardEvent kevent = event->key;
 
   switch(kevent.keysym.sym) {
-    // Space
-    case SDLK_SPACE:
-      if(wordRShift==0) {
-        commandLine.insert(
-          commandLine.begin()+currentWord+1,
-          emptyWord
-        );
-        currentWord++;
-      } else {
-        commandLine.insert(
-          commandLine.begin()+currentWord+1,
-          emptyWord
-        );
-        commandLine[currentWord+1].wordContent =
-          commandLine[currentWord].wordContent.substr(
-            commandLine[currentWord].wordContent.length()-
-              wordRShift,
-            wordRShift
-          );
-        commandLine[currentWord].wordContent =
-          commandLine[currentWord].wordContent.substr(
-            0,
-            commandLine[currentWord].wordContent.length()-wordRShift
-          );
-        commandLine[currentWord].wordClass = RDM_WCLASS_NORMAL;
-        currentWord++;
-        wordRShift = commandLine[currentWord].wordContent.length();
-
-      }
-      historyCurrent = 0;
-      break;
 
     // Enter
     case SDLK_RETURN:
@@ -1283,44 +1320,6 @@ void IOLocal::processKey(SDL_Event* event) {
       historyCurrent = 0;
       break;
 
-    // Disable modificators
-    case SDLK_RSHIFT:
-    case SDLK_LSHIFT:
-    case SDLK_LALT:
-    case SDLK_RALT:
-    case SDLK_LCTRL:
-    case SDLK_RCTRL:
-    case SDLK_MODE:
-    case SDLK_MENU:
-    case SDLK_KP_ENTER:
-    case SDLK_ESCAPE:
-    case SDLK_LGUI:
-    case SDLK_RGUI:
-      break;
-
-    // Other utf8 characteres
-    default:
-      // TODO: SDL2New Implement SDL2 text input support
-      char[] key_char = SDL_GetKeyName(kevent.keysym.sym);
-      if(0==currentWord)
-        commandLine[currentWord].wordClass = RDM_WCLASS_NORMAL;
-      if(wordRShift==0) {
-        commandLine[currentWord].wordContent += key_char;
-      } else {
-        char[] leftPart = commandLine[currentWord].wordContent.substr(
-          0,
-          commandLine[currentWord].wordContent.length()-wordRShift
-        );
-        char[] rightPart = commandLine[currentWord].wordContent.substr(
-            commandLine[currentWord].wordContent.length()-wordRShift,
-            wordRShift
-        );
-        commandLine[currentWord].wordContent = leftPart;
-        commandLine[currentWord].wordContent += key_char;
-        commandLine[currentWord].wordContent += rightPart;
-      }
-      historyCurrent = 0;
-      break;
 
   }
 

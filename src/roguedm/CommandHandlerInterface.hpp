@@ -55,7 +55,7 @@ namespace roguedm {
 
 /** \brief Struct to contain a word content and type. */
 struct Word {
-  char[] wordContent;
+  std::string wordContent;
   int wordClass;
 };
 
