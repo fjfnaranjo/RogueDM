@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cwchar>
 #include <locale>
 #include <vector>
 
@@ -88,16 +89,16 @@ void IOLocal::update() {
   for(int c = 0; c < limit; c++) {
 
     cLineLenght += 1 +
-      commandLine[c].wordContent.length() +
-      wordTypes[commandLine[c].wordClass].lDecorator.length() +
-      wordTypes[commandLine[c].wordClass].rDecorator.length();
+      multibyteLenght(commandLine[c].wordContent) +
+      multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator) +
+      multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
 
     if(cLineLenght>dialogText.w) {
 
       cLineLenght = 1 +
-        commandLine[c].wordContent.length() +
-        wordTypes[commandLine[c].wordClass].lDecorator.length() +
-        wordTypes[commandLine[c].wordClass].rDecorator.length();
+        multibyteLenght(commandLine[c].wordContent) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
 
       ++cStart;
 
@@ -118,9 +119,9 @@ void IOLocal::update() {
 
     if(cSkip>0) {
       cLineLenght += 1 +
-        commandLine[c].wordContent.length() +
-        wordTypes[commandLine[c].wordClass].lDecorator.length() +
-        wordTypes[commandLine[c].wordClass].rDecorator.length();
+        multibyteLenght(commandLine[c].wordContent) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
       if(cLineLenght>dialogText.w) {
         --cSkip;
         cLineLenght = 0;
@@ -130,52 +131,52 @@ void IOLocal::update() {
     if(cSkip==0) {
 
       int nextLineLength = cLineLenght + 1 +
-        commandLine[c].wordContent.length() +
-        wordTypes[commandLine[c].wordClass].lDecorator.length() +
-        wordTypes[commandLine[c].wordClass].rDecorator.length();
+        multibyteLenght(commandLine[c].wordContent) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
       if(nextLineLength>dialogText.w) {
         cLineLenght = 0;
         --cStart;
       }
 
-      int wordL = commandLine[c].wordContent.length() +
-        wordTypes[commandLine[c].wordClass].lDecorator.length() +
-        wordTypes[commandLine[c].wordClass].rDecorator.length();
+      int wordL = multibyteLenght(commandLine[c].wordContent) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
 
       int xpos=dialogText.x+cLineLenght;
 
       if (wordL>0) {
         for(
-          int it=0;
-          it < (int)wordTypes[commandLine[c].wordClass].lDecorator.length();
+          std::size_t it=0;
+          it < multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator);
           ++it, ++xpos
         )
           stampChar(
-            transChar(wordTypes[commandLine[c].wordClass].lDecorator.substr(it, 1)),
+            transChar(multibyteCharacterByIndex(wordTypes[commandLine[c].wordClass].lDecorator, it)),
             commandLine[c].wordClass,
             xpos,
             dialogText.y+(dialogText.h)-cStart
           );
 
         for(
-          int it=0;
-          it < (int)commandLine[c].wordContent.length();
+          std::size_t it=0;
+          it < multibyteLenght(commandLine[c].wordContent);
           ++it, ++xpos
         )
           stampChar(
-            transChar(commandLine[c].wordContent.substr(it, 1)),
+            transChar(multibyteCharacterByIndex(commandLine[c].wordContent, it)),
             commandLine[c].wordClass,
             xpos,
             dialogText.y+(dialogText.h)-cStart
           );
 
         for(
-          int it=0;
-          it < (int)wordTypes[commandLine[c].wordClass].rDecorator.length();
+          std::size_t it=0;
+          it < multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
           ++it, ++xpos
         )
           stampChar(
-            transChar(wordTypes[commandLine[c].wordClass].rDecorator.substr(it, 1)),
+            transChar(multibyteCharacterByIndex(wordTypes[commandLine[c].wordClass].rDecorator, it)),
             commandLine[c].wordClass,
             xpos,
             dialogText.y+(dialogText.h)-cStart
@@ -1422,6 +1423,38 @@ void IOLocal::unregisterCommandHandler(CommandHandlerInterface *c) {
     std::remove(commandHandlers.begin(), commandHandlers.end(), c),
     commandHandlers.end()
   );
+}
+
+std::size_t IOLocal::multibyteLenght(std::string string) {
+  std::size_t characterCount = 0;
+  int currentShift = 0;
+  int bytesReaded = 0;
+  do {
+    currentShift += bytesReaded;
+    bytesReaded = mbrtowc(NULL, &string[currentShift], MB_CUR_MAX, NULL);
+    if(bytesReaded>0) characterCount++;
+  } while (bytesReaded>0);
+  return (bytesReaded<0) ? bytesReaded : characterCount;
+}
+
+std::string IOLocal::multibyteCharacterByIndex(std::string string, std::size_t position) {
+  char *lastCharacterString[MB_CUR_MAX];
+  wchar_t lastCharacter;
+  std::size_t characterCount = 0;
+  int currentShift = 0;
+  int bytesReaded = 0;
+  do {
+    currentShift += bytesReaded;
+    bytesReaded = mbrtowc(&lastCharacter, &string[currentShift], MB_CUR_MAX, NULL);
+    if(bytesReaded>0) characterCount++;
+    if((characterCount-1)==position) {
+      wcrtomb(&lastCharacterString, lastCharacter, NULL);
+      std::cout << string << std::endl << position << std::endl << characterCount << std::endl;
+      std::cout << lastCharacterString << std::endl << lastCharacter << std::endl;
+      return lastCharacterString;
+    }
+  } while (bytesReaded>0);
+  return "";
 }
 
 } // namespace roguedm

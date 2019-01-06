@@ -264,6 +264,12 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     /** Try to find a valid autocompletion for the current command. */
     void tryAutocompletion();
 
+    /** Get the total character lenght in a std::string. */
+    std::size_t multibyteLenght(std::string);
+
+    /** Get a particular character by index in a std::string. */
+    std::string multibyteCharacterByIndex(std::string, std::size_t);
+
     /** The default word to add when the user autocomplete with an empy line. */
     Word defaultWord;
 
