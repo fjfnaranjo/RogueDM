@@ -273,6 +273,9 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     /** Get a particular character by index in a std::string. */
     std::string multibyteCharacterByIndex(const std::string&, const std::size_t);
 
+    /** Get a segment in a std::string. */
+    std::string multibyteSubstr(const std::string&, const std::size_t, const std::size_t);
+
     /** The default word to add when the user autocomplete with an empy line. */
     Word defaultWord;
 

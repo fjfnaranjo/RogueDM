@@ -193,16 +193,16 @@ void IOLocal::update() {
             (
               (
                 dialogText.x+cLineLenght+wordL-
-                  wordTypes[commandLine[c].wordClass].rDecorator.length()
+                  multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator)
               )*txtCWidth
             );
           SDL_RenderCopy(renderer,ipI,NULL,&dest);
-        } else if (wordRShift==(int)commandLine[c].wordContent.length()) {
+        } else if (wordRShift==(int)multibyteLenght(commandLine[c].wordContent)) {
           dest.x =
             (
               (
                 dialogText.x+cLineLenght+
-                  wordTypes[commandLine[c].wordClass].lDecorator.length()
+                  multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator)
               )*txtCWidth
             );
           SDL_RenderCopy(renderer,ipI,NULL,&dest);
@@ -211,7 +211,7 @@ void IOLocal::update() {
             (
               (
                 dialogText.x+cLineLenght+wordL-wordRShift-
-                  wordTypes[commandLine[c].wordClass].rDecorator.length()
+                  multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator)
               )*txtCWidth
             );
           SDL_RenderCopy(renderer,ipI,NULL,&dest);
@@ -219,9 +219,9 @@ void IOLocal::update() {
       }
 
       cLineLenght += 1 +
-        commandLine[c].wordContent.length() +
-        wordTypes[commandLine[c].wordClass].lDecorator.length() +
-        wordTypes[commandLine[c].wordClass].rDecorator.length();
+        multibyteLenght(commandLine[c].wordContent) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
 
     }
 
@@ -269,7 +269,7 @@ const SentenceListReference IOLocal::autocompleteListOptions(const Sentence& a)
   quitCmd.wordContent = RDM_CMD_QUIT;
   quitCmd.wordClass = RDM_WCLASS_COMMAND;
 
-  if(a.size()==1 && a[0].wordContent.length()==0) {
+  if(a.size()==1 && multibyteLenght(a[0].wordContent)==0) {
 
     SentenceListReference l = std::make_shared<SentenceList>();
 
@@ -1101,20 +1101,19 @@ void IOLocal::processText(SDL_Event* event) {
         commandLine.begin()+currentWord+1,
         emptyWord
       );
-      commandLine[currentWord+1].wordContent =
-        commandLine[currentWord].wordContent.substr(
-          commandLine[currentWord].wordContent.length()-
-            wordRShift,
-          wordRShift
-        );
-      commandLine[currentWord].wordContent =
-        commandLine[currentWord].wordContent.substr(
-          0,
-          commandLine[currentWord].wordContent.length()-wordRShift
-        );
+      commandLine[currentWord+1].wordContent = multibyteSubstr(
+        commandLine[currentWord].wordContent,
+        multibyteLenght(commandLine[currentWord].wordContent)-wordRShift,
+        wordRShift
+      );
+      commandLine[currentWord].wordContent = multibyteSubstr(
+        commandLine[currentWord].wordContent,
+        0,
+        multibyteLenght(commandLine[currentWord].wordContent)-wordRShift
+      );
       commandLine[currentWord].wordClass = RDM_WCLASS_NORMAL;
       currentWord++;
-      wordRShift = commandLine[currentWord].wordContent.length();
+      wordRShift = multibyteLenght(commandLine[currentWord].wordContent);
 
     }
     historyCurrent = 0;
@@ -1127,13 +1126,15 @@ void IOLocal::processText(SDL_Event* event) {
     if(wordRShift==0) {
       commandLine[currentWord].wordContent += text;
     } else {
-        std::string leftPart = commandLine[currentWord].wordContent.substr(
+      std::string leftPart = multibyteSubstr(
+        commandLine[currentWord].wordContent,
         0,
-        commandLine[currentWord].wordContent.length()-wordRShift
+        multibyteLenght(commandLine[currentWord].wordContent)-wordRShift
       );
-      std::string rightPart = commandLine[currentWord].wordContent.substr(
-          commandLine[currentWord].wordContent.length()-wordRShift,
-          wordRShift
+      std::string rightPart = multibyteSubstr(
+        commandLine[currentWord].wordContent,
+        multibyteLenght(commandLine[currentWord].wordContent)-wordRShift,
+        wordRShift
       );
       commandLine[currentWord].wordContent = leftPart;
       commandLine[currentWord].wordContent += text;
@@ -1162,11 +1163,11 @@ void IOLocal::processKey(SDL_Event* event) {
 
     // Backspace
     case SDLK_BACKSPACE:
-      if(wordRShift==(int)commandLine[currentWord].wordContent.length()) {
+      if(wordRShift==(int)multibyteLenght(commandLine[currentWord].wordContent)) {
         if(currentWord>0) {
-          if(1==currentWord && commandLine[currentWord].wordContent.length()!=0)
+          if(1==currentWord && multibyteLenght(commandLine[currentWord].wordContent)!=0)
             commandLine[currentWord-1].wordClass = RDM_WCLASS_NORMAL;
-          wordRShift=commandLine[currentWord].wordContent.length();
+          wordRShift=multibyteLenght(commandLine[currentWord].wordContent);
           commandLine[currentWord-1].wordContent =
             commandLine[currentWord-1].wordContent +
             commandLine[currentWord].wordContent;
@@ -1177,14 +1178,14 @@ void IOLocal::processKey(SDL_Event* event) {
         if(0==currentWord)
           commandLine[0].wordClass = RDM_WCLASS_NORMAL;
         commandLine[currentWord].wordContent =
-          commandLine[currentWord].wordContent.substr(
+          multibyteSubstr(
+            commandLine[currentWord].wordContent,
             0,
-            commandLine[currentWord].wordContent.length()-
-              wordRShift-1
+            multibyteLenght(commandLine[currentWord].wordContent)-wordRShift-1
           ) +
-          commandLine[currentWord].wordContent.substr(
-            commandLine[currentWord].wordContent.length()-
-              wordRShift,
+          multibyteSubstr(
+            commandLine[currentWord].wordContent,
+            multibyteLenght(commandLine[currentWord].wordContent)-wordRShift,
             wordRShift
           );
       }
@@ -1195,9 +1196,9 @@ void IOLocal::processKey(SDL_Event* event) {
     case SDLK_DELETE:
       if(wordRShift==0) {
         if((currentWord+1)<(int)commandLine.size()) {
-          if(0==currentWord && commandLine[1].wordContent.length()!=0)
+          if(0==currentWord && multibyteLenght(commandLine[1].wordContent)!=0)
             commandLine[0].wordClass = RDM_WCLASS_NORMAL;
-          wordRShift=commandLine[currentWord+1].wordContent.length();
+          wordRShift=multibyteLenght(commandLine[currentWord+1].wordContent);
           commandLine[currentWord].wordContent =
             commandLine[currentWord].wordContent +
             commandLine[currentWord+1].wordContent;
@@ -1207,12 +1208,14 @@ void IOLocal::processKey(SDL_Event* event) {
         if(0==currentWord)
           commandLine[0].wordClass = RDM_WCLASS_NORMAL;
         commandLine[currentWord].wordContent =
-          commandLine[currentWord].wordContent.substr(
+          multibyteSubstr(
+            commandLine[currentWord].wordContent,
             0,
-            commandLine[currentWord].wordContent.length()-wordRShift
+            multibyteLenght(commandLine[currentWord].wordContent)-wordRShift
           ) +
-          commandLine[currentWord].wordContent.substr(
-            commandLine[currentWord].wordContent.length()-
+          multibyteSubstr(
+            commandLine[currentWord].wordContent,
+            multibyteLenght(commandLine[currentWord].wordContent)-
               wordRShift+1,
             wordRShift-1
           );
@@ -1224,7 +1227,7 @@ void IOLocal::processKey(SDL_Event* event) {
     // H-movement keys
     case SDLK_LEFT:
       if (!(kevent.keysym.mod&KMOD_CTRL)) {
-        if(wordRShift<(int)commandLine[currentWord].wordContent.size())
+        if(wordRShift<(int)multibyteLenght(commandLine[currentWord].wordContent))
           wordRShift++;
         else if (currentWord>0) {
           currentWord--;
@@ -1232,8 +1235,8 @@ void IOLocal::processKey(SDL_Event* event) {
         }
         historyCurrent = 0;
       } else {
-        if(wordRShift<(int)commandLine[currentWord].wordContent.size()) {
-          wordRShift = commandLine[currentWord].wordContent.size();
+        if(wordRShift<(int)multibyteLenght(commandLine[currentWord].wordContent)) {
+          wordRShift = multibyteLenght(commandLine[currentWord].wordContent);
         } else if (currentWord>0) {
           currentWord--;
           wordRShift=0;
@@ -1248,7 +1251,7 @@ void IOLocal::processKey(SDL_Event* event) {
           wordRShift--;
         else if (currentWord<((int)commandLine.size()-1)) {
           currentWord++;
-          wordRShift = commandLine[currentWord].wordContent.size();
+          wordRShift = multibyteLenght(commandLine[currentWord].wordContent);
         }
         historyCurrent = 0;
       } else {
@@ -1256,7 +1259,7 @@ void IOLocal::processKey(SDL_Event* event) {
           wordRShift = 0;
         } else if ((currentWord+1)<(int)commandLine.size()) {
           currentWord++;
-          wordRShift = commandLine[currentWord].wordContent.size();
+          wordRShift = multibyteLenght(commandLine[currentWord].wordContent);
         }
         historyCurrent = 0;
       }
@@ -1265,7 +1268,7 @@ void IOLocal::processKey(SDL_Event* event) {
     // Far-long h-movement keys
     case SDLK_HOME:
       currentWord = 0;
-      wordRShift = commandLine[currentWord].wordContent.size();
+      wordRShift = multibyteLenght(commandLine[currentWord].wordContent);
       historyCurrent = 0;
       break;
 
@@ -1333,7 +1336,7 @@ void IOLocal::tryAutocompletion() {
   SentenceListReference options;
 
   // check for empty line to list all commands
-  if(commandLine.size()==1 && commandLine[0].wordContent.length()==0) {
+  if(commandLine.size()==1 && multibyteLenght(commandLine[0].wordContent)==0) {
 
     for(const auto & commandHandler : commandHandlers) {
 
@@ -1372,7 +1375,7 @@ void IOLocal::processLine() {
   if(!commandLine.empty()) {
 
     // If first word is empty, inserts the say command
-    if(commandLine[0].wordContent.length()==0) {
+    if(multibyteLenght(commandLine[0].wordContent)==0) {
       commandLine.erase(commandLine.begin());
       commandLine.insert(commandLine.begin(),defaultWord);
     }
@@ -1450,6 +1453,30 @@ std::string IOLocal::multibyteCharacterByIndex(const std::string &string, const 
       lastCharacterString.resize(characterSize);
       return lastCharacterString;
     }
+  } while (bytesReaded>0);
+  return u8"";
+}
+
+std::string IOLocal::multibyteSubstr(const std::string &string, const std::size_t start, const std::size_t size) {
+  if(size==0)
+    return u8"";
+  std::string newString;
+  int startByte = 0;
+  std::size_t characterCount = 0;
+  int currentShift = 0;
+  int bytesReaded = 0;
+  do {
+    currentShift += bytesReaded;
+    bytesReaded = mbrtowc(NULL, &string[currentShift], MB_CUR_MAX, NULL);
+    if(bytesReaded>0) characterCount++;
+    if((characterCount-1)==start && bytesReaded>0)
+      startByte = currentShift;
+    if((characterCount-1)==start+size)
+      return string.substr(startByte, currentShift-startByte);
+    if(bytesReaded==0 && startByte>0)
+      return string.substr(startByte, currentShift-startByte);
+    if(bytesReaded==0)
+      return u8"";
   } while (bytesReaded>0);
   return u8"";
 }
