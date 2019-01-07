@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-add_subdirectory("${roguedm_SOURCE_DIR}/roguedm_test/googletest/"
-                 "${roguedm_BINARY_DIR}/roguedm_test/googletest-build")
+add_subdirectory("${roguedm_SOURCE_DIR}/../ext/googletest/"
+                 "${roguedm_BINARY_DIR}/ext/googletest-build")
 
 add_executable (roguedm_test test.cpp)
 

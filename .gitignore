@@ -3,4 +3,4 @@
 /.cproject
 /.project
 /.settings
-/src/roguedm_test/googletest
+/ext/googletest
