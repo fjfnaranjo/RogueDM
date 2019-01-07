@@ -35,8 +35,8 @@
 #define RDM_CL_MAX_HISTORY         128
 
 // Command's words.
-#define RDM_CMD_QUIT         L"quit"       // End app.
-#define RDM_CMD_PSAY         L"psay"       // Player say to all.
+#define RDM_CMD_QUIT         u8"quit"       // End app.
+#define RDM_CMD_PSAY         u8"psay"       // Player say to all.
 
 namespace roguedm {
 
@@ -44,14 +44,14 @@ namespace roguedm {
 struct WordClass {
   SDL_Color color;
   SDL_Color clearColor;
-  std::wstring lDecorator;
-  std::wstring rDecorator;
+  std::string lDecorator;
+  std::string rDecorator;
   SDL_Texture *charsTexture;
 };
 
 /** \brief Struct Player for the name and so. */
 struct Player {
-  std::wstring name;
+  std::string name;
   WordClass word;
 };
 
@@ -220,11 +220,11 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     );
 
     /**
-     * Translate a wchar to the ASCII 850 corresponding code.
-     * \param c The wide character.
-     * \return The ASCII position.
+     * Translate a multibyte character to its ASCII 850 position.
+     * \param c The multibyte character.
+     * \return The ASCII 850 position.
      */
-    int transChar(wchar_t c);
+    int transChar(std::string);
 
     /**
      * Write a 850 ASCII char in the interface.
@@ -252,6 +252,9 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
       int y
     );
 
+    /** Manage a text composition from the SDL events manager */
+    void processText(SDL_Event*);
+
     /** Manage a key senden from the SDL events manager */
     void processKey(SDL_Event*);
 
@@ -260,6 +263,18 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
 
     /** Try to find a valid autocompletion for the current command. */
     void tryAutocompletion();
+
+    /** Get the total character lenght in a std::string.
+     * \return The total number of complete characters in the string or the
+     *         error value returned by mbrtowc in its last failed operation.
+     */
+    std::size_t multibyteLenght(const std::string&);
+
+    /** Get a particular character by index in a std::string. */
+    std::string multibyteCharacterByIndex(const std::string&, const std::size_t);
+
+    /** Get a segment in a std::string. */
+    std::string multibyteSubstr(const std::string&, const std::size_t, const std::size_t);
 
     /** The default word to add when the user autocomplete with an empy line. */
     Word defaultWord;
@@ -277,7 +292,7 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     WordClass wordTypes[RDM_WCLASS_TOTAL];
 
     /** Table used to translate a UTF-8 input character to a ASCII 850 */
-    std::map<wchar_t,int> transUtf8;
+    std::map<std::string,int> transUtf8;
 
     /** SDL window */
     SDL_Window *window = nullptr;

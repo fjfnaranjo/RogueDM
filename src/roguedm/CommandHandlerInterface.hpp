@@ -49,13 +49,13 @@
 #define RDM_WCLASS_TOTAL           15
 
 // Empty command
-#define RDM_WEMPTY                 L""
+#define RDM_WEMPTY                 u8""
 
 namespace roguedm {
 
-/** \brief Struct to contain the wide-string word content and the word type. */
+/** \brief Struct to contain a word content and type. */
 struct Word {
-  std::wstring wordContent;
+  std::string wordContent;
   int wordClass;
 };
 

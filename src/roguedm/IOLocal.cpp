@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cwchar>
 #include <locale>
 #include <vector>
 
@@ -88,16 +89,16 @@ void IOLocal::update() {
   for(int c = 0; c < limit; c++) {
 
     cLineLenght += 1 +
-      commandLine[c].wordContent.length() +
-      wordTypes[commandLine[c].wordClass].lDecorator.length() +
-      wordTypes[commandLine[c].wordClass].rDecorator.length();
+      multibyteLenght(commandLine[c].wordContent) +
+      multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator) +
+      multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
 
     if(cLineLenght>dialogText.w) {
 
       cLineLenght = 1 +
-        commandLine[c].wordContent.length() +
-        wordTypes[commandLine[c].wordClass].lDecorator.length() +
-        wordTypes[commandLine[c].wordClass].rDecorator.length();
+        multibyteLenght(commandLine[c].wordContent) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
 
       ++cStart;
 
@@ -118,9 +119,9 @@ void IOLocal::update() {
 
     if(cSkip>0) {
       cLineLenght += 1 +
-        commandLine[c].wordContent.length() +
-        wordTypes[commandLine[c].wordClass].lDecorator.length() +
-        wordTypes[commandLine[c].wordClass].rDecorator.length();
+        multibyteLenght(commandLine[c].wordContent) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
       if(cLineLenght>dialogText.w) {
         --cSkip;
         cLineLenght = 0;
@@ -130,52 +131,52 @@ void IOLocal::update() {
     if(cSkip==0) {
 
       int nextLineLength = cLineLenght + 1 +
-        commandLine[c].wordContent.length() +
-        wordTypes[commandLine[c].wordClass].lDecorator.length() +
-        wordTypes[commandLine[c].wordClass].rDecorator.length();
+        multibyteLenght(commandLine[c].wordContent) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
       if(nextLineLength>dialogText.w) {
         cLineLenght = 0;
         --cStart;
       }
 
-      int wordL = commandLine[c].wordContent.length() +
-        wordTypes[commandLine[c].wordClass].lDecorator.length() +
-        wordTypes[commandLine[c].wordClass].rDecorator.length();
+      int wordL = multibyteLenght(commandLine[c].wordContent) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
 
       int xpos=dialogText.x+cLineLenght;
 
       if (wordL>0) {
         for(
-          int it=0;
-          it < (int)wordTypes[commandLine[c].wordClass].lDecorator.length();
+          std::size_t it=0;
+          it < multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator);
           ++it, ++xpos
         )
           stampChar(
-            transChar(wordTypes[commandLine[c].wordClass].lDecorator[it]),
+            transChar(multibyteCharacterByIndex(wordTypes[commandLine[c].wordClass].lDecorator, it)),
             commandLine[c].wordClass,
             xpos,
             dialogText.y+(dialogText.h)-cStart
           );
 
         for(
-          int it=0;
-          it < (int)commandLine[c].wordContent.length();
+          std::size_t it=0;
+          it < multibyteLenght(commandLine[c].wordContent);
           ++it, ++xpos
         )
           stampChar(
-            transChar(commandLine[c].wordContent[it]),
+            transChar(multibyteCharacterByIndex(commandLine[c].wordContent, it)),
             commandLine[c].wordClass,
             xpos,
             dialogText.y+(dialogText.h)-cStart
           );
 
         for(
-          int it=0;
-          it < (int)wordTypes[commandLine[c].wordClass].rDecorator.length();
+          std::size_t it=0;
+          it < multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
           ++it, ++xpos
         )
           stampChar(
-            transChar(wordTypes[commandLine[c].wordClass].rDecorator[it]),
+            transChar(multibyteCharacterByIndex(wordTypes[commandLine[c].wordClass].rDecorator, it)),
             commandLine[c].wordClass,
             xpos,
             dialogText.y+(dialogText.h)-cStart
@@ -192,16 +193,16 @@ void IOLocal::update() {
             (
               (
                 dialogText.x+cLineLenght+wordL-
-                  wordTypes[commandLine[c].wordClass].rDecorator.length()
+                  multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator)
               )*txtCWidth
             );
           SDL_RenderCopy(renderer,ipI,NULL,&dest);
-        } else if (wordRShift==(int)commandLine[c].wordContent.length()) {
+        } else if (wordRShift==(int)multibyteLenght(commandLine[c].wordContent)) {
           dest.x =
             (
               (
                 dialogText.x+cLineLenght+
-                  wordTypes[commandLine[c].wordClass].lDecorator.length()
+                  multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator)
               )*txtCWidth
             );
           SDL_RenderCopy(renderer,ipI,NULL,&dest);
@@ -210,7 +211,7 @@ void IOLocal::update() {
             (
               (
                 dialogText.x+cLineLenght+wordL-wordRShift-
-                  wordTypes[commandLine[c].wordClass].rDecorator.length()
+                  multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator)
               )*txtCWidth
             );
           SDL_RenderCopy(renderer,ipI,NULL,&dest);
@@ -218,9 +219,9 @@ void IOLocal::update() {
       }
 
       cLineLenght += 1 +
-        commandLine[c].wordContent.length() +
-        wordTypes[commandLine[c].wordClass].lDecorator.length() +
-        wordTypes[commandLine[c].wordClass].rDecorator.length();
+        multibyteLenght(commandLine[c].wordContent) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].lDecorator) +
+        multibyteLenght(wordTypes[commandLine[c].wordClass].rDecorator);
 
     }
 
@@ -268,7 +269,7 @@ const SentenceListReference IOLocal::autocompleteListOptions(const Sentence& a)
   quitCmd.wordContent = RDM_CMD_QUIT;
   quitCmd.wordClass = RDM_WCLASS_COMMAND;
 
-  if(a.size()==1 && a[0].wordContent.length()==0) {
+  if(a.size()==1 && multibyteLenght(a[0].wordContent)==0) {
 
     SentenceListReference l = std::make_shared<SentenceList>();
 
@@ -306,9 +307,9 @@ IOLocal::IOLocal() {
 
   int createStatus = SDL_CreateWindowAndRenderer(
     800, 500,
-	SDL_WINDOW_RESIZABLE,
+    SDL_WINDOW_RESIZABLE,
     &window,
-	&renderer
+    &renderer
   );
 
   if(createStatus || NULL==window || NULL==renderer) {
@@ -316,8 +317,8 @@ IOLocal::IOLocal() {
     SDL_LogError(
       SDL_LOG_CATEGORY_APPLICATION,
       _(RDM_STR_SDL_ERROR),
-	  SDL_GetError()
-	);
+      SDL_GetError()
+    );
     SDL_Quit();
     return;
   }
@@ -345,6 +346,7 @@ IOLocal::IOLocal() {
   ticks = SDL_GetTicks();
   initScreenSize();
   SDL_ShowCursor(true);
+  SDL_StartTextInput();
 
 }
 
@@ -383,7 +385,7 @@ int IOLocal::getErrorCode() {
 
 void IOLocal::resetLine() {
   Word emptyWord;
-  emptyWord.wordContent = L"";
+  emptyWord.wordContent = u8"";
   emptyWord.wordClass = RDM_WCLASS_NORMAL;
   commandLine.clear();
   commandLine.push_back(emptyWord);
@@ -429,8 +431,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NORMAL].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NORMAL].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NORMAL].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NORMAL].lDecorator = L"";
-  wordTypes[RDM_WCLASS_NORMAL].rDecorator = L"";
+  wordTypes[RDM_WCLASS_NORMAL].lDecorator = u8"";
+  wordTypes[RDM_WCLASS_NORMAL].rDecorator = u8"";
   wordTypes[RDM_WCLASS_NORMAL].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -448,8 +450,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_COMMAND].clearColor.r = 0;
   wordTypes[RDM_WCLASS_COMMAND].clearColor.g = 0;
   wordTypes[RDM_WCLASS_COMMAND].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_COMMAND].lDecorator = L"\\";
-  wordTypes[RDM_WCLASS_COMMAND].rDecorator = L"";
+  wordTypes[RDM_WCLASS_COMMAND].lDecorator = u8"\\";
+  wordTypes[RDM_WCLASS_COMMAND].rDecorator = u8"";
   wordTypes[RDM_WCLASS_COMMAND].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -467,8 +469,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_ALLIED].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_ALLIED].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_ALLIED].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED].lDecorator = L"'";
-  wordTypes[RDM_WCLASS_NPC_ALLIED].rDecorator = L"'";
+  wordTypes[RDM_WCLASS_NPC_ALLIED].lDecorator = u8"'";
+  wordTypes[RDM_WCLASS_NPC_ALLIED].rDecorator = u8"'";
   wordTypes[RDM_WCLASS_NPC_ALLIED].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -486,8 +488,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].lDecorator = L"'";
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].rDecorator = L"'";
+  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].lDecorator = u8"'";
+  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].rDecorator = u8"'";
   wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -505,8 +507,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_NEUTRAL].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_NEUTRAL].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_NEUTRAL].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].lDecorator = L"";
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].rDecorator = L"?";
+  wordTypes[RDM_WCLASS_NPC_NEUTRAL].lDecorator = u8"";
+  wordTypes[RDM_WCLASS_NPC_NEUTRAL].rDecorator = u8"?";
   wordTypes[RDM_WCLASS_NPC_NEUTRAL].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -524,8 +526,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].lDecorator = L"";
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].rDecorator = L"?";
+  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].lDecorator = u8"";
+  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].rDecorator = u8"?";
   wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -543,8 +545,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_ENEMY].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_ENEMY].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_ENEMY].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY].lDecorator = L"";
-  wordTypes[RDM_WCLASS_NPC_ENEMY].rDecorator = L"!!";
+  wordTypes[RDM_WCLASS_NPC_ENEMY].lDecorator = u8"";
+  wordTypes[RDM_WCLASS_NPC_ENEMY].rDecorator = u8"!!";
   wordTypes[RDM_WCLASS_NPC_ENEMY].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -562,8 +564,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].lDecorator = L"";
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].rDecorator = L"!";
+  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].lDecorator = u8"";
+  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].rDecorator = u8"!";
   wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -581,8 +583,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].clearColor.r = 0;
   wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].clearColor.g = 0;
   wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].lDecorator = L"";
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].rDecorator = L"!!!";
+  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].lDecorator = u8"";
+  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].rDecorator = u8"!!!";
   wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -600,8 +602,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_PLACE].clearColor.r = 0;
   wordTypes[RDM_WCLASS_PLACE].clearColor.g = 0;
   wordTypes[RDM_WCLASS_PLACE].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_PLACE].lDecorator = L"[";
-  wordTypes[RDM_WCLASS_PLACE].rDecorator = L"]";
+  wordTypes[RDM_WCLASS_PLACE].lDecorator = u8"[";
+  wordTypes[RDM_WCLASS_PLACE].rDecorator = u8"]";
   wordTypes[RDM_WCLASS_PLACE].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -619,8 +621,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_OBJECT].clearColor.r = 0;
   wordTypes[RDM_WCLASS_OBJECT].clearColor.g = 0;
   wordTypes[RDM_WCLASS_OBJECT].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT].lDecorator = L"{";
-  wordTypes[RDM_WCLASS_OBJECT].rDecorator = L"}";
+  wordTypes[RDM_WCLASS_OBJECT].lDecorator = u8"{";
+  wordTypes[RDM_WCLASS_OBJECT].rDecorator = u8"}";
   wordTypes[RDM_WCLASS_OBJECT].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -638,8 +640,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_OBJECT_MAGIC].clearColor.r = 0;
   wordTypes[RDM_WCLASS_OBJECT_MAGIC].clearColor.g = 0;
   wordTypes[RDM_WCLASS_OBJECT_MAGIC].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].lDecorator = L"{";
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].rDecorator = L"}*";
+  wordTypes[RDM_WCLASS_OBJECT_MAGIC].lDecorator = u8"{";
+  wordTypes[RDM_WCLASS_OBJECT_MAGIC].rDecorator = u8"}*";
   wordTypes[RDM_WCLASS_OBJECT_MAGIC].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -657,8 +659,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_OBJECT_SET].clearColor.r = 0;
   wordTypes[RDM_WCLASS_OBJECT_SET].clearColor.g = 0;
   wordTypes[RDM_WCLASS_OBJECT_SET].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_SET].lDecorator = L"{";
-  wordTypes[RDM_WCLASS_OBJECT_SET].rDecorator = L"}s";
+  wordTypes[RDM_WCLASS_OBJECT_SET].lDecorator = u8"{";
+  wordTypes[RDM_WCLASS_OBJECT_SET].rDecorator = u8"}s";
   wordTypes[RDM_WCLASS_OBJECT_SET].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -676,8 +678,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_OBJECT_UNIQ].clearColor.r = 0;
   wordTypes[RDM_WCLASS_OBJECT_UNIQ].clearColor.g = 0;
   wordTypes[RDM_WCLASS_OBJECT_UNIQ].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].lDecorator = L"{";
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].rDecorator = L"}**";
+  wordTypes[RDM_WCLASS_OBJECT_UNIQ].lDecorator = u8"{";
+  wordTypes[RDM_WCLASS_OBJECT_UNIQ].rDecorator = u8"}**";
   wordTypes[RDM_WCLASS_OBJECT_UNIQ].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -695,8 +697,8 @@ void IOLocal::initWordTypes() {
   wordTypes[RDM_WCLASS_OBJECT_EPIC].clearColor.r = 0;
   wordTypes[RDM_WCLASS_OBJECT_EPIC].clearColor.g = 0;
   wordTypes[RDM_WCLASS_OBJECT_EPIC].clearColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].lDecorator = L"{";
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].rDecorator = L"}***";
+  wordTypes[RDM_WCLASS_OBJECT_EPIC].lDecorator = u8"{";
+  wordTypes[RDM_WCLASS_OBJECT_EPIC].rDecorator = u8"}***";
   wordTypes[RDM_WCLASS_OBJECT_EPIC].charsTexture = SDL_CreateTextureFromSurface(renderer, baseTexture);
 
   colorizeWordType(
@@ -717,127 +719,127 @@ void IOLocal::initWordTypes() {
 
 void IOLocal::initTransTable() {
 
-  transUtf8[L' '] = 32;
-  transUtf8[L'!'] = 33;
-  transUtf8[L'\"']= 34;
-  transUtf8[L'#'] = 35;
-  transUtf8[L'$'] = 36;
-  transUtf8[L'%'] = 37;
-  transUtf8[L'&'] = 38;
-  transUtf8[L'\''] = 39;
-  transUtf8[L'('] = 40;
-  transUtf8[L')'] = 41;
-  transUtf8[L'*'] = 42;
-  transUtf8[L'+'] = 43;
-  transUtf8[L','] = 44;
-  transUtf8[L'-'] = 45;
-  transUtf8[L'.'] = 46;
-  transUtf8[L'/'] = 47;
+  transUtf8[u8" "] = 32;
+  transUtf8[u8"!"] = 33;
+  transUtf8[u8"\""]= 34;
+  transUtf8[u8"#"] = 35;
+  transUtf8[u8"$"] = 36;
+  transUtf8[u8"%"] = 37;
+  transUtf8[u8"&"] = 38;
+  transUtf8[u8"'"] = 39;
+  transUtf8[u8"("] = 40;
+  transUtf8[u8")"] = 41;
+  transUtf8[u8"*"] = 42;
+  transUtf8[u8"+"] = 43;
+  transUtf8[u8","] = 44;
+  transUtf8[u8"-"] = 45;
+  transUtf8[u8"."] = 46;
+  transUtf8[u8"/"] = 47;
 
-  transUtf8[L'0'] = 48;
-  transUtf8[L'1'] = 49;
-  transUtf8[L'2'] = 50;
-  transUtf8[L'3'] = 51;
-  transUtf8[L'4'] = 52;
-  transUtf8[L'5'] = 53;
-  transUtf8[L'6'] = 54;
-  transUtf8[L'7'] = 55;
-  transUtf8[L'8'] = 56;
-  transUtf8[L'9'] = 57;
-  transUtf8[L':'] = 58;
-  transUtf8[L';'] = 59;
-  transUtf8[L'<'] = 60;
-  transUtf8[L'='] = 61;
-  transUtf8[L'>'] = 62;
-  transUtf8[L'?'] = 63;
+  transUtf8[u8"0"] = 48;
+  transUtf8[u8"1"] = 49;
+  transUtf8[u8"2"] = 50;
+  transUtf8[u8"3"] = 51;
+  transUtf8[u8"4"] = 52;
+  transUtf8[u8"5"] = 53;
+  transUtf8[u8"6"] = 54;
+  transUtf8[u8"7"] = 55;
+  transUtf8[u8"8"] = 56;
+  transUtf8[u8"9"] = 57;
+  transUtf8[u8":"] = 58;
+  transUtf8[u8";"] = 59;
+  transUtf8[u8"<"] = 60;
+  transUtf8[u8"="] = 61;
+  transUtf8[u8">"] = 62;
+  transUtf8[u8"?"] = 63;
 
-  transUtf8[L'@'] = 64;
-  transUtf8[L'A'] = 65;
-  transUtf8[L'B'] = 66;
-  transUtf8[L'C'] = 67;
-  transUtf8[L'D'] = 68;
-  transUtf8[L'E'] = 69;
-  transUtf8[L'F'] = 70;
-  transUtf8[L'G'] = 71;
-  transUtf8[L'H'] = 72;
-  transUtf8[L'I'] = 73;
-  transUtf8[L'J'] = 74;
-  transUtf8[L'K'] = 75;
-  transUtf8[L'L'] = 76;
-  transUtf8[L'M'] = 77;
-  transUtf8[L'N'] = 78;
-  transUtf8[L'O'] = 79;
+  transUtf8[u8"@"] = 64;
+  transUtf8[u8"A"] = 65;
+  transUtf8[u8"B"] = 66;
+  transUtf8[u8"C"] = 67;
+  transUtf8[u8"D"] = 68;
+  transUtf8[u8"E"] = 69;
+  transUtf8[u8"F"] = 70;
+  transUtf8[u8"G"] = 71;
+  transUtf8[u8"H"] = 72;
+  transUtf8[u8"I"] = 73;
+  transUtf8[u8"J"] = 74;
+  transUtf8[u8"K"] = 75;
+  transUtf8[u8"L"] = 76;
+  transUtf8[u8"M"] = 77;
+  transUtf8[u8"N"] = 78;
+  transUtf8[u8"O"] = 79;
 
-  transUtf8[L'P'] = 80;
-  transUtf8[L'Q'] = 81;
-  transUtf8[L'R'] = 82;
-  transUtf8[L'S'] = 83;
-  transUtf8[L'T'] = 84;
-  transUtf8[L'U'] = 85;
-  transUtf8[L'V'] = 86;
-  transUtf8[L'W'] = 87;
-  transUtf8[L'X'] = 88;
-  transUtf8[L'Y'] = 89;
-  transUtf8[L'Z'] = 90;
-  transUtf8[L'['] = 91;
-  transUtf8[L'\\']= 92;
-  transUtf8[L']'] = 93;
-  transUtf8[L'^'] = 94;
-  transUtf8[L'_'] = 95;
+  transUtf8[u8"P"] = 80;
+  transUtf8[u8"Q"] = 81;
+  transUtf8[u8"R"] = 82;
+  transUtf8[u8"S"] = 83;
+  transUtf8[u8"T"] = 84;
+  transUtf8[u8"U"] = 85;
+  transUtf8[u8"V"] = 86;
+  transUtf8[u8"W"] = 87;
+  transUtf8[u8"X"] = 88;
+  transUtf8[u8"Y"] = 89;
+  transUtf8[u8"Z"] = 90;
+  transUtf8[u8"["] = 91;
+  transUtf8[u8"\\"]= 92;
+  transUtf8[u8"]"] = 93;
+  transUtf8[u8"^"] = 94;
+  transUtf8[u8"_"] = 95;
 
-  transUtf8[L'`'] = 96;
-  transUtf8[L'a'] = 97;
-  transUtf8[L'b'] = 98;
-  transUtf8[L'c'] = 99;
-  transUtf8[L'd'] = 100;
-  transUtf8[L'e'] = 101;
-  transUtf8[L'f'] = 102;
-  transUtf8[L'g'] = 103;
-  transUtf8[L'h'] = 104;
-  transUtf8[L'i'] = 105;
-  transUtf8[L'j'] = 106;
-  transUtf8[L'k'] = 107;
-  transUtf8[L'l'] = 108;
-  transUtf8[L'm'] = 109;
-  transUtf8[L'n'] = 110;
-  transUtf8[L'o'] = 111;
+  transUtf8[u8"`"] = 96;
+  transUtf8[u8"a"] = 97;
+  transUtf8[u8"b"] = 98;
+  transUtf8[u8"c"] = 99;
+  transUtf8[u8"d"] = 100;
+  transUtf8[u8"e"] = 101;
+  transUtf8[u8"f"] = 102;
+  transUtf8[u8"g"] = 103;
+  transUtf8[u8"h"] = 104;
+  transUtf8[u8"i"] = 105;
+  transUtf8[u8"j"] = 106;
+  transUtf8[u8"k"] = 107;
+  transUtf8[u8"l"] = 108;
+  transUtf8[u8"m"] = 109;
+  transUtf8[u8"n"] = 110;
+  transUtf8[u8"o"] = 111;
 
-  transUtf8[L'p'] = 112;
-  transUtf8[L'q'] = 113;
-  transUtf8[L'r'] = 114;
-  transUtf8[L's'] = 115;
-  transUtf8[L't'] = 116;
-  transUtf8[L'u'] = 117;
-  transUtf8[L'v'] = 118;
-  transUtf8[L'w'] = 119;
-  transUtf8[L'x'] = 120;
-  transUtf8[L'y'] = 121;
-  transUtf8[L'z'] = 122;
-  transUtf8[L'{'] = 123;
-  transUtf8[L'|'] = 124;
-  transUtf8[L'}'] = 125;
-  transUtf8[L'~'] = 126;
+  transUtf8[u8"p"] = 112;
+  transUtf8[u8"q"] = 113;
+  transUtf8[u8"r"] = 114;
+  transUtf8[u8"s"] = 115;
+  transUtf8[u8"t"] = 116;
+  transUtf8[u8"u"] = 117;
+  transUtf8[u8"v"] = 118;
+  transUtf8[u8"w"] = 119;
+  transUtf8[u8"x"] = 120;
+  transUtf8[u8"y"] = 121;
+  transUtf8[u8"z"] = 122;
+  transUtf8[u8"{"] = 123;
+  transUtf8[u8"|"] = 124;
+  transUtf8[u8"}"] = 125;
+  transUtf8[u8"~"] = 126;
 
-  transUtf8[L'Ç'] = 128;
-  transUtf8[L'ü'] = 129;
-  transUtf8[L'é'] = 130;
-  transUtf8[L'ç'] = 135;
-  transUtf8[L'É'] = 144;
-  transUtf8[L'á'] = 160;
-  transUtf8[L'í'] = 161;
-  transUtf8[L'ó'] = 162;
-  transUtf8[L'ú'] = 163;
-  transUtf8[L'ñ'] = 164;
-  transUtf8[L'Ñ'] = 165;
-  transUtf8[L'ª'] = 166;
-  transUtf8[L'º'] = 167;
-  transUtf8[L'¿'] = 168;
-  transUtf8[L'¡'] = 173;
-  transUtf8[L'Á'] = 181;
-  transUtf8[L'€'] = 213;
-  transUtf8[L'Í'] = 214;
-  transUtf8[L'Ó'] = 224;
-  transUtf8[L'Ú'] = 233;
+  transUtf8[u8"\u00c7"] = 128;
+  transUtf8[u8"\u00fc"] = 129;
+  transUtf8[u8"\u00e9"] = 130;
+  transUtf8[u8"\u00e7"] = 135;
+  transUtf8[u8"\u00c9"] = 144;
+  transUtf8[u8"\u00e1"] = 160;
+  transUtf8[u8"\u00ed"] = 161;
+  transUtf8[u8"\u00f3"] = 162;
+  transUtf8[u8"\u00fa"] = 163;
+  transUtf8[u8"\u00f1"] = 164;
+  transUtf8[u8"\u00d1"] = 165;
+  transUtf8[u8"\u00aa"] = 166;
+  transUtf8[u8"\u00ba"] = 167;
+  transUtf8[u8"\u00bf"] = 168;
+  transUtf8[u8"\u00a1"] = 173;
+  transUtf8[u8"\u00c1"] = 181;
+  transUtf8[u8"\u20ac"] = 213;
+  transUtf8[u8"\u00cd"] = 214;
+  transUtf8[u8"\u00d3"] = 224;
+  transUtf8[u8"\u00da"] = 233;
 
 }
 
@@ -1014,15 +1016,12 @@ void IOLocal::drawCross(
   stampChar((t==0||t==1)?197:206,0,x,y);
 }
 
-int IOLocal::transChar(wchar_t c) {
-
-  std::map<wchar_t,int>::iterator tItt;
-  tItt = transUtf8.find(c);
-  if (tItt!=transUtf8.end())
-    return transUtf8[c];
-  else
+int IOLocal::transChar(std::string c) {
+  for (auto const & entry : transUtf8)
+    if (0==c.compare(entry.first))
+      return entry.second;
+    // TODO: Remove magic constant
     return 254;
-
 }
 
 void IOLocal::stampChar(
@@ -1069,6 +1068,9 @@ void IOLocal::eventsManager() {
             break;
         }
         break;
+      // TODO: Resolve substitution/replace mode
+      case SDL_TEXTINPUT:
+        processText(&event);
       case SDL_KEYDOWN:
         processKey(&event);
         break;
@@ -1077,9 +1079,74 @@ void IOLocal::eventsManager() {
 
 }
 
-void IOLocal::processKey(SDL_Event* event) {
+void IOLocal::processText(SDL_Event* event) {
 
-  // TODO: Resolve substitution/replace mode
+  Word emptyWord;
+  emptyWord.wordContent = RDM_WEMPTY;
+  emptyWord.wordClass = RDM_WCLASS_NORMAL;
+
+  std::string text = event->text.text;
+
+  if(text == u8"") {
+
+    // Space
+    if(wordRShift==0) {
+      commandLine.insert(
+        commandLine.begin()+currentWord+1,
+        emptyWord
+      );
+      currentWord++;
+    } else {
+      commandLine.insert(
+        commandLine.begin()+currentWord+1,
+        emptyWord
+      );
+      commandLine[currentWord+1].wordContent = multibyteSubstr(
+        commandLine[currentWord].wordContent,
+        multibyteLenght(commandLine[currentWord].wordContent)-wordRShift,
+        wordRShift
+      );
+      commandLine[currentWord].wordContent = multibyteSubstr(
+        commandLine[currentWord].wordContent,
+        0,
+        multibyteLenght(commandLine[currentWord].wordContent)-wordRShift
+      );
+      commandLine[currentWord].wordClass = RDM_WCLASS_NORMAL;
+      currentWord++;
+      wordRShift = multibyteLenght(commandLine[currentWord].wordContent);
+
+    }
+    historyCurrent = 0;
+
+  } else {
+
+    // TODO: SDL2New Implement SDL2 text input support
+    if(0==currentWord)
+      commandLine[currentWord].wordClass = RDM_WCLASS_NORMAL;
+    if(wordRShift==0) {
+      commandLine[currentWord].wordContent += text;
+    } else {
+      std::string leftPart = multibyteSubstr(
+        commandLine[currentWord].wordContent,
+        0,
+        multibyteLenght(commandLine[currentWord].wordContent)-wordRShift
+      );
+      std::string rightPart = multibyteSubstr(
+        commandLine[currentWord].wordContent,
+        multibyteLenght(commandLine[currentWord].wordContent)-wordRShift,
+        wordRShift
+      );
+      commandLine[currentWord].wordContent = leftPart;
+      commandLine[currentWord].wordContent += text;
+      commandLine[currentWord].wordContent += rightPart;
+    }
+    historyCurrent = 0;
+
+  }
+
+}
+
+void IOLocal::processKey(SDL_Event* event) {
 
   Word emptyWord;
   emptyWord.wordContent = RDM_WEMPTY;
@@ -1088,37 +1155,6 @@ void IOLocal::processKey(SDL_Event* event) {
   SDL_KeyboardEvent kevent = event->key;
 
   switch(kevent.keysym.sym) {
-    // Space
-    case SDLK_SPACE:
-      if(wordRShift==0) {
-        commandLine.insert(
-          commandLine.begin()+currentWord+1,
-          emptyWord
-        );
-        currentWord++;
-      } else {
-        commandLine.insert(
-          commandLine.begin()+currentWord+1,
-          emptyWord
-        );
-        commandLine[currentWord+1].wordContent =
-          commandLine[currentWord].wordContent.substr(
-            commandLine[currentWord].wordContent.length()-
-              wordRShift,
-            wordRShift
-          );
-        commandLine[currentWord].wordContent =
-          commandLine[currentWord].wordContent.substr(
-            0,
-            commandLine[currentWord].wordContent.length()-wordRShift
-          );
-        commandLine[currentWord].wordClass = RDM_WCLASS_NORMAL;
-        currentWord++;
-        wordRShift = commandLine[currentWord].wordContent.length();
-
-      }
-      historyCurrent = 0;
-      break;
 
     // Enter
     case SDLK_RETURN:
@@ -1127,11 +1163,11 @@ void IOLocal::processKey(SDL_Event* event) {
 
     // Backspace
     case SDLK_BACKSPACE:
-      if(wordRShift==(int)commandLine[currentWord].wordContent.length()) {
+      if(wordRShift==(int)multibyteLenght(commandLine[currentWord].wordContent)) {
         if(currentWord>0) {
-          if(1==currentWord && commandLine[currentWord].wordContent.length()!=0)
+          if(1==currentWord && multibyteLenght(commandLine[currentWord].wordContent)!=0)
             commandLine[currentWord-1].wordClass = RDM_WCLASS_NORMAL;
-          wordRShift=commandLine[currentWord].wordContent.length();
+          wordRShift=multibyteLenght(commandLine[currentWord].wordContent);
           commandLine[currentWord-1].wordContent =
             commandLine[currentWord-1].wordContent +
             commandLine[currentWord].wordContent;
@@ -1142,14 +1178,14 @@ void IOLocal::processKey(SDL_Event* event) {
         if(0==currentWord)
           commandLine[0].wordClass = RDM_WCLASS_NORMAL;
         commandLine[currentWord].wordContent =
-          commandLine[currentWord].wordContent.substr(
+          multibyteSubstr(
+            commandLine[currentWord].wordContent,
             0,
-            commandLine[currentWord].wordContent.length()-
-              wordRShift-1
+            multibyteLenght(commandLine[currentWord].wordContent)-wordRShift-1
           ) +
-          commandLine[currentWord].wordContent.substr(
-            commandLine[currentWord].wordContent.length()-
-              wordRShift,
+          multibyteSubstr(
+            commandLine[currentWord].wordContent,
+            multibyteLenght(commandLine[currentWord].wordContent)-wordRShift,
             wordRShift
           );
       }
@@ -1160,9 +1196,9 @@ void IOLocal::processKey(SDL_Event* event) {
     case SDLK_DELETE:
       if(wordRShift==0) {
         if((currentWord+1)<(int)commandLine.size()) {
-          if(0==currentWord && commandLine[1].wordContent.length()!=0)
+          if(0==currentWord && multibyteLenght(commandLine[1].wordContent)!=0)
             commandLine[0].wordClass = RDM_WCLASS_NORMAL;
-          wordRShift=commandLine[currentWord+1].wordContent.length();
+          wordRShift=multibyteLenght(commandLine[currentWord+1].wordContent);
           commandLine[currentWord].wordContent =
             commandLine[currentWord].wordContent +
             commandLine[currentWord+1].wordContent;
@@ -1172,12 +1208,14 @@ void IOLocal::processKey(SDL_Event* event) {
         if(0==currentWord)
           commandLine[0].wordClass = RDM_WCLASS_NORMAL;
         commandLine[currentWord].wordContent =
-          commandLine[currentWord].wordContent.substr(
+          multibyteSubstr(
+            commandLine[currentWord].wordContent,
             0,
-            commandLine[currentWord].wordContent.length()-wordRShift
+            multibyteLenght(commandLine[currentWord].wordContent)-wordRShift
           ) +
-          commandLine[currentWord].wordContent.substr(
-            commandLine[currentWord].wordContent.length()-
+          multibyteSubstr(
+            commandLine[currentWord].wordContent,
+            multibyteLenght(commandLine[currentWord].wordContent)-
               wordRShift+1,
             wordRShift-1
           );
@@ -1189,7 +1227,7 @@ void IOLocal::processKey(SDL_Event* event) {
     // H-movement keys
     case SDLK_LEFT:
       if (!(kevent.keysym.mod&KMOD_CTRL)) {
-        if(wordRShift<(int)commandLine[currentWord].wordContent.size())
+        if(wordRShift<(int)multibyteLenght(commandLine[currentWord].wordContent))
           wordRShift++;
         else if (currentWord>0) {
           currentWord--;
@@ -1197,8 +1235,8 @@ void IOLocal::processKey(SDL_Event* event) {
         }
         historyCurrent = 0;
       } else {
-        if(wordRShift<(int)commandLine[currentWord].wordContent.size()) {
-          wordRShift = commandLine[currentWord].wordContent.size();
+        if(wordRShift<(int)multibyteLenght(commandLine[currentWord].wordContent)) {
+          wordRShift = multibyteLenght(commandLine[currentWord].wordContent);
         } else if (currentWord>0) {
           currentWord--;
           wordRShift=0;
@@ -1213,7 +1251,7 @@ void IOLocal::processKey(SDL_Event* event) {
           wordRShift--;
         else if (currentWord<((int)commandLine.size()-1)) {
           currentWord++;
-          wordRShift = commandLine[currentWord].wordContent.size();
+          wordRShift = multibyteLenght(commandLine[currentWord].wordContent);
         }
         historyCurrent = 0;
       } else {
@@ -1221,7 +1259,7 @@ void IOLocal::processKey(SDL_Event* event) {
           wordRShift = 0;
         } else if ((currentWord+1)<(int)commandLine.size()) {
           currentWord++;
-          wordRShift = commandLine[currentWord].wordContent.size();
+          wordRShift = multibyteLenght(commandLine[currentWord].wordContent);
         }
         historyCurrent = 0;
       }
@@ -1230,7 +1268,7 @@ void IOLocal::processKey(SDL_Event* event) {
     // Far-long h-movement keys
     case SDLK_HOME:
       currentWord = 0;
-      wordRShift = commandLine[currentWord].wordContent.size();
+      wordRShift = multibyteLenght(commandLine[currentWord].wordContent);
       historyCurrent = 0;
       break;
 
@@ -1283,47 +1321,6 @@ void IOLocal::processKey(SDL_Event* event) {
       historyCurrent = 0;
       break;
 
-    // Disable modificators
-    case SDLK_RSHIFT:
-    case SDLK_LSHIFT:
-    case SDLK_LALT:
-    case SDLK_RALT:
-    case SDLK_LCTRL:
-    case SDLK_RCTRL:
-    case SDLK_MODE:
-    case SDLK_MENU:
-    case SDLK_KP_ENTER:
-    case SDLK_ESCAPE:
-    case SDLK_LGUI:
-    case SDLK_RGUI:
-      break;
-
-    // Other wide characteres
-    default:
-      // TODO: SDL2New Implement SDL2 text input support
-      char* key_char = (char*)SDL_GetKeyName(kevent.keysym.sym);
-      key_char[0] = tolower(key_char[0]);
-      wchar_t key_wchar;
-      mbstowcs(&key_wchar, key_char , 1);
-      if(0==currentWord)
-        commandLine[currentWord].wordClass = RDM_WCLASS_NORMAL;
-      if(wordRShift==0) {
-        commandLine[currentWord].wordContent += key_wchar;
-      } else {
-        std::wstring leftPart = commandLine[currentWord].wordContent.substr(
-          0,
-          commandLine[currentWord].wordContent.length()-wordRShift
-        );
-        std::wstring rightPart = commandLine[currentWord].wordContent.substr(
-            commandLine[currentWord].wordContent.length()-wordRShift,
-            wordRShift
-        );
-        commandLine[currentWord].wordContent = leftPart;
-        commandLine[currentWord].wordContent += key_wchar;
-        commandLine[currentWord].wordContent += rightPart;
-      }
-      historyCurrent = 0;
-      break;
 
   }
 
@@ -1339,7 +1336,7 @@ void IOLocal::tryAutocompletion() {
   SentenceListReference options;
 
   // check for empty line to list all commands
-  if(commandLine.size()==1 && commandLine[0].wordContent.length()==0) {
+  if(commandLine.size()==1 && multibyteLenght(commandLine[0].wordContent)==0) {
 
     for(const auto & commandHandler : commandHandlers) {
 
@@ -1374,11 +1371,11 @@ void IOLocal::tryAutocompletion() {
 
 void IOLocal::processLine() {
 
-  // Ignoramos líneas vacias
+  // Ignore empty lines
   if(!commandLine.empty()) {
 
     // If first word is empty, inserts the say command
-    if(commandLine[0].wordContent.length()==0) {
+    if(multibyteLenght(commandLine[0].wordContent)==0) {
       commandLine.erase(commandLine.begin());
       commandLine.insert(commandLine.begin(),defaultWord);
     }
@@ -1426,6 +1423,62 @@ void IOLocal::unregisterCommandHandler(CommandHandlerInterface *c) {
     std::remove(commandHandlers.begin(), commandHandlers.end(), c),
     commandHandlers.end()
   );
+}
+
+std::size_t IOLocal::multibyteLenght(const std::string &string) {
+  std::size_t characterCount = 0;
+  int currentShift = 0;
+  int bytesReaded = 0;
+  do {
+    currentShift += bytesReaded;
+    bytesReaded = mbrtowc(NULL, &string[currentShift], MB_CUR_MAX, NULL);
+    if(bytesReaded>0) characterCount++;
+  } while (bytesReaded>0);
+  return (bytesReaded<0) ? bytesReaded : characterCount;
+}
+
+std::string IOLocal::multibyteCharacterByIndex(const std::string &string, const std::size_t position) {
+  std::string lastCharacterString(MB_CUR_MAX, '\0');
+  wchar_t lastCharacter;
+  std::size_t characterCount = 0;
+  std::size_t characterSize = 0;
+  int currentShift = 0;
+  int bytesReaded = 0;
+  do {
+    currentShift += bytesReaded;
+    bytesReaded = mbrtowc(&lastCharacter, &string[currentShift], MB_CUR_MAX, NULL);
+    if(bytesReaded>0) characterCount++;
+    if((characterCount-1)==position) {
+      characterSize = wcrtomb(&lastCharacterString[0], lastCharacter, NULL);
+      lastCharacterString.resize(characterSize);
+      return lastCharacterString;
+    }
+  } while (bytesReaded>0);
+  return u8"";
+}
+
+std::string IOLocal::multibyteSubstr(const std::string &string, const std::size_t start, const std::size_t size) {
+  if(size==0)
+    return u8"";
+  std::string newString;
+  int startByte = 0;
+  std::size_t characterCount = 0;
+  int currentShift = 0;
+  int bytesReaded = 0;
+  do {
+    currentShift += bytesReaded;
+    bytesReaded = mbrtowc(NULL, &string[currentShift], MB_CUR_MAX, NULL);
+    if(bytesReaded>0) characterCount++;
+    if((characterCount-1)==start && bytesReaded>0)
+      startByte = currentShift;
+    if((characterCount-1)==start+size)
+      return string.substr(startByte, currentShift-startByte);
+    if(bytesReaded==0 && startByte>0)
+      return string.substr(startByte, currentShift-startByte);
+    if(bytesReaded==0)
+      return u8"";
+  } while (bytesReaded>0);
+  return u8"";
 }
 
 } // namespace roguedm
