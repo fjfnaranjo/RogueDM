@@ -1,3 +1,0 @@
-To generate the code documentation, issue the following command in the project root.
-
-doxygen docs/doxygen/doxyfile
