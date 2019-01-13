@@ -19,14 +19,15 @@
 
 #include "../StageInterface.hpp"
 
-namespace roguedm_main {
+namespace roguedm_game {
 
 /**
- * \brief The main stage class.
+ * \brief The GUI stage class.
  *
- * This stage represents the game application behavior.
+ * This stage represents an standard user run of the application. It creates
+ * a visual GUI and allow hosting and connection of games.
  */
-class Main : public roguedm::StageInterface
+class GuiStage : public roguedm::StageInterface
 {
 
   public:
@@ -35,27 +36,26 @@ class Main : public roguedm::StageInterface
      * Default constructor (project guidelines requires always a constructor,
      * even if it will be empty).
      */
-    Main();
+    GuiStage();
 
     /**
      * Default destructor (project guidelines requires always a destructor,
      * even if it will be empty).
      */
-    virtual ~Main();
+    virtual ~GuiStage();
 
     /**
-     * \brief This method hold the main stage tasks, this is, all the pure game
-     *        related operations.
+     * \brief The GUI stage code.
      */
     roguedm::StageResponse execute() override;
 
   private:
 
     /** Copy operator (private because is disabled by default). */
-    Main(const Main&);
+    GuiStage(const GuiStage&);
 
     /** Assign operator (private because is disabled by default). */
-    void operator=(const Main&);
+    void operator=(const GuiStage&);
 
     /** Member to store the stage desired application exit code. */
     int status;

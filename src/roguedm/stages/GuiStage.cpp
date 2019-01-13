@@ -15,28 +15,28 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "Main.hpp"
+#include "GuiStage.hpp"
 
 #include <cstdio>
 #include <memory>
 #include <locale>
 
-#include "Game.hpp"
 #include "../gettext.hpp"
 #include "../strings.hpp"
 #include "../Config.hpp"
+#include "../game/Game.hpp"
 #include "../IOLocal.hpp"
 #include "../IORemote.hpp"
 
-namespace roguedm_main {
+namespace roguedm_game {
 
-Main::Main() {
+GuiStage::GuiStage() {
   status = 0;
 }
 
-Main::~Main() {}
+GuiStage::~GuiStage() {}
 
-roguedm::StageResponse Main::execute() {
+roguedm::StageResponse GuiStage::execute() {
 
   auto gameInstance = std::make_unique<Game>();
 

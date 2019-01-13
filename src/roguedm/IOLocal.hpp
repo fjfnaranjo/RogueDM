@@ -54,7 +54,7 @@ struct Player {
  * \brief The interface management class.
  *
  * Manage the SDL interface with the player. The console graphical output and
- * the texts input. Also handles the vast mayority of the console command line
+ * the texts input. Also handles the vast majority of the console command line
  * features.
  *
  * Pattern Singleton.

@@ -15,11 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "Game.hpp"
+#include "../game/Game.hpp"
 
 #include <memory>
 
-namespace roguedm_main {
+namespace roguedm_game {
 
 Game::Game() {}
 

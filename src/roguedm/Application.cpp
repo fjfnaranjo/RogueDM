@@ -22,7 +22,7 @@
 #include <locale>
 
 #include "gettext.hpp"
-#include "main/Main.hpp"
+#include "stages/GuiStage.hpp"
 #include "strings.hpp"
 #include "StageInterface.hpp"
 
@@ -79,7 +79,7 @@ int Application::run(int argc, char *argv[]) {
 
     // Run the different application stages and handle their chaining
     StageInterfaceReference currentStage =
-        std::make_shared<roguedm_main::Main>();
+        std::make_shared<roguedm_game::GuiStage>();
     StageResponse lastResponse;
     do {
       lastResponse = currentStage->execute();

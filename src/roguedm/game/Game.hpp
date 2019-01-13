@@ -20,7 +20,7 @@
 #include "../CommandHandlerInterface.hpp"
 #include "../GameComponentInterface.hpp"
 
-namespace roguedm_main {
+namespace roguedm_game {
 
 /**
  * \brief Class for all game rules related tasks.

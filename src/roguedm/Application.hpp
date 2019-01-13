@@ -26,13 +26,15 @@ namespace roguedm {
  *
  * This class is used to parse the program arguments and do all the generic
  * steps expected on a CLI program launch (help text, I18N init, ...).
+ *
+ * It also runs the application stage loop. See \ref application-design.
  */
 class Application {
 
   public:
 
     /**
-     * Runs the actual program initialization code.
+     * Runs the actual program inner/main code.
      * \param argc main() arguments count.
      * \param argv main() arguments values.
      * \return Status code to be returned by main().
@@ -48,6 +50,8 @@ class Application {
      * * Prints usage information.
      * * Prints version information.
      *
+     * \param argc main() arguments count.
+     * \param argv main() arguments values.
      * \param configuration Global configuration object.
      */
     bool process_arguments (

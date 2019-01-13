@@ -73,6 +73,6 @@ namespace but an special namespace and component exists to handle the actual
 game rulesets (we are talking here about the RPG/board game beign played in
 the VTT either locally or over the network).
 
-The \ref roguedm_main::Game component in the \ref roguedm_main namespace is
+The \ref roguedm_game::Game component in the \ref roguedm_game namespace is
 responsible of this labor and you can find more information about it in the
 \ref game-rulesets documentation.
