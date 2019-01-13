@@ -1071,6 +1071,7 @@ void IOLocal::eventsManager() {
       // TODO: Resolve substitution/replace mode
       case SDL_TEXTINPUT:
         processText(&event);
+        break;
       case SDL_KEYDOWN:
         processKey(&event);
         break;
