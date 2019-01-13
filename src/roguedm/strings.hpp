@@ -20,8 +20,7 @@
  * \brief File containing the strings used by the application CLI.
  *
  * This file should be used to store all strings and templates exposed to the
- * application CLI interface. For convenience, it also defines the gettext
- * macro.
+ * application CLI interface.
  */
 
 #pragma once

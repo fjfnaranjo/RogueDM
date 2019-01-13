@@ -19,10 +19,10 @@
 
 #include <memory>
 
-#include "macros.hpp"
-#include "CommandHandlerInterface.hpp"
-#include "Config.hpp"
-#include "GameComponentInterface.hpp"
+#include "../commands.hpp"
+#include "../macros.hpp"
+#include "../Config.hpp"
+#include "../GameComponentInterface.hpp"
 
 namespace roguedm {
 
@@ -33,10 +33,10 @@ namespace roguedm {
  *
  * Pattern Singleton.
  */
-class IORemote : CommandHandlerInterface, GameComponentInterface
+class NetworkIO : CommandHandlerInterface, GameComponentInterface
 {
 
-  RDM_DECLARE_CLASS_AS_SINGLETON(IORemote)
+  RDM_DECLARE_CLASS_AS_SINGLETON(NetworkIO)
 
   public:
 
@@ -47,17 +47,17 @@ class IORemote : CommandHandlerInterface, GameComponentInterface
     void update() override;
 
     /**
-     * Used by IOLocal to ask the command handler a response for a command.
+     * Used to ask the command handler a response for a command.
      */
     int processCommand(const Sentence&) override;
 
     /**
-     * Used by IOLocal to ask the command handler a autocomplete suggestion.
+     * Used to ask the command handler an autocomplete suggestion.
      */
     const int autocomplete(Sentence&) override;
 
     /**
-     * Used by IOLocal to ask the command handler a autocomplete list.
+     * Used to ask the command handler an autocomplete candidate list.
      */
     const SentenceListReference autocompleteListOptions(const Sentence&)
       override;
@@ -78,6 +78,6 @@ class IORemote : CommandHandlerInterface, GameComponentInterface
 
 };
 
-typedef std::shared_ptr<IORemote> IORemoteReference;
+typedef std::shared_ptr<NetworkIO> NetworkIOReference;
 
 } // namespace roguedm

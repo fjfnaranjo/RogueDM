@@ -19,7 +19,7 @@
 
 #include "../StageInterface.hpp"
 
-namespace roguedm_game {
+namespace roguedm {
 
 /**
  * \brief The GUI stage class.
@@ -27,7 +27,7 @@ namespace roguedm_game {
  * This stage represents an standard user run of the application. It creates
  * a visual GUI and allow hosting and connection of games.
  */
-class GuiStage : public roguedm::StageInterface
+class GuiStage : public StageInterface
 {
 
   public:
@@ -47,7 +47,7 @@ class GuiStage : public roguedm::StageInterface
     /**
      * \brief The GUI stage code.
      */
-    roguedm::StageResponse execute() override;
+    StageResponse execute() override;
 
   private:
 
@@ -62,4 +62,4 @@ class GuiStage : public roguedm::StageInterface
 
 };
 
-} // namespace roguedm_main
+} // namespace roguedm

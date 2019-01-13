@@ -25,10 +25,10 @@
 #include "../strings.hpp"
 #include "../Config.hpp"
 #include "../game/Game.hpp"
-#include "../IOLocal.hpp"
-#include "../IORemote.hpp"
+#include "../network/NetworkIO.hpp"
+#include "../sdl2/Sdl2IO.hpp"
 
-namespace roguedm_game {
+namespace roguedm {
 
 GuiStage::GuiStage() {
   status = 0;
@@ -36,32 +36,32 @@ GuiStage::GuiStage() {
 
 GuiStage::~GuiStage() {}
 
-roguedm::StageResponse GuiStage::execute() {
+StageResponse GuiStage::execute() {
 
-  auto gameInstance = std::make_unique<Game>();
+  auto gameInstance = std::make_unique<roguedm_game::Game>();
 
-  auto ioLocalInstance = roguedm::IOLocal::instance();
-  int ioLocalErrorCode = ioLocalInstance->getErrorCode();
-  if(0!=ioLocalErrorCode) {
-    status = ioLocalErrorCode;
+  auto sdl2IOInstance = Sdl2IO::instance();
+  int sdl2IOErrorCode = sdl2IOInstance->getErrorCode();
+  if(0!=sdl2IOErrorCode) {
+    status = sdl2IOErrorCode;
     return {status, RDM_STAGE_EXIT};
   }
 
-  auto ioRemoteInstance = roguedm::IORemote::instance();
-  int ioRemoteErrorCode = ioRemoteInstance->getErrorCode();
-  if(0!=ioRemoteErrorCode) {
-    status = ioRemoteErrorCode;
+  auto networkIOInstance = NetworkIO::instance();
+  int networkIOErrorCode = networkIOInstance->getErrorCode();
+  if(0!=networkIOErrorCode) {
+    status = networkIOErrorCode;
     return {status, RDM_STAGE_EXIT};
   }
 
   // input checking and scene drawing (game loop)
   int done = 0;
   while(!done) {
-    ioLocalInstance->update();
-    done = ioLocalInstance->mustHalt();
-    ioRemoteInstance->update();
+    sdl2IOInstance->update();
+    done = sdl2IOInstance->mustHalt();
+    networkIOInstance->update();
     // TODO: Check if remote and game instances should issue a 'done' also
-    // done = ioRemoteInstance->mustHalt();
+    // done = NetworkIOInstance->mustHalt();
     gameInstance->update();
     // done = gameInstance->mustHalt();
   }
@@ -70,4 +70,4 @@ roguedm::StageResponse GuiStage::execute() {
 
 }
 
-} // namespace roguedm_main
+} // namespace roguedm

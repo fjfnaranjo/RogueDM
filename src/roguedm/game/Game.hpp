@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include "../CommandHandlerInterface.hpp"
+#include "../commands.hpp"
 #include "../GameComponentInterface.hpp"
 
 namespace roguedm_game {
@@ -46,17 +46,17 @@ class Game :
     virtual ~Game();
 
     /**
-     * Used by IOLocal to ask the command handler a response for a command.
+     * Used to ask the command handler a response for a command.
      */
     int processCommand(const roguedm::Sentence&) override;
 
     /**
-     * Used by IOLocal to ask the command handler a autocomplete suggestion.
+     * Used to ask the command handler an autocomplete suggestion.
      */
     const int autocomplete(roguedm::Sentence&) override;
 
     /**
-     * Used by IOLocal to ask the command handler a autocomplete list.
+     * Used to ask the command handler an autocomplete candidate list.
      */
     const roguedm::SentenceListReference autocompleteListOptions(
       const roguedm::Sentence&

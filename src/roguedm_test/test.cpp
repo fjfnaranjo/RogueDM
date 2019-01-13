@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
 
-#include "../roguedm/IORemote.hpp"
+#include "../roguedm/network/NetworkIO.hpp"
 
 TEST(testMath, myCubeTest) {
-  auto initial = new roguedm::IORemote();
+  auto initial = new roguedm::NetworkIO();
   EXPECT_EQ(1000, 1000);
   delete initial;
 }

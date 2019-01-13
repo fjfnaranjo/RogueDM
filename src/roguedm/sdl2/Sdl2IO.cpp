@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "IOLocal.hpp"
+#include "Sdl2IO.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -25,14 +25,14 @@
 
 #include <SDL2/SDL_image.h>
 
-#include "macros.hpp"
-#include "gettext.hpp"
-#include "strings.hpp"
+#include "../macros.hpp"
+#include "../gettext.hpp"
+#include "../strings.hpp"
 
 namespace roguedm {
 
 // Repaint window
-void IOLocal::update() {
+void Sdl2IO::update() {
 
   // FPS lock
   if ((SDL_GetTicks() - ticks) < 33)
@@ -230,11 +230,11 @@ void IOLocal::update() {
 
 }
 
-int IOLocal::mustHalt() {
+int Sdl2IO::mustHalt() {
   return appDone;
 }
 
-int IOLocal::processCommand(const Sentence& a) {
+int Sdl2IO::processCommand(const Sentence& a) {
   if(a[0].wordContent==RDM_CMD_QUIT && a[0].wordClass==RDM_WCLASS_COMMAND) {
     appDone = 1;
     return 1;
@@ -242,7 +242,7 @@ int IOLocal::processCommand(const Sentence& a) {
   return 0;
 }
 
-const int IOLocal::autocomplete(Sentence& a) {
+const int Sdl2IO::autocomplete(Sentence& a) {
 
   // quit command completion
   if(a[0].wordContent==RDM_CMD_QUIT && a[0].wordClass==RDM_WCLASS_NORMAL) {
@@ -253,7 +253,7 @@ const int IOLocal::autocomplete(Sentence& a) {
   return 0;
 
 }
-const SentenceListReference IOLocal::autocompleteListOptions(const Sentence& a)
+const SentenceListReference Sdl2IO::autocompleteListOptions(const Sentence& a)
 {
 
   Word psayCmd;
@@ -284,7 +284,7 @@ const SentenceListReference IOLocal::autocompleteListOptions(const Sentence& a)
 
 }
 
-IOLocal::IOLocal() {
+Sdl2IO::Sdl2IO() {
 
   errorCode = 0;
   appDone = 0;
@@ -345,7 +345,7 @@ IOLocal::IOLocal() {
 
 }
 
-IOLocal::~IOLocal() {
+Sdl2IO::~Sdl2IO() {
 
   if(0!=errorCode)
     return;
@@ -374,11 +374,11 @@ IOLocal::~IOLocal() {
 
 }
 
-int IOLocal::getErrorCode() {
+int Sdl2IO::getErrorCode() {
   return errorCode;
 }
 
-void IOLocal::resetLine() {
+void Sdl2IO::resetLine() {
   Word emptyWord;
   emptyWord.wordContent = u8"";
   emptyWord.wordClass = RDM_WCLASS_NORMAL;
@@ -388,7 +388,7 @@ void IOLocal::resetLine() {
   wordRShift = 0;
 }
 
-void IOLocal::initWordTypes() {
+void Sdl2IO::initWordTypes() {
 
   // Load base texture
   SDL_Surface *baseTexture;
@@ -712,7 +712,7 @@ void IOLocal::initWordTypes() {
 
 }
 
-void IOLocal::initTransTable() {
+void Sdl2IO::initTransTable() {
 
   transUtf8[u8" "] = 32;
   transUtf8[u8"!"] = 33;
@@ -838,7 +838,7 @@ void IOLocal::initTransTable() {
 
 }
 
-void IOLocal::colorizeWordType(
+void Sdl2IO::colorizeWordType(
   SDL_Texture* srf,
   int fgr,
   int fgg,
@@ -867,14 +867,14 @@ void IOLocal::colorizeWordType(
 }
 
 // Recalculate window coords and zones after term resize
-void IOLocal::initScreenSize() {
+void Sdl2IO::initScreenSize() {
   int ww, wh;
   SDL_GetWindowSize(window, &ww, &wh);
   maxCols=floor(ww/txtCWidth)-1;
   maxRows=floor(wh/txtCHeight)-1;
 }
 
-void IOLocal::drawBox(
+void Sdl2IO::drawBox(
   int t,
   int x,
   int y,
@@ -931,7 +931,7 @@ void IOLocal::drawBox(
 
 }
 
-void IOLocal::drawHSeparator(
+void Sdl2IO::drawHSeparator(
   int t,
   int x,
   int y,
@@ -967,7 +967,7 @@ void IOLocal::drawHSeparator(
 
 }
 
-void IOLocal::drawVSeparator(
+void Sdl2IO::drawVSeparator(
   int t,
   int x,
   int y,
@@ -1003,7 +1003,7 @@ void IOLocal::drawVSeparator(
 
 }
 
-void IOLocal::drawCross(
+void Sdl2IO::drawCross(
   int t,
   int x,
   int y
@@ -1011,7 +1011,7 @@ void IOLocal::drawCross(
   stampChar((t==0||t==1)?197:206,0,x,y);
 }
 
-int IOLocal::transChar(std::string c) {
+int Sdl2IO::transChar(std::string c) {
   for (auto const & entry : transUtf8)
     if (0==c.compare(entry.first))
       return entry.second;
@@ -1019,7 +1019,7 @@ int IOLocal::transChar(std::string c) {
     return 254;
 }
 
-void IOLocal::stampChar(
+void Sdl2IO::stampChar(
   int cNumber,
   int wType,
   int dx,
@@ -1045,7 +1045,7 @@ void IOLocal::stampChar(
 
 }
 // Process the user keyboard input
-void IOLocal::eventsManager() {
+void Sdl2IO::eventsManager() {
 
   // TODO: Fix memory leak with event
 
@@ -1075,7 +1075,7 @@ void IOLocal::eventsManager() {
 
 }
 
-void IOLocal::processText(SDL_Event* event) {
+void Sdl2IO::processText(SDL_Event* event) {
 
   Word emptyWord;
   emptyWord.wordContent = RDM_WEMPTY;
@@ -1142,7 +1142,7 @@ void IOLocal::processText(SDL_Event* event) {
 
 }
 
-void IOLocal::processKey(SDL_Event* event) {
+void Sdl2IO::processKey(SDL_Event* event) {
 
   Word emptyWord;
   emptyWord.wordContent = RDM_WEMPTY;
@@ -1322,7 +1322,7 @@ void IOLocal::processKey(SDL_Event* event) {
 
 }
 
-void IOLocal::tryAutocompletion() {
+void Sdl2IO::tryAutocompletion() {
 
   // empty word to insert when expanding commands
   Word emptyWord;
@@ -1365,7 +1365,7 @@ void IOLocal::tryAutocompletion() {
 
 }
 
-void IOLocal::processLine() {
+void Sdl2IO::processLine() {
 
   // Ignore empty lines
   if(!commandLine.empty()) {
@@ -1405,23 +1405,23 @@ void IOLocal::processLine() {
 
 }
 
-void IOLocal::setDefaultWord(Word c) {
+void Sdl2IO::setDefaultWord(Word c) {
   defaultWord = c;
 }
 
-void IOLocal::registerCommandHandler(CommandHandlerInterface *c) {
+void Sdl2IO::registerCommandHandler(CommandHandlerInterface *c) {
   unregisterCommandHandler(c);
   commandHandlers.push_back(c);
 }
 
-void IOLocal::unregisterCommandHandler(CommandHandlerInterface *c) {
+void Sdl2IO::unregisterCommandHandler(CommandHandlerInterface *c) {
   commandHandlers.erase(
     std::remove(commandHandlers.begin(), commandHandlers.end(), c),
     commandHandlers.end()
   );
 }
 
-std::size_t IOLocal::multibyteLenght(const std::string &string) {
+std::size_t Sdl2IO::multibyteLenght(const std::string &string) {
   std::size_t characterCount = 0;
   int currentShift = 0;
   int bytesReaded = 0;
@@ -1433,7 +1433,7 @@ std::size_t IOLocal::multibyteLenght(const std::string &string) {
   return (bytesReaded<0) ? bytesReaded : characterCount;
 }
 
-std::string IOLocal::multibyteCharacterByIndex(const std::string &string, const std::size_t position) {
+std::string Sdl2IO::multibyteCharacterByIndex(const std::string &string, const std::size_t position) {
   std::string lastCharacterString(MB_CUR_MAX, '\0');
   wchar_t lastCharacter;
   std::size_t characterCount = 0;
@@ -1453,7 +1453,7 @@ std::string IOLocal::multibyteCharacterByIndex(const std::string &string, const 
   return u8"";
 }
 
-std::string IOLocal::multibyteSubstr(const std::string &string, const std::size_t start, const std::size_t size) {
+std::string Sdl2IO::multibyteSubstr(const std::string &string, const std::size_t start, const std::size_t size) {
   if(size==0)
     return u8"";
   std::string newString;

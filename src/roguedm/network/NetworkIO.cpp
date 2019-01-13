@@ -15,20 +15,20 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "IORemote.hpp"
+#include "NetworkIO.hpp"
 
 #include <locale>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_net.h>
 
-#include "gettext.hpp"
-#include "strings.hpp"
+#include "../gettext.hpp"
+#include "../strings.hpp"
 
 namespace roguedm {
 
 // Set up networking.
-IORemote::IORemote() {
+NetworkIO::NetworkIO() {
 
   // Scope configuration to check if network must be disabled.
   configuration = Config::instance();
@@ -48,7 +48,7 @@ IORemote::IORemote() {
 };
 
 // Set down networking.
-IORemote::~IORemote() {
+NetworkIO::~NetworkIO() {
 
   // Do NOT close SDLNet if networking is disabled.
   if(configuration->getDoNotUseNetworking())
@@ -59,18 +59,18 @@ IORemote::~IORemote() {
 
 };
 
-int IORemote::getErrorCode() {
+int NetworkIO::getErrorCode() {
   return errorCode;
 }
 
-void IORemote::update() {}
-int IORemote::processCommand(const Sentence& a) {
+void NetworkIO::update() {}
+int NetworkIO::processCommand(const Sentence& a) {
   return 0;
 }
-const int IORemote::autocomplete(Sentence& a) {
+const int NetworkIO::autocomplete(Sentence& a) {
   return 0;
 }
-const SentenceListReference IORemote::autocompleteListOptions(
+const SentenceListReference NetworkIO::autocompleteListOptions(
   const Sentence& a
 ) {
   return std::make_shared<SentenceList>();

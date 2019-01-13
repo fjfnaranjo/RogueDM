@@ -29,14 +29,18 @@ return the last reported exit status if:
 
 ### Responsabilities of the stages
 
-An stage will either do an special hidden task or display some kind of
+A stage will either do a special hidden task or display some kind of
 interface to the user.
 
 Unless a special stage is run for a specific purpose, the stages have also two
 common responsabilities:
 
 * Reacting to commands from some \ref roguedm::CommandHandlerInterface.
-* Create and update a set of \ref roguedm::GameComponentInterface. 
+* Create and update a set of \ref roguedm::GameComponentInterface.
+
+The stages also return a complex value of type \ref roguedm::StageResponse.
+
+All the stages and their related code is in the stages folder.
 
 ## The application "command handlers"
 
@@ -66,7 +70,24 @@ realtime.
 This components implement the \ref roguedm::GameComponentInterface and the
 current stage is responsible of their definition and management.
 
-### Namespaces, the Game component and the game rulesets
+## IO classes and user interfaces
+
+The different interfaces that stages can use to communicate with the user have
+a special name to avoid naming collisions with object oriented class
+interfaces. We call them "IO classes".
+
+All the IO classes are identified by a "IO" suffix. This classes can be also
+command handlers and components.
+
+The current IO classes are:
+
+* The SDL 2 interface in the sdl2 folder: \ref roguedm::Sdl2IO.
+* The network interface in the network folder: \ref roguedm::NetworkIO.
+
+Giving the complexity of this IO classes their logic is under their respective
+folders.
+
+## Namespaces, the Game component and the game rulesets
 
 Most of the fundamental application bahavior is handled in the \ref roguedm
 namespace but an special namespace and component exists to handle the actual

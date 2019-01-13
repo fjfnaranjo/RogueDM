@@ -79,7 +79,7 @@ int Application::run(int argc, char *argv[]) {
 
     // Run the different application stages and handle their chaining
     StageInterfaceReference currentStage =
-        std::make_shared<roguedm_game::GuiStage>();
+        std::make_shared<GuiStage>();
     StageResponse lastResponse;
     do {
       lastResponse = currentStage->execute();

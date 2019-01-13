@@ -23,8 +23,8 @@
 
 #include <SDL2/SDL.h>
 
-#include "CommandHandlerInterface.hpp"
-#include "GameComponentInterface.hpp"
+#include "../commands.hpp"
+#include "../GameComponentInterface.hpp"
 
 // Max command history lines..
 #define RDM_CL_MAX_HISTORY         128
@@ -59,10 +59,10 @@ struct Player {
  *
  * Pattern Singleton.
  */
-class IOLocal : CommandHandlerInterface, GameComponentInterface
+class Sdl2IO : CommandHandlerInterface, GameComponentInterface
 {
 
-  RDM_DECLARE_CLASS_AS_SINGLETON(IOLocal)
+  RDM_DECLARE_CLASS_AS_SINGLETON(Sdl2IO)
 
   public:
 
@@ -73,17 +73,17 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     void update() override;
 
     /**
-     * Used by IOLocal to ask the command handler a response for a command.
+     * Used to ask the command handler a response for a command.
      */
     int processCommand(const Sentence&) override;
 
     /**
-     * Used by IOLocal to ask the command handler a autocomplete suggestion.
+     * Used to ask the command handler an autocomplete suggestion.
      */
     const int autocomplete(Sentence&) override;
 
     /**
-     * Used by IOLocal to ask the command handler a autocomplete list.
+     * Used to ask the command handler an autocomplete candidate list.
      */
     const SentenceListReference autocompleteListOptions(const Sentence&)
       override;
@@ -369,6 +369,6 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
 
 };
 
-typedef std::shared_ptr<IOLocal> IOLocalReference;
+typedef std::shared_ptr<Sdl2IO> Sdl2IOReference;
 
 } // namespace roguedm
