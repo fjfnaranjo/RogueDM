@@ -9,7 +9,13 @@ will take care of showing the action with its amazing text renderer.
 
 RogueDM was also heavily inspired by [Dwarf Fortress](http://www.bay12games.com/dwarves/).
 
-This introductory sections will help you getting started:
+Finally, RogueDM is free (as in freedom) and licensed under the
+[GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html). Check the
+Collaborators page if you want more information about helping
+with RogueDM development.
 
-* \subpage getting-roguedm
-* \subpage building-roguedm
+## Documentation chapters
+
+* This introductory page will help you \subpage getting-started.
+* A user guide (in-progress) can be found in the \subpage user-guide page.
+* If you want to colaborate, check the \subpage collaborators page.

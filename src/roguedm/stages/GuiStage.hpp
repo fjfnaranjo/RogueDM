@@ -15,26 +15,19 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file InitialState.hpp
- * \brief File containing the InitialState class declarations.
- */
-
 #pragma once
 
-#include "StateInterface.hpp"
+#include "../StageInterface.hpp"
 
-namespace roguedm {
+namespace roguedm_game {
 
 /**
- * \brief This is the initial state class.
+ * \brief The GUI stage class.
  *
- * Currently just a place holder only used to call the MainState state class.
- * \see StateInterface
- * \see StateInterface.execute()
- * \see roguedm_main::MainState
+ * This stage represents an standard user run of the application. It creates
+ * a visual GUI and allow hosting and connection of games.
  */
-class InitialState : public StateInterface
+class GuiStage : public roguedm::StageInterface
 {
 
   public:
@@ -43,36 +36,30 @@ class InitialState : public StateInterface
      * Default constructor (project guidelines requires always a constructor,
      * even if it will be empty).
      */
-    InitialState();
+    GuiStage();
 
     /**
      * Default destructor (project guidelines requires always a destructor,
      * even if it will be empty).
      */
-    virtual ~InitialState();
+    virtual ~GuiStage();
 
     /**
-     * \brief This method hold the initial state tasks, currently only calls the
-     *        MainState state class.
-     *
-     * Overrided from StateInterface.
-     * \see StateInterface
-     * \see StateInterface.execute()
-     * \see roguedm_main::MainState
+     * \brief The GUI stage code.
      */
-    StateResponse execute();
+    roguedm::StageResponse execute() override;
 
   private:
 
     /** Copy operator (private because is disabled by default). */
-    InitialState(const InitialState&);
+    GuiStage(const GuiStage&);
 
-    /** Assing operator (private because is disabled by default). */
-    void operator=(const InitialState&);
+    /** Assign operator (private because is disabled by default). */
+    void operator=(const GuiStage&);
 
-    /** Member to store the state desired application exit code. */
+    /** Member to store the stage desired application exit code. */
     int status;
 
 };
 
-} // namespace roguedm
+} // namespace roguedm_main

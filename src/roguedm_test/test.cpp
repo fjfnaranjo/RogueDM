@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
 
-#include "../roguedm/InitialState.hpp"
+#include "../roguedm/IORemote.hpp"
 
 TEST(testMath, myCubeTest) {
-  auto initial = new roguedm::InitialState();
+  auto initial = new roguedm::IORemote();
   EXPECT_EQ(1000, 1000);
   delete initial;
 }

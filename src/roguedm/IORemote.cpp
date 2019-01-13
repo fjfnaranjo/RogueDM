@@ -15,11 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file IORemote.cpp
- * \brief File containing the IORemote class definitions.
- */
-
 #include "IORemote.hpp"
 
 #include <locale>

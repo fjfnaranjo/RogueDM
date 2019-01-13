@@ -15,24 +15,17 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file Game.hpp
- * \brief File containing the Game class declarations.
- */
-
 #pragma once
 
 #include "../CommandHandlerInterface.hpp"
 #include "../GameComponentInterface.hpp"
 
-namespace roguedm_main {
+namespace roguedm_game {
 
 /**
  * \brief Class for all game rules related tasks.
  *
  * This class manages the game rules and anything related to it.
- * \see roguedm::StateInterface
- * \see roguedm::StateInterface.execute()
  */
 class Game :
   public roguedm::CommandHandlerInterface,
@@ -54,29 +47,26 @@ class Game :
 
     /**
      * Used by IOLocal to ask the command handler a response for a command.
-     * \see roguedm::CommandHandlerInterface.processCommand()
      */
-    int processCommand(const roguedm::Sentence&);
+    int processCommand(const roguedm::Sentence&) override;
 
     /**
      * Used by IOLocal to ask the command handler a autocomplete suggestion.
-     * \see roguedm::CommandHandlerInterface.autocomplete()
      */
-    const int autocomplete(roguedm::Sentence&);
+    const int autocomplete(roguedm::Sentence&) override;
 
     /**
      * Used by IOLocal to ask the command handler a autocomplete list.
-     * \see roguedm::CommandHandlerInterface.autocompleteListOptions()
      */
     const roguedm::SentenceListReference autocompleteListOptions(
       const roguedm::Sentence&
-    );
+    ) override;
 
     /**
      * Method used when the main app has time to allow a network management
      * step from the game loop.
      */
-    void update();
+    void update() override;
 
   private:
 
