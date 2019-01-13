@@ -65,10 +65,10 @@ int NetworkIO::getErrorCode() {
 
 void NetworkIO::update() {}
 int NetworkIO::processCommand(const Sentence& a) {
-  return 0;
+  return RDM_COMMAND_UNKNOWN;
 }
 const int NetworkIO::autocomplete(Sentence& a) {
-  return 0;
+  return RDM_COMMAND_AC_NEXT;
 }
 const SentenceListReference NetworkIO::autocompleteListOptions(
   const Sentence& a

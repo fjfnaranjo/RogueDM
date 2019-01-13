@@ -25,8 +25,12 @@ Game::Game() {}
 
 Game::~Game() {}
 
-int Game::processCommand(const roguedm::Sentence&) { return 0; }
-const int Game::autocomplete(roguedm::Sentence&) { return 0; };
+int Game::processCommand(const roguedm::Sentence&) {
+  return RDM_COMMAND_UNKNOWN;
+}
+const int Game::autocomplete(roguedm::Sentence&) {
+  return RDM_COMMAND_AC_NEXT;
+};
 
 const roguedm::SentenceListReference Game::autocompleteListOptions(
   const roguedm::Sentence&

@@ -237,9 +237,9 @@ int Sdl2IO::mustHalt() {
 int Sdl2IO::processCommand(const Sentence& a) {
   if(a[0].wordContent==RDM_CMD_QUIT && a[0].wordClass==RDM_WCLASS_COMMAND) {
     appDone = 1;
-    return 1;
+    return RDM_COMMAND_DONE;
   }
-  return 0;
+  return RDM_COMMAND_UNKNOWN;
 }
 
 const int Sdl2IO::autocomplete(Sentence& a) {
@@ -247,10 +247,10 @@ const int Sdl2IO::autocomplete(Sentence& a) {
   // quit command completion
   if(a[0].wordContent==RDM_CMD_QUIT && a[0].wordClass==RDM_WCLASS_NORMAL) {
     a[0].wordClass=RDM_WCLASS_COMMAND;
-    return 1;
+    return RDM_COMMAND_AC_COMPLETED;
   }
 
-  return 0;
+  return RDM_COMMAND_AC_NEXT;
 
 }
 const SentenceListReference Sdl2IO::autocompleteListOptions(const Sentence& a)
@@ -1350,7 +1350,7 @@ void Sdl2IO::tryAutocompletion() {
   // Process action
   for(const auto & commandHandler : commandHandlers) {
 
-    if(1==commandHandler->autocomplete(commandLine))
+    if(RDM_COMMAND_AC_COMPLETED==commandHandler->autocomplete(commandLine))
       break;
 
     options = commandHandler->autocompleteListOptions(commandLine);
@@ -1382,7 +1382,7 @@ void Sdl2IO::processLine() {
 
     // Process action
     for(const auto & commandHandler : commandHandlers)
-      if(1==commandHandler->processCommand(commandLine))
+      if(RDM_COMMAND_DONE==commandHandler->processCommand(commandLine))
         break;
 
     // Push the command in the historic

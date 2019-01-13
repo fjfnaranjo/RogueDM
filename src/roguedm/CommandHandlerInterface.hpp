@@ -19,6 +19,12 @@
 
 #include "commands.hpp"
 
+#define RDM_COMMAND_DONE    0
+#define RDM_COMMAND_UNKNOWN 1
+
+#define RDM_COMMAND_AC_COMPLETED 0
+#define RDM_COMMAND_AC_NEXT      1
+
 namespace roguedm {
 
 /**
@@ -40,29 +46,30 @@ class CommandHandlerInterface
     /**
      * \brief Used to ask the command handler a response for a command.
      *
-     * If a command proccesor returns 0, the command will be issued to other
-     * command proccesor. If it returns 1, the command line will be reset.
-     * \param s A reference to the current command line.
-     * \return 0 or 1, see interface description.
+     * If a command handler returns \ref RDM_COMMAND_DONE, the command can
+     * be considered completed. If it returns \ref RDM_COMMAND_UNKNOWN, the
+     * command should be issued to another command handler.
+     * \param s The command sentence.
+     * \return 0 or 1, see method description.
      */
     virtual int processCommand(const Sentence& s) =0;
 
     /**
      * \brief Used to ask the command handler an autocomplete suggestion.
      *
-     * This method modify the command line and complete it, returning 1 to
-     * notify Sdl2IO that the work is done. If it can't do it, it will
-     * return 0 and another command handler will try.
-     * \param[out] s A reference to the current command line.
-     * \return 0 or 1, see interface description.
+     * Modify the command sentence and complete it if possible, returning
+     * \ref RDM_COMMAND_AC_COMPLETED on success or \ref RDM_COMMAND_AC_NEXT to
+     * signify that another command handler should try to complete it.
+     * \param[out] s The command sentence.
+     * \return 0 or 1, see method description.
      */
     virtual const int autocomplete(Sentence& s) =0;
 
     /**
      * \brief Used to ask the command handler an autocomplete candidate list.
      *
-     * This method build a autocomplete list for the current command or an empty
-     * list if there is not valid complete options.
+     * This method builds an autocomplete candidate list for the current
+     * command or an empty list if there is not valid complete options.
      * \param s A reference to the current command line.
      * \return The Sentence vector or an empty one.
      */
