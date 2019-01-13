@@ -16,7 +16,7 @@
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * \file main.cpp
+ * \file src/main.cpp
  * \brief File containing the program entry point.
  *
  * This file only holds the C++ main() function and delegates all the control

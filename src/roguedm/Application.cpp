@@ -84,7 +84,7 @@ int Application::run(int argc, char *argv[]) {
     do {
       lastResponse = currentStage->execute();
       currentStage = lastResponse.nextStage;
-    } while (RDM_STAGE_EXIT!=currentStage);
+    } while (lastResponse.status!=0 and RDM_STAGE_EXIT!=currentStage);
     return lastResponse.status;
 
   }
