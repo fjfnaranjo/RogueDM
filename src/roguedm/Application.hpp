@@ -15,12 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file RogueDM.hpp
- * \brief File containing the main application class (RogueDM) declarations.
- */
-
 #pragma once
+
+#include "Config.hpp"
 
 namespace roguedm {
 
@@ -28,19 +25,35 @@ namespace roguedm {
  * \brief Main application class.
  *
  * This class is used to parse the program arguments and do all the generic
- * steps expected for a CLI application launch (help text, I18N init, ...).
+ * steps expected on a CLI program launch (help text, I18N init, ...).
  */
-class RogueDM {
+class Application {
 
   public:
 
     /**
-     * Run the main application code.
-     * \param argc Number of program arguments (copied from main()).
-     * \param argv Value of program arguments (copied from main()).
-     * \return Status code to be returned with exit().
+     * Runs the actual program initialization code.
+     * \param argc main() arguments count.
+     * \param argv main() arguments values.
+     * \return Status code to be returned by main().
      */
     int run(int argc, char *argv[]);
+
+  private:
+
+    /**
+     * Processes the program arguments.
+     *
+     * * Sets configuration from arguments.
+     * * Prints usage information.
+     * * Prints version information.
+     *
+     * \param configuration Global configuration object.
+     */
+    bool process_arguments (
+      int argc, char* argv[],
+      const ConfigReference& configuration
+    );
 
 };
 

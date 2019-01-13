@@ -28,13 +28,13 @@
  *
  * This namespace is used for the general application operations and types.
  * This namespace includes local keyboard->display interaction and multiplayer
- * interaction. It also includes the code for the application state machine.
+ * interaction.
  */
 
 /**
  * \namespace roguedm_main
- * \brief Namespace for the application main state (the VTT itself).
+ * \brief Namespace for the application main stage (the VTT itself).
  *
- * This is the namespace for the main state or the VTT itself. It contains
+ * This is the namespace for the main stage or the VTT itself. It contains
  * all the operations and types related with the VTT behavior and features.
  */

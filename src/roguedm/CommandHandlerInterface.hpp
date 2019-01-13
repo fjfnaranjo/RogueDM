@@ -15,11 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file CommandHandlerInterface.hpp
- * \brief File used to contain the CommandHandlerInterface interface.
- */
-
 #pragma once
 
 #include <iostream>

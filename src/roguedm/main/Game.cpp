@@ -15,11 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file Game.cpp
- * \brief File containing the Game class definitions.
- */
-
 #include "Game.hpp"
 
 #include <memory>

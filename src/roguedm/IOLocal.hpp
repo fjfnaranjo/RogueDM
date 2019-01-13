@@ -15,11 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file IOLocal.hpp
- * \brief File containing the IOLocal class declarations.
- */
-
 #pragma once
 
 #include <iostream>
@@ -74,27 +69,24 @@ class IOLocal : CommandHandlerInterface, GameComponentInterface
     /**
      * Method used when the main app has time to allow a network management
      * step from the game loop.
-     * \see GameComponentInterface.update()
      */
-    void update();
+    void update() override;
 
     /**
      * Used by IOLocal to ask the command handler a response for a command.
-     * \see CommandHandlerInterface.processCommand()
      */
-    int processCommand(const Sentence&);
+    int processCommand(const Sentence&) override;
 
     /**
      * Used by IOLocal to ask the command handler a autocomplete suggestion.
-     * \see CommandHandlerInterface.autocomplete()
      */
-    const int autocomplete(Sentence&);
+    const int autocomplete(Sentence&) override;
 
     /**
      * Used by IOLocal to ask the command handler a autocomplete list.
-     * \see CommandHandlerInterface.autocompleteListOptions()
      */
-    const SentenceListReference autocompleteListOptions(const Sentence&);
+    const SentenceListReference autocompleteListOptions(const Sentence&)
+      override;
 
     /**
      * Get the error code value (detecting contruction failures).

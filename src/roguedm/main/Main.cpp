@@ -15,12 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file MainState.cpp
- * \brief File containing the MainState class definitions.
- */
-
-#include "MainState.hpp"
+#include "Main.hpp"
 
 #include <cstdio>
 #include <memory>
@@ -35,13 +30,13 @@
 
 namespace roguedm_main {
 
-MainState::MainState() {
+Main::Main() {
   status = 0;
 }
 
-MainState::~MainState() {}
+Main::~Main() {}
 
-roguedm::StateResponse MainState::execute() {
+roguedm::StageResponse Main::execute() {
 
   auto gameInstance = std::make_unique<Game>();
 
@@ -49,14 +44,14 @@ roguedm::StateResponse MainState::execute() {
   int ioLocalErrorCode = ioLocalInstance->getErrorCode();
   if(0!=ioLocalErrorCode) {
     status = ioLocalErrorCode;
-    return {status, RDM_STATE_NO_STATE};
+    return {status, RDM_STAGE_EXIT};
   }
 
   auto ioRemoteInstance = roguedm::IORemote::instance();
   int ioRemoteErrorCode = ioRemoteInstance->getErrorCode();
   if(0!=ioRemoteErrorCode) {
     status = ioRemoteErrorCode;
-    return {status, RDM_STATE_NO_STATE};
+    return {status, RDM_STAGE_EXIT};
   }
 
   // input checking and scene drawing (game loop)
@@ -71,7 +66,7 @@ roguedm::StateResponse MainState::execute() {
     // done = gameInstance->mustHalt();
   }
 
-  return {status, RDM_STATE_NO_STATE};
+  return {status, RDM_STAGE_EXIT};
 
 }
 

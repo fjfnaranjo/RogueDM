@@ -17,26 +17,50 @@
 
 #pragma once
 
+#include <memory>
+
 #include "macros.hpp"
+
+/**
+ * \brief Value to report that no more stages should be executed.
+ */
+#define RDM_STAGE_EXIT nullptr
 
 namespace roguedm {
 
+// This is a forward declaration for usage in the StageInterfaceReference
+// declaration.
+class StageInterface;
+
 /**
- * \interface GameComponentInterface
- * \brief C++ interface for game components called inside a game loop.
- *
- * This interface declare the members required by the main game loop to work
- * properly. It includes the update() method.
+ * \brief Shared pointer to a stage.
  */
-class GameComponentInterface
+typedef std::shared_ptr<StageInterface> StageInterfaceReference;
+
+/**
+ * \brief Response for stages implementing the StageInterface.
+ */
+struct StageResponse {
+  int status;
+  StageInterfaceReference nextStage;
+};
+
+/**
+ * \interface StageInterface
+ * \brief Interface for the different stages used in the application.
+ *
+ * Every class must extends this interface if it wants to work as a stage for
+ * the application.
+ */
+class StageInterface
 {
 
-  RDM_DECLARE_CLASS_AS_INTERFACE(GameComponentInterface);
+  RDM_DECLARE_CLASS_AS_INTERFACE(StageInterface);
 
   public:
 
-    /** Used by main loops to update a component. */
-    virtual void update() =0;
+    /** The stage main code. */
+    virtual StageResponse execute() =0;
 
 };
 
