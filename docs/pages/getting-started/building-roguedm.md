@@ -11,8 +11,6 @@ interface.
 
 *This instructions are just for Linux. Sorry ^^ .*
 
-Excelent! Lets start with it.
-
 First, you need a [CMake](https://cmake.org) building toolkit.
 
 > CMake is an open-source, cross-platform family of tools designed to build,

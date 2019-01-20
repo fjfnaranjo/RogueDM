@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "NetworkIO.hpp"
+#include "Network.hpp"
 
 #include <locale>
 
@@ -28,7 +28,7 @@
 namespace roguedm {
 
 // Set up networking.
-NetworkIO::NetworkIO() {
+Network::Network() {
 
   // Scope configuration to check if network must be disabled.
   configuration = Config::instance();
@@ -48,7 +48,7 @@ NetworkIO::NetworkIO() {
 };
 
 // Set down networking.
-NetworkIO::~NetworkIO() {
+Network::~Network() {
 
   // Do NOT close SDLNet if networking is disabled.
   if(configuration->getDoNotUseNetworking())
@@ -59,18 +59,18 @@ NetworkIO::~NetworkIO() {
 
 };
 
-int NetworkIO::getErrorCode() {
+int Network::getErrorCode() {
   return errorCode;
 }
 
-void NetworkIO::update() {}
-int NetworkIO::processCommand(const Sentence& a) {
+void Network::update() {}
+int Network::processCommand(const Sentence& a) {
   return RDM_COMMAND_UNKNOWN;
 }
-const int NetworkIO::autocomplete(Sentence& a) {
+const int Network::autocomplete(Sentence& a) {
   return RDM_COMMAND_AC_NEXT;
 }
-const SentenceListReference NetworkIO::autocompleteListOptions(
+const SentenceListReference Network::autocompleteListOptions(
   const Sentence& a
 ) {
   return std::make_shared<SentenceList>();

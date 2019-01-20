@@ -19,3 +19,16 @@ with RogueDM development.
 * This introductory page will help you \subpage getting-started.
 * A user guide (in-progress) can be found in the \subpage user-guide page.
 * If you want to colaborate, check the \subpage collaborators page.
+
+[//]: # (General definitions not included as output in welcome page)
+
+\namespace roguedm
+\brief General namespace (for the local and network interfaces).
+
+This namespace is used for the general application operations and types.
+
+\namespace roguedm_gui
+\brief Namespace for the SDL2 graphical interface.
+
+\namespace roguedm_game
+\brief Namespace for the game rulesets.

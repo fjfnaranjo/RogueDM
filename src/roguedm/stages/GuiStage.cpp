@@ -25,7 +25,7 @@
 #include "../strings.hpp"
 #include "../Config.hpp"
 #include "../game/Game.hpp"
-#include "../network/NetworkIO.hpp"
+#include "../network/Network.hpp"
 #include "../sdl2/Sdl2IO.hpp"
 
 namespace roguedm {
@@ -40,17 +40,17 @@ StageResponse GuiStage::execute() {
 
   auto gameInstance = std::make_unique<roguedm_game::Game>();
 
-  auto sdl2IOInstance = Sdl2IO::instance();
+  auto sdl2IOInstance = roguedm_gui::Sdl2IO::instance();
   int sdl2IOErrorCode = sdl2IOInstance->getErrorCode();
   if(0!=sdl2IOErrorCode) {
     status = sdl2IOErrorCode;
     return {status, RDM_STAGE_EXIT};
   }
 
-  auto networkIOInstance = NetworkIO::instance();
-  int networkIOErrorCode = networkIOInstance->getErrorCode();
-  if(0!=networkIOErrorCode) {
-    status = networkIOErrorCode;
+  auto networkInstance = Network::instance();
+  int networkErrorCode = networkInstance->getErrorCode();
+  if(0!=networkErrorCode) {
+    status = networkErrorCode;
     return {status, RDM_STAGE_EXIT};
   }
 
@@ -59,9 +59,9 @@ StageResponse GuiStage::execute() {
   while(!done) {
     sdl2IOInstance->update();
     done = sdl2IOInstance->mustHalt();
-    networkIOInstance->update();
+    networkInstance->update();
     // TODO: Check if remote and game instances should issue a 'done' also
-    // done = NetworkIOInstance->mustHalt();
+    // done = NetworkInstance->mustHalt();
     gameInstance->update();
     // done = gameInstance->mustHalt();
   }

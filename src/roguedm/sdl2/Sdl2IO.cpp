@@ -29,7 +29,7 @@
 #include "../gettext.hpp"
 #include "../strings.hpp"
 
-namespace roguedm {
+namespace roguedm_gui {
 
 // Repaint window
 void Sdl2IO::update() {
@@ -234,7 +234,7 @@ int Sdl2IO::mustHalt() {
   return appDone;
 }
 
-int Sdl2IO::processCommand(const Sentence& a) {
+int Sdl2IO::processCommand(const roguedm::Sentence& a) {
   if(a[0].wordContent==RDM_CMD_QUIT && a[0].wordClass==RDM_WCLASS_COMMAND) {
     appDone = 1;
     return RDM_COMMAND_DONE;
@@ -242,7 +242,7 @@ int Sdl2IO::processCommand(const Sentence& a) {
   return RDM_COMMAND_UNKNOWN;
 }
 
-const int Sdl2IO::autocomplete(Sentence& a) {
+const int Sdl2IO::autocomplete(roguedm::Sentence& a) {
 
   // quit command completion
   if(a[0].wordContent==RDM_CMD_QUIT && a[0].wordClass==RDM_WCLASS_NORMAL) {
@@ -253,22 +253,25 @@ const int Sdl2IO::autocomplete(Sentence& a) {
   return RDM_COMMAND_AC_NEXT;
 
 }
-const SentenceListReference Sdl2IO::autocompleteListOptions(const Sentence& a)
-{
+const roguedm::SentenceListReference Sdl2IO::autocompleteListOptions(
+  const roguedm::Sentence& a
+) {
 
-  Word psayCmd;
+  roguedm::Word psayCmd;
   psayCmd.wordContent = RDM_CMD_PSAY;
   psayCmd.wordClass = RDM_WCLASS_COMMAND;
 
-  Word quitCmd;
+  roguedm::Word quitCmd;
   quitCmd.wordContent = RDM_CMD_QUIT;
   quitCmd.wordClass = RDM_WCLASS_COMMAND;
 
   if(a.size()==1 && multibyteLenght(a[0].wordContent)==0) {
 
-    SentenceListReference l = std::make_shared<SentenceList>();
+    roguedm::SentenceListReference l =
+        std::make_shared<roguedm::SentenceList>();
 
-    SentenceReference o = std::make_shared<Sentence>();
+    roguedm::SentenceReference o =
+        std::make_shared<roguedm::Sentence>();
 
     o->push_back(psayCmd);
     l->push_back(*o);
@@ -280,7 +283,7 @@ const SentenceListReference Sdl2IO::autocompleteListOptions(const Sentence& a)
 
   }
 
-  return std::make_shared<SentenceList>();
+  return std::make_shared<roguedm::SentenceList>();
 
 }
 
@@ -329,7 +332,7 @@ Sdl2IO::Sdl2IO() {
   historyBackup = commandLine;
 
   // Default word
-  Word newDefaultWord;
+  roguedm::Word newDefaultWord;
   newDefaultWord.wordContent = RDM_CMD_PSAY;
   newDefaultWord.wordClass = RDM_WCLASS_COMMAND;
   setDefaultWord(newDefaultWord);
@@ -379,7 +382,7 @@ int Sdl2IO::getErrorCode() {
 }
 
 void Sdl2IO::resetLine() {
-  Word emptyWord;
+  roguedm::Word emptyWord;
   emptyWord.wordContent = u8"";
   emptyWord.wordClass = RDM_WCLASS_NORMAL;
   commandLine.clear();
@@ -1077,7 +1080,7 @@ void Sdl2IO::eventsManager() {
 
 void Sdl2IO::processText(SDL_Event* event) {
 
-  Word emptyWord;
+  roguedm::Word emptyWord;
   emptyWord.wordContent = RDM_WEMPTY;
   emptyWord.wordClass = RDM_WCLASS_NORMAL;
 
@@ -1144,7 +1147,7 @@ void Sdl2IO::processText(SDL_Event* event) {
 
 void Sdl2IO::processKey(SDL_Event* event) {
 
-  Word emptyWord;
+  roguedm::Word emptyWord;
   emptyWord.wordContent = RDM_WEMPTY;
   emptyWord.wordClass = RDM_WCLASS_NORMAL;
 
@@ -1325,11 +1328,11 @@ void Sdl2IO::processKey(SDL_Event* event) {
 void Sdl2IO::tryAutocompletion() {
 
   // empty word to insert when expanding commands
-  Word emptyWord;
+  roguedm::Word emptyWord;
   emptyWord.wordContent = RDM_WEMPTY;
   emptyWord.wordClass = RDM_WCLASS_NORMAL;
 
-  SentenceListReference options;
+  roguedm::SentenceListReference options;
 
   // check for empty line to list all commands
   if(commandLine.size()==1 && multibyteLenght(commandLine[0].wordContent)==0) {
@@ -1405,7 +1408,7 @@ void Sdl2IO::processLine() {
 
 }
 
-void Sdl2IO::setDefaultWord(Word c) {
+void Sdl2IO::setDefaultWord(roguedm::Word c) {
   defaultWord = c;
 }
 
@@ -1477,4 +1480,4 @@ std::string Sdl2IO::multibyteSubstr(const std::string &string, const std::size_t
   return u8"";
 }
 
-} // namespace roguedm
+} // namespace roguedm_gui

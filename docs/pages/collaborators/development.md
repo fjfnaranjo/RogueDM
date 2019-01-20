@@ -11,11 +11,11 @@ The followed code style guide is [Google C++ Style Guide](https://google.github.
 
 ### Object programming
 
-The desing follows an **strong** approach to Object programming.
+The desing follows a **strong** approach to Object programming.
 
 * Most logic is represented as object abstractions.
-* All classes have a unique file for its definitions and other for its
-  declarations. Another related types can be defined along this classes but
+* All classes have an unique file for its declarations and other for its
+  definitions. Another related types can be defined along this classes but
   try to avoid cluttering the files too much.
 * The C++ main method is mapped to a class (see \ref src/main.cpp and
   \ref roguedm::Application).

@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
 
-#include "../roguedm/network/NetworkIO.hpp"
+#include "../roguedm/network/Network.hpp"
 
 TEST(testMath, myCubeTest) {
-  auto initial = new roguedm::NetworkIO();
+  auto initial = new roguedm::Network();
   EXPECT_EQ(1000, 1000);
   delete initial;
 }

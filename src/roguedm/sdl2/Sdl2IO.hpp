@@ -33,7 +33,7 @@
 #define RDM_CMD_QUIT         u8"quit"       // End app.
 #define RDM_CMD_PSAY         u8"psay"       // Player say to all.
 
-namespace roguedm {
+namespace roguedm_gui {
 
 /** \brief Struct wordclass to contain word color and decorators. */
 struct WordClass {
@@ -59,7 +59,9 @@ struct Player {
  *
  * Pattern Singleton.
  */
-class Sdl2IO : CommandHandlerInterface, GameComponentInterface
+class Sdl2IO :
+    roguedm::CommandHandlerInterface,
+    roguedm::GameComponentInterface
 {
 
   RDM_DECLARE_CLASS_AS_SINGLETON(Sdl2IO)
@@ -75,17 +77,19 @@ class Sdl2IO : CommandHandlerInterface, GameComponentInterface
     /**
      * Used to ask the command handler a response for a command.
      */
-    int processCommand(const Sentence&) override;
+    int processCommand(const roguedm::Sentence&) override;
 
     /**
      * Used to ask the command handler an autocomplete suggestion.
      */
-    const int autocomplete(Sentence&) override;
+    const int autocomplete(roguedm::Sentence&) override;
 
     /**
      * Used to ask the command handler an autocomplete candidate list.
      */
-    const SentenceListReference autocompleteListOptions(const Sentence&)
+    const roguedm::SentenceListReference autocompleteListOptions(
+      const roguedm::Sentence&
+    )
       override;
 
     /**
@@ -111,7 +115,7 @@ class Sdl2IO : CommandHandlerInterface, GameComponentInterface
      * Set a new default word.
      * \param c The new word.
      */
-    void setDefaultWord(Word c);
+    void setDefaultWord(roguedm::Word c);
 
     /**
      * Tell the outside that the user wants to quit de app.
@@ -269,7 +273,7 @@ class Sdl2IO : CommandHandlerInterface, GameComponentInterface
     std::string multibyteSubstr(const std::string&, const std::size_t, const std::size_t);
 
     /** The default word to add when the user autocomplete with an empy line. */
-    Word defaultWord;
+    roguedm::Word defaultWord;
 
     /** The command hanlders list. */
     std::vector<CommandHandlerInterface*> commandHandlers;
@@ -293,22 +297,22 @@ class Sdl2IO : CommandHandlerInterface, GameComponentInterface
     SDL_Renderer *renderer = nullptr;
 
     /** The current command line contents. */
-    Sentence commandLine;
+    roguedm::Sentence commandLine;
 
     /** Current history position when using up-down keys. */
     int historyCurrent;
 
     /** The current command line contents. */
-    SentenceList consoleHistory;
+    roguedm::SentenceList consoleHistory;
 
     /** Sentences vector for the history. */
-    SentenceList history;
+    roguedm::SentenceList history;
 
     /**
      * Sentence currently written when the player starts using the history
      * exploration control
      */
-    Sentence historyBackup;
+    roguedm::Sentence historyBackup;
 
     /** Line exploration current displacement in words. */
     int currentWord;
@@ -371,4 +375,4 @@ class Sdl2IO : CommandHandlerInterface, GameComponentInterface
 
 typedef std::shared_ptr<Sdl2IO> Sdl2IOReference;
 
-} // namespace roguedm
+} // namespace roguedm_gui

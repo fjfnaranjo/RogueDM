@@ -33,10 +33,10 @@ namespace roguedm {
  *
  * Pattern Singleton.
  */
-class NetworkIO : CommandHandlerInterface, GameComponentInterface
+class Network : CommandHandlerInterface, GameComponentInterface
 {
 
-  RDM_DECLARE_CLASS_AS_SINGLETON(NetworkIO)
+  RDM_DECLARE_CLASS_AS_SINGLETON(Network)
 
   public:
 
@@ -78,6 +78,6 @@ class NetworkIO : CommandHandlerInterface, GameComponentInterface
 
 };
 
-typedef std::shared_ptr<NetworkIO> NetworkIOReference;
+typedef std::shared_ptr<Network> NetworkReference;
 
 } // namespace roguedm
