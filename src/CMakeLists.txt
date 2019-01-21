@@ -26,6 +26,15 @@ set(roguedm_VERSION_PRE a1)
 set(roguedm_VERSION_DEV dev0)
 configure_file("${roguedm_SOURCE_DIR}/roguedm/version.hpp.in"
                "${roguedm_BINARY_DIR}/roguedm/version.hpp")
+
+# Basic directories sensible to platform
+set(roguedm_CONFIG_DIRECTORY env/config CACHE PATH "User configuration")
+set(roguedm_SHARE_DIRECTORY env/share CACHE PATH "Application data")
+configure_file("${roguedm_SOURCE_DIR}/roguedm/paths.hpp.in"
+               "${roguedm_BINARY_DIR}/roguedm/paths.hpp")
+
+
+# Include parametrized sources
 include_directories(BEFORE ${roguedm_BINARY_DIR}/src)
 
 # Sources selection

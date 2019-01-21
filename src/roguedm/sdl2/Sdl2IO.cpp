@@ -27,6 +27,7 @@
 
 #include "../macros.hpp"
 #include "../gettext.hpp"
+#include "../paths.hpp"
 #include "../strings.hpp"
 
 namespace roguedm_gui {
@@ -395,7 +396,7 @@ void Sdl2IO::initWordTypes() {
 
   // Load base texture
   SDL_Surface *baseTexture;
-  baseTexture = IMG_Load("env/share/imgs/codepage-850-9-14.png");
+  baseTexture = IMG_Load(RDM_PATH_SHARE "/imgs/codepage-850-9-14.png");
 
   // Insertion point rects
   SDL_Rect orig, dest;
