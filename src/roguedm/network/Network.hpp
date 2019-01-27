@@ -19,8 +19,8 @@
 
 #include <memory>
 
-#include "../commands.hpp"
 #include "../macros.hpp"
+#include "../CommandHandlerInterface.hpp"
 #include "../Config.hpp"
 #include "../GameComponentInterface.hpp"
 

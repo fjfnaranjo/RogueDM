@@ -23,7 +23,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "../commands.hpp"
+#include "../CommandHandlerInterface.hpp"
 #include "../GameComponentInterface.hpp"
 
 // Max command history lines..

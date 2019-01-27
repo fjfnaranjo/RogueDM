@@ -79,5 +79,3 @@ typedef std::vector<Sentence> SentenceList;
 typedef std::shared_ptr<SentenceList> SentenceListReference;
 
 } // namespace roguedm
-
-#include "CommandHandlerInterface.hpp"
