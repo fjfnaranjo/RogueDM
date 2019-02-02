@@ -18,6 +18,7 @@
 #include "Application.hpp"
 
 #include <iostream>
+#include <locale>
 #include <string>
 
 #include "stages/GuiStage.hpp"
@@ -69,6 +70,9 @@ bool Application::process_arguments (
 }
 
 int Application::run(int argc, char *argv[]) {
+
+  // System locale
+  setlocale(LC_ALL, "");
 
   bool skipLaunch = false;
   ConfigReference configuration;
