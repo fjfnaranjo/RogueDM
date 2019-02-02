@@ -74,7 +74,12 @@ int Application::run(int argc, char *argv[]) {
   ConfigReference configuration;
 
   // Load configuration
-  configuration = Config::instance();
+  try {
+    configuration = Config::instance();
+  } catch (const ConfigException& e) {
+    std::cout << e.what();
+    skipLaunch = true;
+  }
 
   // Parse program arguments
   if(!skipLaunch) {

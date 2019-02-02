@@ -17,6 +17,8 @@
 
 #include "Config.hpp"
 
+#include "strings.hpp"
+
 namespace roguedm {
 
 Config::Config() {
@@ -36,6 +38,14 @@ const int Config::getDoNotUseNetworking() {
 
 void Config::setDoNotUseNetworking(int newVal) {
   doNotUseNetworking = newVal;
+}
+
+ConfigException::ConfigException(const char* why) {
+  reason = std::string(format_string(_ (RDM_STR_SETTINGS_NOLOAD), why));
+}
+
+const char* ConfigException::what() const throw() {
+  return reason.c_str();
 }
 
 } // namespace roguedm

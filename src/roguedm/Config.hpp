@@ -67,4 +67,14 @@ class Config
 
 typedef std::shared_ptr<Config> ConfigReference;
 
+// TODO: Should I improve this exception?
+class ConfigException : public std::exception {
+  public:
+    ConfigException() =delete;
+    ConfigException(const char*);
+    const char* what() const throw();
+  private:
+    std::string reason;
+};
+
 } // namespace roguedm
