@@ -17,11 +17,8 @@
 
 #include "GuiStage.hpp"
 
-#include <cstdio>
 #include <memory>
-#include <locale>
 
-#include "../gettext.hpp"
 #include "../strings.hpp"
 #include "../Config.hpp"
 #include "../game/Game.hpp"

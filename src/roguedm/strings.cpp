@@ -15,11 +15,20 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file gettext.hpp
- * \brief File containing the gettext alias.
- */
+#include <cstdarg>
+#include <string>
 
-#pragma once
+#include "strings.hpp"
 
-#define _ gettext
+namespace roguedm {
+
+std::string format_string(const char* format, ...) {
+  char buffer[RDM_STR_MAX];
+  va_list args;
+  va_start(args, format);
+  vsnprintf(buffer, RDM_STR_MAX, format, args);
+  va_end(args);
+  return std::string(buffer);
+}
+
+}

@@ -17,11 +17,9 @@
 
 #include "Application.hpp"
 
-#include <cstdio>
-#include <cstring>
-#include <locale>
+#include <iostream>
+#include <string>
 
-#include "gettext.hpp"
 #include "stages/GuiStage.hpp"
 #include "strings.hpp"
 #include "StageInterface.hpp"
@@ -38,28 +36,31 @@ bool Application::process_arguments (
   // Notice how this parses arguments from the end of the list
   for (int c = argc; c > 1 && !skipLaunch; c--) {
 
-    if (!strcmp (argv[c - 1], RDM_STR_USAGE_VERSION)) {    // --usage
-      printf (_ (RDM_STR_VERSION_STRING));
-      printf (_ (RDM_STR_VERSION_FULL));
-      printf ("\n");
+    auto current_argument = std::string(argv[c - 1]);
+
+    if (0==current_argument.compare(RDM_STR_USAGE_VERSION)) {    // --usage
+      std::cout << format_string(
+        _ (RDM_STR_VERSION_STRING), RDM_STR_VERSION_FULL
+      );
       skipLaunch = true;
     }
 
-    else if (!strcmp (argv[c - 1], RDM_STR_USAGE_HELP)) {  // --help
-      printf (_ (RDM_STR_VERSION_STRING));
-      printf (_ (RDM_STR_VERSION_FULL));
-      printf ("\n");
-      printf (_ (RDM_STR_USAGE), argv[0]);
-      printf ("\n");
+    else if (0==current_argument.compare(RDM_STR_USAGE_HELP)) {  // --help
+      std::cout << format_string(
+        _ (RDM_STR_VERSION_STRING), RDM_STR_VERSION_FULL
+      );
+      std::cout << format_string(
+        _ (RDM_STR_USAGE), argv[0]
+      );
       skipLaunch = true;
     }
 
-    else if (!strcmp (argv[c - 1], RDM_STR_USAGE_LOCAL)) { // --local
+    else if (0==current_argument.compare(RDM_STR_USAGE_LOCAL)) { // --local
       configuration->setDoNotUseNetworking (true);
     }
 
     else {                                                 // Unknown argument
-      printf (_ (RDM_STR_USAGE_UKNOWN), argv[c - 1]);
+      std::cout << format_string(_ (RDM_STR_USAGE_UKNOWN), argv[c - 1]);
       skipLaunch = true;
     }
 
@@ -69,11 +70,16 @@ bool Application::process_arguments (
 
 int Application::run(int argc, char *argv[]) {
 
-  setlocale(LC_ALL, ""); // TODO: Remove all STL locale handling
+  bool skipLaunch = false;
+  ConfigReference configuration;
 
-  // Load configuration and parse program arguments
-  ConfigReference configuration = Config::instance();
-  bool skipLaunch = process_arguments(argc, argv, configuration);
+  // Load configuration
+  configuration = Config::instance();
+
+  // Parse program arguments
+  if(!skipLaunch) {
+    skipLaunch = process_arguments(argc, argv, configuration);
+  }
 
   if(!skipLaunch) {
 

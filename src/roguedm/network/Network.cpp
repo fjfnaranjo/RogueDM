@@ -17,12 +17,9 @@
 
 #include "Network.hpp"
 
-#include <locale>
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_net.h>
 
-#include "../gettext.hpp"
 #include "../strings.hpp"
 
 namespace roguedm {

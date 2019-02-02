@@ -26,8 +26,6 @@
 #include <SDL2/SDL_image.h>
 
 #include "../macros.hpp"
-#include "../gettext.hpp"
-#include "../paths.hpp"
 #include "../strings.hpp"
 
 namespace roguedm_gui {

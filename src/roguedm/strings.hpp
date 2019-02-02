@@ -25,17 +25,33 @@
 
 #pragma once
 
+#include <locale>
+#include <string>
+
+#define _ gettext
+
+#include "paths.hpp"
 #include "version.hpp"
 
-#define RDM_STR_VERSION_STRING   "Rogue's Dungeon Master Version "
+#define RDM_STR_MAX              255
+
+#define RDM_STR_VERSION_STRING   "Rogue's Dungeon Master Version %s .\n"
 #define RDM_STR_USAGE_VERSION    "--version"
 #define RDM_STR_USAGE_HELP       "--help"
 #define RDM_STR_USAGE_LOCAL      "--local"
-#define RDM_STR_USAGE            "usage: %s [--version] [--help] [--local]"
+#define RDM_STR_USAGE            "usage: %s [--version] [--help] [--local]\n"
 
 #define RDM_STR_USAGE_UKNOWN     "Unknown program argument: %s\n"
+
+#define RDM_STR_SETTINGS_NOLOAD  "Error loading settings: %s.\n"
 
 #define RDM_STR_SDL_ERROR        "SDL error reported: %s\n"
 #define RDM_STR_SDL_NET_ERROR    "SDLNet error reported: %s\n"
 
 #define RDM_STR_NOT_NETWORKING   "Networking disabled...\n"
+
+namespace roguedm {
+
+std::string format_string(const char* format, ...);
+
+}
