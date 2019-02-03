@@ -19,6 +19,8 @@
 
 #include <cstring>
 #include <fstream>
+#include <iostream>
+#include <vector>
 
 #include <SDL2/SDL.h>
 
@@ -30,6 +32,10 @@ Config::Config() {
 
   std::ifstream cfgFile;
   configurationStatus = openConfigFile(cfgFile);
+  if(!configurationStatus)
+    throw ConfigException(configurationLastError.c_str());
+
+  configurationStatus = parseConfigFile(cfgFile);
   if(!configurationStatus)
     throw ConfigException(configurationLastError.c_str());
 
@@ -102,6 +108,80 @@ bool Config::openConfigFile(std::ifstream &aFile) {
       configurationLastError = std::strerror(errno);
       return false;
     }
+
+  }
+
+  return true;
+
+}
+
+bool Config::parseConfigFile(std::ifstream &aFile) {
+
+  bool in_comment = false;
+  bool in_group = false;
+  bool in_setting_value = false;
+  std::string current_content = "";
+  std::string current_group = "general";
+  std::string current_setting = "";
+
+  char ch;
+  while (aFile >> std::noskipws >> ch) {
+
+    // skip tabs
+    if(ch==SAX_TAB)
+      continue;
+
+    // stop reading a comment
+    if (in_comment && (ch==SAX_LINE_SEP || ch==SAX_LINE_SEP_2)) {
+      in_comment = false;
+      continue;
+    }
+
+    // do nothing inside comments
+    if (in_comment)
+      continue;
+
+    // detect comment
+    if (ch==SAX_COMMENT) {
+      in_comment = true;
+      continue;
+    }
+
+    if (ch==SAX_GROUP_START) {
+      in_group = true;
+      continue;
+    }
+
+    if (in_group && ch==SAX_GROUP_END) {
+      current_group = current_content.substr(0, current_content.length());
+      current_content = "";
+      in_group = false;
+      continue;
+    }
+
+    if (ch==SAX_VALUE_SEP) {
+      current_setting = current_content.substr(0, current_content.length());
+      current_content = "";
+      in_setting_value = true;
+      continue;
+    }
+
+    if (in_setting_value && (ch==SAX_LINE_SEP || ch==SAX_LINE_SEP_2)) {
+      std::cout << "Group: " << current_group << " Setting: " << current_setting << " Value: " << current_content << std::endl;
+      in_setting_value = false;
+      current_content = "";
+      continue;
+    }
+
+    if (ch==SAX_LINE_SEP || ch==SAX_LINE_SEP_2) {
+      if(in_group)
+        return false;
+      in_comment = false;
+      current_content = "";
+      continue;
+    }
+
+    current_content += ch;
 
   }
 

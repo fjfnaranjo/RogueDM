@@ -17,11 +17,24 @@
 
 #pragma once
 
+#include <map>
 #include <memory>
+#include <string>
 
 #include "macros.hpp"
 
+#define SAX_COMMENT '#'
+#define SAX_GROUP_START '['
+#define SAX_GROUP_END ']'
+#define SAX_VALUE_SEP '='
+#define SAX_LINE_SEP '\n'
+#define SAX_LINE_SEP_2 '\r'
+#define SAX_TAB '\t'
+
 namespace roguedm {
+
+typedef std::map<std::string, std::string> ConfigSetting;
+typedef std::map<std::string, ConfigSetting> ConfigSections;
 
 /**
  * \brief The configuration management class.
@@ -76,6 +89,10 @@ class Config
 
     /** Configuration status message. */
     std::string configurationLastError = std::string();
+
+    bool parseConfigFile(std::ifstream &aFile);
+
+    ConfigSections groups = {};
 
     /** Do-not-use-networking flag. */
     bool doNotUseNetworking = false;
