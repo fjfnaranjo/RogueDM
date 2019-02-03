@@ -38,30 +38,47 @@ class Config
   public:
 
     /**
-     * Gets the current configuration status code
-     * \return The status code.
+     * Gets the current configuration status.
+     * \return Returns false if config is on an inconsistent state.
      */
-    const int getConfigurationStatus();
+    const bool getConfigurationStatus() const;
 
     /**
      * Field doNotUseNetworking getter.
      * \return Field doNotUseNetworking value.
      */
-    const int getDoNotUseNetworking();
+    const bool getDoNotUseNetworking() const;
 
     /**
      * Field doNotUseNetworking setter.
      * \param newVal The new doNotUseNetworking field value.
      */
-    void setDoNotUseNetworking(int newVal);
+    void setDoNotUseNetworking(bool newVal);
 
   private:
 
-    /** Configuration staus to detect errors. */
-    int configurationStatus;
+    /**
+     * Creates a new user config file from the base config file.
+     * \return False on error.
+     */
+    bool makeConfigFile();
+
+    /**
+     * Open the config file and handle IO errors.
+     * \param aFile A reference to a file object to associate with the config
+     *              file.
+     * \return False on error.
+     */
+    bool openConfigFile(std::ifstream &aFile);
+
+    /** Configuration status to detect errors. */
+    bool configurationStatus = false;
+
+    /** Configuration status message. */
+    std::string configurationLastError = std::string();
 
     /** Do-not-use-networking flag. */
-    int doNotUseNetworking;
+    bool doNotUseNetworking = false;
 
 };
 

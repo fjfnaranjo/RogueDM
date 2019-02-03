@@ -43,12 +43,17 @@
 
 #define RDM_STR_USAGE_UKNOWN     "Unknown program argument: %s\n"
 
+#define RDM_STR_SETTINGS_NEW     "Existing config file not accessible, trying to create a new one.\n"
+#define RDM_STR_SETTINGS_NOBASE  "Can't access the basic config file. Check application paths.\n"
 #define RDM_STR_SETTINGS_NOLOAD  "Error loading settings: %s.\n"
 
 #define RDM_STR_SDL_ERROR        "SDL error reported: %s\n"
 #define RDM_STR_SDL_NET_ERROR    "SDLNet error reported: %s\n"
 
 #define RDM_STR_NOT_NETWORKING   "Networking disabled...\n"
+
+#define RDM_ERR_SETTINGS_ERROR   1
+#define RDM_ERR_ARGS_ERROR       2
 
 namespace roguedm {
 

@@ -54,10 +54,14 @@ class Application {
      * \param argv main() arguments values.
      * \param configuration Global configuration object.
      */
-    bool process_arguments (
+    void process_arguments (
       int argc, char* argv[],
       const ConfigReference& configuration
     );
+
+    int exitStatus = 0;
+    bool keepRunning = true;
+    bool argumentsError = false;
 
 };
 

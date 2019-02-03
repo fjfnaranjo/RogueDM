@@ -17,27 +17,96 @@
 
 #include "Config.hpp"
 
+#include <cstring>
+#include <fstream>
+
+#include <SDL2/SDL.h>
+
 #include "strings.hpp"
 
 namespace roguedm {
 
 Config::Config() {
-  configurationStatus = 0;
-  doNotUseNetworking = 0;
+
+  std::ifstream cfgFile;
+  configurationStatus = openConfigFile(cfgFile);
+  if(!configurationStatus)
+    throw ConfigException(configurationLastError.c_str());
+
 }
 
 Config::~Config() =default;
 
-const int Config::getConfigurationStatus() {
+const bool Config::getConfigurationStatus() const {
   return configurationStatus;
 }
 
-const int Config::getDoNotUseNetworking() {
+const bool Config::getDoNotUseNetworking() const {
   return doNotUseNetworking;
 }
 
-void Config::setDoNotUseNetworking(int newVal) {
+void Config::setDoNotUseNetworking(bool newVal) {
   doNotUseNetworking = newVal;
+}
+
+bool Config::makeConfigFile() {
+
+  std::ifstream cfgFileIn(
+    RDM_PATH_HERE RDM_PATH_SHARE RDM_PATH_SEP "config.ini",
+    std::ios_base::binary
+  );
+  if(!cfgFileIn) {
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,_ (RDM_STR_SETTINGS_NOBASE));
+    configurationLastError = std::strerror(errno);
+    return false;
+  }
+
+  std::ofstream cfgFileOut(
+    RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
+    std::ios_base::binary
+  );
+  if(!cfgFileOut) {
+    configurationLastError = std::strerror(errno);
+    return false;
+  }
+
+  cfgFileOut << cfgFileIn.rdbuf();
+  if(!cfgFileOut || !cfgFileIn) {
+    configurationLastError = std::strerror(errno);
+    return false;
+  }
+
+  return true;
+
+}
+
+bool Config::openConfigFile(std::ifstream &aFile) {
+
+  aFile.open(
+    RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
+    std::ios_base::in
+  );
+
+  // If opening the config file fails create a new one from the base.
+  if(!aFile) {
+
+    SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, _ (RDM_STR_SETTINGS_NEW));
+    if(!makeConfigFile())
+      return false;
+
+    aFile.open(
+      RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
+      std::ios_base::in
+    );
+    if(!aFile) {
+      configurationLastError = std::strerror(errno);
+      return false;
+    }
+
+  }
+
+  return true;
+
 }
 
 ConfigException::ConfigException(const char* why) {
