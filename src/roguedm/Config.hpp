@@ -34,6 +34,8 @@
 #define RDM_CFG_PARSER_TRUE "yes"
 #define RDM_CFG_PARSER_FALSE "no"
 
+#define RDM_CFG_CHARMAP_PREFIX "charmap:"
+
 namespace roguedm {
 
 /**

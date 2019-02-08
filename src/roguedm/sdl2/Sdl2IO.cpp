@@ -288,6 +288,8 @@ const roguedm::SentenceListReference Sdl2IO::autocompleteListOptions(
 
 Sdl2IO::Sdl2IO() {
 
+  config = roguedm::Config::instance();
+
   errorCode = 0;
   appDone = 0;
 
@@ -392,14 +394,43 @@ void Sdl2IO::resetLine() {
 
 void Sdl2IO::initWordTypes() {
 
-  // Load base texture
-  SDL_Surface *baseTexture;
-  baseTexture = IMG_Load(RDM_PATH_SHARE "/imgs/codepage-850-9-14.png");
+  // Default charmap texture
+  std::string defaultCharmap =
+    RDM_CFG_CHARMAP_PREFIX + config->getSettingValue(
+      "general", "charmaps", "default"
+    );
+
+  // Default charmap texture file path
+  std::string defaultCharmapPath =
+    std::string(RDM_PATH_SHARE) +
+    std::string(RDM_PATH_SEP) +
+    config->getSettingValue(
+      defaultCharmap, "path", "imgs/codepage-850-9-14.png"
+    );
+
+  // Texture data
+  txtCHeight = config->getSettingIntValue(defaultCharmap, "txtCHeight", 14);
+  txtCWidth = config->getSettingIntValue(defaultCharmap, "txtCWidth", 9);
+  txtCpr = config->getSettingIntValue(defaultCharmap, "txtCpr", 32);
+  txtHeight = config->getSettingIntValue(defaultCharmap, "txtHeight", 112);
+  txtWidth = config->getSettingIntValue(defaultCharmap, "txtWidth", 288);
+  txtHSep = config->getSettingIntValue(defaultCharmap, "txtHSep", 0);
+  txtWSep = config->getSettingIntValue(defaultCharmap, "txtWSep", 0);
+  txtHStart = config->getSettingIntValue(defaultCharmap, "txtHStart", 0);
+  txtWStart = config->getSettingIntValue(defaultCharmap, "txtWStart", 0);
 
   // Insertion point rects
   SDL_Rect orig, dest;
-  orig.x=279; orig.y=28; orig.w=9; orig.h=14;
-  dest.x=0;dest.y=0;
+  orig.x = config->getSettingIntValue(defaultCharmap, "txtIpXStart", 279);
+  orig.y = config->getSettingIntValue(defaultCharmap, "txtIpYStart", 28);
+  orig.w = txtCWidth;
+  orig.h = txtCHeight;
+  dest.x = 0;
+  dest.y = 0;
+
+  // Load base texture
+  SDL_Surface *baseTexture;
+  baseTexture = IMG_Load(defaultCharmapPath.c_str());
 
   // Insertion point surface creation
   SDL_Surface *ipI_surface;
@@ -409,17 +440,6 @@ void Sdl2IO::initWordTypes() {
   SDL_BlitSurface(baseTexture,&orig,ipI_surface,&dest);
   SDL_SetColorKey(ipI_surface,true,SDL_MapRGB(ipI_surface->format,0,0,0));
   ipI = SDL_CreateTextureFromSurface(renderer, ipI_surface);
-
-  // Texture data
-  txtCpr=32;
-  txtHeight=112;
-  txtWidth=288;
-  txtCHeight=14;
-  txtCWidth=9;
-  txtHSep=0;
-  txtWSep=0;
-  txtHStart=0;
-  txtWStart=0;
 
   // Define word type colors
   wordTypes[RDM_WCLASS_NORMAL].color.r = 200;

@@ -24,6 +24,7 @@
 #include <SDL2/SDL.h>
 
 #include "../CommandHandlerInterface.hpp"
+#include "../Config.hpp"
 #include "../GameComponentInterface.hpp"
 
 // Max command history lines..
@@ -124,6 +125,9 @@ class Sdl2IO :
     int mustHalt();
 
   private:
+
+    /** App configuration singleton reference. */
+    roguedm::ConfigReference config;
 
     /**
      * Keep the SDL_GetTicks return value to implement a FPS lock.
