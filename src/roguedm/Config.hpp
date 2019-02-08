@@ -68,18 +68,6 @@ class Config
     const bool getConfigurationStatus() const;
 
     /**
-     * Field doNotUseNetworking getter.
-     * \return Field doNotUseNetworking value.
-     */
-    const bool getDoNotUseNetworking() const;
-
-    /**
-     * Field doNotUseNetworking setter.
-     * \param newVal The new doNotUseNetworking field value.
-     */
-    void setDoNotUseNetworking(bool newVal);
-
-    /**
      * Check if a section exists by its name.
      *
      * See \ref app-configuration.
@@ -155,9 +143,6 @@ class Config
      * See \ref app-configuration.
      */
     ConfigSections sections = {};
-
-    /** Do-not-use-networking flag. */
-    bool doNotUseNetworking = false;
 
 };
 

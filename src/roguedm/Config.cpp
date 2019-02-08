@@ -45,14 +45,6 @@ const bool Config::getConfigurationStatus() const {
   return configurationStatus;
 }
 
-const bool Config::getDoNotUseNetworking() const {
-  return doNotUseNetworking;
-}
-
-void Config::setDoNotUseNetworking(bool newVal) {
-  doNotUseNetworking = newVal;
-}
-
 bool Config::hasSection(const std::string &section) const {
   const auto sections_it = sections.find(section);
   if(sections_it == sections.end())
