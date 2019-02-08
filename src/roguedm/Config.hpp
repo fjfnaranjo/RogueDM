@@ -23,13 +23,13 @@
 
 #include "macros.hpp"
 
-#define SAX_COMMENT '#'
-#define SAX_GROUP_START '['
-#define SAX_GROUP_END ']'
-#define SAX_VALUE_SEP '='
-#define SAX_LINE_SEP '\n'
-#define SAX_LINE_SEP_2 '\r'
-#define SAX_TAB '\t'
+#define RDM_CFG_PARSER_COMMENT '#'
+#define RDM_CFG_PARSER_GROUP_START '['
+#define RDM_CFG_PARSER_GROUP_END ']'
+#define RDM_CFG_PARSER_VALUE_SEP '='
+#define RDM_CFG_PARSER_LINE_SEP '\n'
+#define RDM_CFG_PARSER_LINE_SEP_2 '\r'
+#define RDM_CFG_PARSER_TAB '\t'
 
 namespace roguedm {
 
@@ -90,8 +90,17 @@ class Config
     /** Configuration status message. */
     std::string configurationLastError = std::string();
 
+    /**
+     * Parses a configuration file into the \ref groups member
+     *
+     * ```
+     * [section]
+     * setting=value
+     * ```
+     */
     bool parseConfigFile(std::ifstream &aFile);
 
+    /** Section->Setting->Value 2 level mapping with the app settings */
     ConfigSections groups = {};
 
     /** Do-not-use-networking flag. */

@@ -19,8 +19,6 @@
 
 #include <cstring>
 #include <fstream>
-#include <iostream>
-#include <vector>
 
 #include <SDL2/SDL.h>
 
@@ -62,7 +60,7 @@ bool Config::makeConfigFile() {
     std::ios_base::binary
   );
   if(!cfgFileIn) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,_ (RDM_STR_SETTINGS_NOBASE));
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,_ (RDM_STR_CFG_BASE_ERROR));
     configurationLastError = std::strerror(errno);
     return false;
   }
@@ -96,7 +94,7 @@ bool Config::openConfigFile(std::ifstream &aFile) {
   // If opening the config file fails create a new one from the base.
   if(!aFile) {
 
-    SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, _ (RDM_STR_SETTINGS_NEW));
+    SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, _ (RDM_STR_CFG_CREATE_NEW));
     if(!makeConfigFile())
       return false;
 
@@ -118,69 +116,111 @@ bool Config::openConfigFile(std::ifstream &aFile) {
 bool Config::parseConfigFile(std::ifstream &aFile) {
 
   bool in_comment = false;
-  bool in_group = false;
-  bool in_setting_value = false;
+  bool in_section = false;
+  bool in_value = false;
   std::string current_content = "";
-  std::string current_group = "general";
+  std::string current_section = "general";
   std::string current_setting = "";
 
+  // read the file one character at a time
   char ch;
   while (aFile >> std::noskipws >> ch) {
 
-    // skip tabs
-    if(ch==SAX_TAB)
+    // tabs are simply ignored, whenever they appear
+    if(ch==RDM_CFG_PARSER_TAB)
       continue;
 
-    // stop reading a comment
-    if (in_comment && (ch==SAX_LINE_SEP || ch==SAX_LINE_SEP_2)) {
-      in_comment = false;
+    // if we find a end line ..
+    if (ch==RDM_CFG_PARSER_LINE_SEP || ch==RDM_CFG_PARSER_LINE_SEP_2) {
+
+      // .. if we were in a comment consider the comment ended
+      if (in_comment) {
+        in_comment = false;
+        continue;
+      }
+
+      // .. if we were parsing a section name, raise an error
+      if(in_section) {
+        configurationLastError = _ (RDM_STR_PARSER_INCP_SEC);
+        return false;
+      }
+
+      // .. if we were parsing a value, store the new value ..
+      if (in_value) {
+        SDL_LogDebug(
+          SDL_LOG_CATEGORY_APPLICATION,
+          _ (RDM_STR_CFG_DEBUG),
+          current_section.c_str(),
+          current_setting.c_str(),
+          current_content.c_str()
+        );
+        in_value = false;
+      }
+
+      // .. and clear the current content.
+      current_content = "";
       continue;
+
     }
 
-    // do nothing inside comments
+    // if we are in a comment, ignore everything but a comment end (see above)
     if (in_comment)
       continue;
 
-    // detect comment
-    if (ch==SAX_COMMENT) {
+    // detect a comment line
+    if (ch==RDM_CFG_PARSER_COMMENT) {
+      // but fail if we were parsing something else
+      if(in_section || in_value || !current_content.empty() ) {
+        configurationLastError = _ (RDM_STR_PARSER_CMT_OOP);
+        return false;
+      }
       in_comment = true;
       continue;
     }
 
-    if (ch==SAX_GROUP_START) {
-      in_group = true;
+    // detect a section start
+    if (ch==RDM_CFG_PARSER_GROUP_START) {
+      // but fail if we were parsing something else
+      if(in_section || in_value || !current_content.empty() ) {
+        configurationLastError = _ (RDM_STR_PARSER_SEC_OOP);
+        return false;
+      }
+      in_section = true;
       continue;
     }
 
-    if (in_group && ch==SAX_GROUP_END) {
-      current_group = current_content.substr(0, current_content.length());
+    // detect a section end and store its value
+    if (in_section && ch==RDM_CFG_PARSER_GROUP_END) {
+      // sections can't be empty
+      if(current_content.empty()) {
+        configurationLastError = _ (RDM_STR_PARSER_SEC_EMTY);
+        return false;
+      }
+      // section ends can't overlap values
+      if(in_value) {
+        configurationLastError = _ (RDM_STR_PARSER_SEC_IVA);
+        return false;
+      }
+      current_section = current_content.substr(0, current_content.length());
       current_content = "";
-      in_group = false;
+      in_section = false;
       continue;
     }
 
-    if (ch==SAX_VALUE_SEP) {
+    // detect a section/value separator
+    if (ch==RDM_CFG_PARSER_VALUE_SEP) {
+      // fail if not after a setting
+      if(current_content.empty()) {
+        configurationLastError = _ (RDM_STR_PARSER_VSP_OOP);
+        return false;
+      }
       current_setting = current_content.substr(0, current_content.length());
       current_content = "";
-      in_setting_value = true;
+      in_value = true;
       continue;
     }
 
-    if (in_setting_value && (ch==SAX_LINE_SEP || ch==SAX_LINE_SEP_2)) {
-      std::cout << "Group: " << current_group << " Setting: " << current_setting << " Value: " << current_content << std::endl;
-      in_setting_value = false;
-      current_content = "";
-      continue;
-    }
-
-    if (ch==SAX_LINE_SEP || ch==SAX_LINE_SEP_2) {
-      if(in_group)
-        return false;
-      in_comment = false;
-      current_content = "";
-      continue;
-    }
-
+    // in any other situation, store the character
     current_content += ch;
 
   }
@@ -190,7 +230,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
 }
 
 ConfigException::ConfigException(const char* why) {
-  reason = std::string(format_string(_ (RDM_STR_SETTINGS_NOLOAD), why));
+  reason = std::string(format_string(_ (RDM_STR_CFG_LOAD_ERROR), why));
 }
 
 const char* ConfigException::what() const throw() {

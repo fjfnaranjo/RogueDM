@@ -43,9 +43,17 @@
 
 #define RDM_STR_USAGE_UKNOWN     "Unknown program argument: %s\n"
 
-#define RDM_STR_SETTINGS_NEW     "Existing config file not accessible, trying to create a new one.\n"
-#define RDM_STR_SETTINGS_NOBASE  "Can't access the basic config file. Check application paths.\n"
-#define RDM_STR_SETTINGS_NOLOAD  "Error loading settings: %s.\n"
+#define RDM_STR_CFG_CREATE_NEW   "Existing config file not accessible, trying to create a new one.\n"
+#define RDM_STR_CFG_BASE_ERROR   "Can't access the basic config file. Check application paths.\n"
+#define RDM_STR_CFG_LOAD_ERROR   "Error loading settings: %s.\n"
+#define RDM_STR_CFG_DEBUG        "Section: %s Setting: %s Value: %s\n"
+
+#define RDM_STR_PARSER_INCP_SEC  "Incomplete section.\n"
+#define RDM_STR_PARSER_CMT_OOP   "Comment start out of place.\n"
+#define RDM_STR_PARSER_SEC_OOP   "Section start out of place.\n"
+#define RDM_STR_PARSER_VSP_OOP   "Setting/value separator out of place.\n"
+#define RDM_STR_PARSER_SEC_EMTY  "Empty section.\n"
+#define RDM_STR_PARSER_SEC_IVA   "Section started inside a value.\n"
 
 #define RDM_STR_SDL_ERROR        "SDL error reported: %s\n"
 #define RDM_STR_SDL_NET_ERROR    "SDLNet error reported: %s\n"
