@@ -31,6 +31,9 @@
 #define RDM_CFG_PARSER_LINE_SEP_2 '\r'
 #define RDM_CFG_PARSER_TAB '\t'
 
+#define RDM_CFG_PARSER_TRUE "yes"
+#define RDM_CFG_PARSER_FALSE "no"
+
 namespace roguedm {
 
 /**
@@ -93,16 +96,40 @@ class Config
     );
 
     /**
+     * Works like \ref setSettingValue but stores values of type int.
+     */
+    void setSettingIntValue(
+        const std::string&, const std::string&, const int&
+    );
+
+    /**
+     * Works like \ref setSettingValue but stores values of type bool.
+     */
+    void setSettingBoolValue(
+        const std::string&, const std::string&, const bool&
+    );
+
+    /**
      * Get the value for a particular setting in a particular section.
-     *
-     * As with \ref setSettingValue this will create a new section and setting
-     * if the value doesn't exists. This value will be set as empty. Check first
-     * using \ref hasSetting if you don't want to create an empty value.
      *
      * See \ref app-configuration.
      */
     const std::string getSettingValue(
-        const std::string&, const std::string&
+        const std::string&, const std::string&, const std::string&
+    ) const;
+
+    /**
+     * Works like \ref getSettingValue but returns values of type int.
+     */
+    const int getSettingIntValue(
+        const std::string&, const std::string&, const int&
+    ) const;
+
+    /**
+     * Works like \ref getSettingValue but returns values of type bool.
+     */
+    const bool getSettingBoolValue(
+        const std::string&, const std::string&, const bool&
     ) const;
 
   private:

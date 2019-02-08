@@ -61,7 +61,7 @@ void Application::process_arguments (
     }
 
     else if (0==current_argument.compare(RDM_STR_USAGE_LOCAL)) { // --local
-      configuration->setSettingValue("general", "skipNetworking", "yes");
+      configuration->setSettingBoolValue("general", "skipNetworking", true);
     }
 
     else {                                                 // Unknown argument

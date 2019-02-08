@@ -81,16 +81,61 @@ void Config::setSettingValue(
   sections[section][setting] = value.substr(0, value.length());
 }
 
+void Config::setSettingIntValue(
+  const std::string &section,
+  const std::string &setting,
+  const int &value
+) {
+  setSettingValue(section, setting, std::to_string(value));
+}
+
+void Config::setSettingBoolValue(
+  const std::string &section,
+  const std::string &setting,
+  const bool &value
+) {
+  if(value)
+    setSettingValue(section, setting, RDM_CFG_PARSER_TRUE);
+  else
+    setSettingValue(section, setting, RDM_CFG_PARSER_FALSE);
+}
+
 const std::string Config::getSettingValue(
   const std::string &section,
-  const std::string &setting
+  const std::string &setting,
+  const std::string &default_
 ) const {
   if(hasSetting(section, setting)) {
     const auto sections_it = sections.find(section);
     const auto settings_it = sections_it->second.find(setting);
     return settings_it->second;
   } else
-    return std::string();
+    return default_;
+}
+
+const int Config::getSettingIntValue(
+  const std::string &section,
+  const std::string &setting,
+  const int &default_
+) const {
+  return std::stoi(
+    getSettingValue(section, setting, std::to_string(default_))
+  );
+}
+
+const bool Config::getSettingBoolValue(
+  const std::string &section,
+  const std::string &setting,
+  const bool &default_
+) const {
+  if(RDM_CFG_PARSER_TRUE==getSettingValue(
+    section,
+    setting,
+    default_ ? RDM_CFG_PARSER_TRUE : RDM_CFG_PARSER_FALSE)
+  )
+    return true;
+  else
+    return false;
 }
 
 bool Config::makeConfigFile() {

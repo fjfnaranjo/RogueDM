@@ -31,7 +31,7 @@ Network::Network() {
   configuration = Config::instance();
   errorCode = 0;
 
-  if(configuration->getSettingValue("general", "skipNetworking")=="yes") {
+  if(configuration->getSettingBoolValue("general", "skipNetworking", false)) {
     SDL_Log(_(RDM_STR_NOT_NETWORKING));
     return;
   }
@@ -48,7 +48,7 @@ Network::Network() {
 Network::~Network() {
 
   // Do NOT close SDLNet if networking is disabled.
-  if(configuration->getSettingValue("general", "skipNetworking")=="yes")
+  if(configuration->getSettingBoolValue("general", "skipNetworking", false))
     return;
 
   if(0==errorCode)
