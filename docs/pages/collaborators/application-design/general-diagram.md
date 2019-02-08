@@ -11,3 +11,4 @@
 * **c**: \subpage word-sentences-commands
 * **d**: \subpage networking
 * **e**: \subpage game-definitions
+* **a (top)**: \subpage app-configuration

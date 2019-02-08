@@ -33,7 +33,18 @@
 
 namespace roguedm {
 
+/**
+ * This is the typedef for the Setting->Value map.
+ *
+ * See \ref app-configuration.
+ */
 typedef std::map<std::string, std::string> ConfigSettings;
+
+/**
+ * This is the typedef for the Section->Setting map.
+ *
+ * See \ref app-configuration.
+ */
 typedef std::map<std::string, ConfigSettings> ConfigSections;
 
 /**
@@ -68,13 +79,43 @@ class Config
      */
     void setDoNotUseNetworking(bool newVal);
 
+    /**
+     * Check if a section exists by its name.
+     *
+     * See \ref app-configuration.
+     */
     bool hasSection(const std::string&) const;
 
+    /**
+     * Check if a section and a setting exists by their names.
+     *
+     * See \ref app-configuration.
+     */
     bool hasSetting(const std::string&, const std::string&) const;
 
-    void setSettingValue(const std::string&, const std::string&, const std::string&);
+    /**
+     * Set a new setting value for a particular section.
+     *
+     * This will create a new section and setting if needed.
+     *
+     * See \ref app-configuration.
+     */
+    void setSettingValue(
+        const std::string&, const std::string&, const std::string&
+    );
 
-    const std::string getSettingValue(const std::string&, const std::string&) const;
+    /**
+     * Get the value for a particular setting in a particular section.
+     *
+     * As with \ref setSettingValue this will create a new section and setting
+     * if the value doesn't exists. This value will be set as empty. Check first
+     * using \ref hasSetting if you don't want to create an empty value.
+     *
+     * See \ref app-configuration.
+     */
+    const std::string getSettingValue(
+        const std::string&, const std::string&
+    ) const;
 
   private:
 
@@ -99,7 +140,7 @@ class Config
     std::string configurationLastError = std::string();
 
     /**
-     * Parses a configuration file into the \ref groups member
+     * Parses a configuration file into the \ref sections member
      *
      * ```
      * [section]
@@ -108,7 +149,11 @@ class Config
      */
     bool parseConfigFile(std::ifstream &aFile);
 
-    /** Section->Setting->Value 2 level mapping with the app settings */
+    /**
+     * Section->Setting->Value 2 level mapping with the app settings.
+     *
+     * See \ref app-configuration.
+     */
     ConfigSections sections = {};
 
     /** Do-not-use-networking flag. */
