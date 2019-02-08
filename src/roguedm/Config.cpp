@@ -134,7 +134,7 @@ bool Config::openConfigFile(std::ifstream &aFile) {
   // If opening the config file fails create a new one from the base.
   if(!aFile) {
 
-    SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, _ (RDM_STR_CFG_CREATE_NEW));
+    SDL_Log(_ (RDM_STR_CFG_CREATE_NEW));
     if(!makeConfigFile())
       return false;
 
