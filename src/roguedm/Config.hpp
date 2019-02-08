@@ -33,8 +33,8 @@
 
 namespace roguedm {
 
-typedef std::map<std::string, std::string> ConfigSetting;
-typedef std::map<std::string, ConfigSetting> ConfigSections;
+typedef std::map<std::string, std::string> ConfigSettings;
+typedef std::map<std::string, ConfigSettings> ConfigSections;
 
 /**
  * \brief The configuration management class.
@@ -67,6 +67,14 @@ class Config
      * \param newVal The new doNotUseNetworking field value.
      */
     void setDoNotUseNetworking(bool newVal);
+
+    bool hasSection(const std::string&) const;
+
+    bool hasSetting(const std::string&, const std::string&) const;
+
+    void setSettingValue(const std::string&, const std::string&, const std::string&);
+
+    const std::string getSettingValue(const std::string&, const std::string&) const;
 
   private:
 
@@ -101,7 +109,7 @@ class Config
     bool parseConfigFile(std::ifstream &aFile);
 
     /** Section->Setting->Value 2 level mapping with the app settings */
-    ConfigSections groups = {};
+    ConfigSections sections = {};
 
     /** Do-not-use-networking flag. */
     bool doNotUseNetworking = false;

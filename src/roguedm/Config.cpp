@@ -53,6 +53,54 @@ void Config::setDoNotUseNetworking(bool newVal) {
   doNotUseNetworking = newVal;
 }
 
+bool Config::hasSection(const std::string &section) const {
+  const auto sections_it = sections.find(section);
+  if(sections_it == sections.end())
+    return false;
+  else
+    return true;
+}
+
+bool Config::hasSetting(
+  const std::string &section,
+  const std::string &setting
+) const {
+  if(!hasSection(section))
+    return false;
+  const auto sections_it = sections.find(section);
+  const auto settings_it = sections_it->second.find(setting);
+  if(settings_it == sections_it->second.end())
+    return false;
+  else
+    return true;
+}
+
+void Config::setSettingValue(
+  const std::string &section,
+  const std::string &setting,
+  const std::string &value
+) {
+  if(section.empty() || setting.empty() || value.empty())
+    return;
+  if(!hasSection(section)) {
+    ConfigSettings new_setting = {{setting, value}};
+    sections[section] = new_setting;
+  }
+  sections[section][setting] = value.substr(0, value.length());
+}
+
+const std::string Config::getSettingValue(
+  const std::string &section,
+  const std::string &setting
+) const {
+  if(hasSetting(section, setting)) {
+    const auto sections_it = sections.find(section);
+    const auto settings_it = sections_it->second.find(setting);
+    return settings_it->second;
+  } else
+    return std::string();
+}
+
 bool Config::makeConfigFile() {
 
   std::ifstream cfgFileIn(
@@ -154,6 +202,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
           current_setting.c_str(),
           current_content.c_str()
         );
+        setSettingValue(current_section, current_setting, current_content);
         in_value = false;
       }
 
