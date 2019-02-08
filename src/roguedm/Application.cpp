@@ -21,21 +21,23 @@
 #include <locale>
 #include <string>
 
+#include <SDL2/SDL.h>
+
 #include "stages/GuiStage.hpp"
 #include "strings.hpp"
 #include "StageInterface.hpp"
 
 namespace roguedm {
 
-bool Application::process_arguments (
+void Application::process_arguments (
   int argc, char* argv[],
   const ConfigReference& configuration
 ) {
 
-  bool skipLaunch = false;
+  bool skipNextArguments = false;
 
   // Notice how this parses arguments from the end of the list
-  for (int c = argc; c > 1 && !skipLaunch; c--) {
+  for (int c = argc; c > 1 && !skipNextArguments; c--) {
 
     auto current_argument = std::string(argv[c - 1]);
 
@@ -43,7 +45,8 @@ bool Application::process_arguments (
       std::cout << format_string(
         _ (RDM_STR_VERSION_STRING), RDM_STR_VERSION_FULL
       );
-      skipLaunch = true;
+      skipNextArguments = true;
+      keepRunning = false;
     }
 
     else if (0==current_argument.compare(RDM_STR_USAGE_HELP)) {  // --help
@@ -53,20 +56,23 @@ bool Application::process_arguments (
       std::cout << format_string(
         _ (RDM_STR_USAGE), argv[0]
       );
-      skipLaunch = true;
+      skipNextArguments = true;
+      keepRunning = false;
     }
 
     else if (0==current_argument.compare(RDM_STR_USAGE_LOCAL)) { // --local
-      configuration->setDoNotUseNetworking (true);
+      configuration->setSettingValue("general", "skipNetworking", "yes");
     }
 
     else {                                                 // Unknown argument
       std::cout << format_string(_ (RDM_STR_USAGE_UKNOWN), argv[c - 1]);
-      skipLaunch = true;
+      skipNextArguments = true;
+      argumentsError = true;
+      exitStatus = RDM_ERR_ARGS_ERROR;
+      keepRunning = false;
     }
 
   }
-  return skipLaunch;
 }
 
 int Application::run(int argc, char *argv[]) {
@@ -74,23 +80,25 @@ int Application::run(int argc, char *argv[]) {
   // System locale
   setlocale(LC_ALL, "");
 
-  bool skipLaunch = false;
   ConfigReference configuration;
 
   // Load configuration
   try {
     configuration = Config::instance();
   } catch (const ConfigException& e) {
-    std::cout << e.what();
-    skipLaunch = true;
+    SDL_LogError(
+      SDL_LOG_CATEGORY_APPLICATION,
+      e.what()
+    );
+    exitStatus = RDM_ERR_SETTINGS_ERROR;
+    keepRunning = false;
   }
 
   // Parse program arguments
-  if(!skipLaunch) {
-    skipLaunch = process_arguments(argc, argv, configuration);
-  }
+  if(keepRunning)
+    process_arguments(argc, argv, configuration);
 
-  if(!skipLaunch) {
+  if(keepRunning) {
 
     // Run the different application stages and handle their chaining
     StageInterfaceReference currentStage =
@@ -100,11 +108,11 @@ int Application::run(int argc, char *argv[]) {
       lastResponse = currentStage->execute();
       currentStage = lastResponse.nextStage;
     } while (lastResponse.status!=0 and RDM_STAGE_EXIT!=currentStage);
-    return lastResponse.status;
+    exitStatus = lastResponse.status;
 
   }
 
-  return 0;
+  return exitStatus;
 
 }
 

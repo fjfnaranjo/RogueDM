@@ -10,3 +10,4 @@ structured.
  * \ref word-sentences-commands
  * \ref networking
  * \ref game-definitions
+ * \ref app-configuration

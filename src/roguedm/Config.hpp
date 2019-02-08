@@ -17,11 +17,35 @@
 
 #pragma once
 
+#include <map>
 #include <memory>
+#include <string>
 
 #include "macros.hpp"
 
+#define RDM_CFG_PARSER_COMMENT '#'
+#define RDM_CFG_PARSER_GROUP_START '['
+#define RDM_CFG_PARSER_GROUP_END ']'
+#define RDM_CFG_PARSER_VALUE_SEP '='
+#define RDM_CFG_PARSER_LINE_SEP '\n'
+#define RDM_CFG_PARSER_LINE_SEP_2 '\r'
+#define RDM_CFG_PARSER_TAB '\t'
+
 namespace roguedm {
+
+/**
+ * This is the typedef for the Setting->Value map.
+ *
+ * See \ref app-configuration.
+ */
+typedef std::map<std::string, std::string> ConfigSettings;
+
+/**
+ * This is the typedef for the Section->Setting map.
+ *
+ * See \ref app-configuration.
+ */
+typedef std::map<std::string, ConfigSettings> ConfigSections;
 
 /**
  * \brief The configuration management class.
@@ -38,30 +62,87 @@ class Config
   public:
 
     /**
-     * Gets the current configuration status code
-     * \return The status code.
+     * Gets the current configuration status.
+     * \return Returns false if config is on an inconsistent state.
      */
-    const int getConfigurationStatus();
+    const bool getConfigurationStatus() const;
 
     /**
-     * Field doNotUseNetworking getter.
-     * \return Field doNotUseNetworking value.
+     * Check if a section exists by its name.
+     *
+     * See \ref app-configuration.
      */
-    const int getDoNotUseNetworking();
+    bool hasSection(const std::string&) const;
 
     /**
-     * Field doNotUseNetworking setter.
-     * \param newVal The new doNotUseNetworking field value.
+     * Check if a section and a setting exists by their names.
+     *
+     * See \ref app-configuration.
      */
-    void setDoNotUseNetworking(int newVal);
+    bool hasSetting(const std::string&, const std::string&) const;
+
+    /**
+     * Set a new setting value for a particular section.
+     *
+     * This will create a new section and setting if needed.
+     *
+     * See \ref app-configuration.
+     */
+    void setSettingValue(
+        const std::string&, const std::string&, const std::string&
+    );
+
+    /**
+     * Get the value for a particular setting in a particular section.
+     *
+     * As with \ref setSettingValue this will create a new section and setting
+     * if the value doesn't exists. This value will be set as empty. Check first
+     * using \ref hasSetting if you don't want to create an empty value.
+     *
+     * See \ref app-configuration.
+     */
+    const std::string getSettingValue(
+        const std::string&, const std::string&
+    ) const;
 
   private:
 
-    /** Configuration staus to detect errors. */
-    int configurationStatus;
+    /**
+     * Creates a new user config file from the base config file.
+     * \return False on error.
+     */
+    bool makeConfigFile();
 
-    /** Do-not-use-networking flag. */
-    int doNotUseNetworking;
+    /**
+     * Open the config file and handle IO errors.
+     * \param aFile A reference to a file object to associate with the config
+     *              file.
+     * \return False on error.
+     */
+    bool openConfigFile(std::ifstream &aFile);
+
+    /** Configuration status to detect errors. */
+    bool configurationStatus = false;
+
+    /** Configuration status message. */
+    std::string configurationLastError = std::string();
+
+    /**
+     * Parses a configuration file into the \ref sections member
+     *
+     * ```
+     * [section]
+     * setting=value
+     * ```
+     */
+    bool parseConfigFile(std::ifstream &aFile);
+
+    /**
+     * Section->Setting->Value 2 level mapping with the app settings.
+     *
+     * See \ref app-configuration.
+     */
+    ConfigSections sections = {};
 
 };
 
