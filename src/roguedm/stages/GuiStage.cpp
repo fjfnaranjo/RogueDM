@@ -37,15 +37,15 @@ StageResponse GuiStage::execute() {
 
   auto gameInstance = std::make_unique<roguedm_game::Game>();
 
-  auto sdl2IOInstance = roguedm_gui::Sdl2IO::instance();
-  int sdl2IOErrorCode = sdl2IOInstance->getErrorCode();
+  auto sdl2Io = std::make_unique<roguedm_gui::Sdl2IO>();
+  int sdl2IOErrorCode = sdl2Io->getErrorCode();
   if(0!=sdl2IOErrorCode) {
     status = sdl2IOErrorCode;
     return {status, RDM_STAGE_EXIT};
   }
 
-  auto networkInstance = Network::instance();
-  int networkErrorCode = networkInstance->getErrorCode();
+  auto network = std::make_unique<Network>();
+  int networkErrorCode = network->getErrorCode();
   if(0!=networkErrorCode) {
     status = networkErrorCode;
     return {status, RDM_STAGE_EXIT};
@@ -54,9 +54,9 @@ StageResponse GuiStage::execute() {
   // input checking and scene drawing (game loop)
   int done = 0;
   while(!done) {
-    sdl2IOInstance->update();
-    done = sdl2IOInstance->mustHalt();
-    networkInstance->update();
+    sdl2Io->update();
+    done = sdl2Io->mustHalt();
+    network->update();
     // TODO: Check if remote and game instances should issue a 'done' also
     // done = NetworkInstance->mustHalt();
     gameInstance->update();

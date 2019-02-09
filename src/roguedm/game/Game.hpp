@@ -33,17 +33,10 @@ class Game :
 {
   public:
 
-    /**
-     * Default constructor (project guidelines requires always a constructor,
-     * even if it will be empty).
-     */
     Game();
-
-    /**
-     * Default destructor (project guidelines requires always a destructor,
-     * even if it will be empty).
-     */
-    virtual ~Game();
+    ~Game();
+    Game(const Game & ) =delete;
+    Game & operator = (const Game & ) =delete;
 
     /**
      * Used to ask the command handler a response for a command.
@@ -67,14 +60,6 @@ class Game :
      * step from the game loop.
      */
     void update() override;
-
-  private:
-
-    /** Copy operator (private because is disabled by default). */
-    Game(const Game&);
-
-    /** Assing operator (private because is disabled by default). */
-    void operator=(const Game&);
 
 };
 

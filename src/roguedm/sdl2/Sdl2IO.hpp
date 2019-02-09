@@ -65,9 +65,12 @@ class Sdl2IO :
     roguedm::GameComponentInterface
 {
 
-  RDM_DECLARE_CLASS_AS_SINGLETON(Sdl2IO)
-
   public:
+
+    Sdl2IO();
+    ~Sdl2IO();
+    Sdl2IO(const Sdl2IO & ) =delete;
+    Sdl2IO & operator = (const Sdl2IO & ) =delete;
 
     /**
      * Method used when the main app has time to allow a network management

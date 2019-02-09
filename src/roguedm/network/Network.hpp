@@ -36,9 +36,12 @@ namespace roguedm {
 class Network : CommandHandlerInterface, GameComponentInterface
 {
 
-  RDM_DECLARE_CLASS_AS_SINGLETON(Network)
-
   public:
+
+    Network();
+    ~Network();
+    Network(const Network & ) =delete;
+    Network & operator = (const Network & ) =delete;
 
     /**
      * Method used when the main app has time to allow a network management

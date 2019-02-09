@@ -22,11 +22,6 @@
 
 namespace roguedm {
 
-class CliIO : CommandHandlerInterface, GameComponentInterface
-{
-
-  //RDM_DECLARE_CLASS_AS_SINGLETON(CliIO)
-
-};
+class CliIO : CommandHandlerInterface, GameComponentInterface {};
 
 } // namespace roguedm
