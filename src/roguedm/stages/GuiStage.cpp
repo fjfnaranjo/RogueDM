@@ -31,8 +31,6 @@ GuiStage::GuiStage() {
   status = 0;
 }
 
-GuiStage::~GuiStage() {}
-
 StageResponse GuiStage::execute() {
 
   auto gameInstance = std::make_unique<roguedm_game::Game>();

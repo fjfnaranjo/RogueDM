@@ -61,7 +61,19 @@
         instance = std::make_shared<ClassName>();                     \
       return instance;                                                \
     }                                                                 \
-    ClassName();                                                      \
-    ~ClassName();                                                     \
-    ClassName(const ClassName & ) =delete;                            \
-    ClassName & operator = (const ClassName & ) =delete;
+    virtual ~ClassName() =default;                                    \
+    ClassName(const ClassName&) =delete;                              \
+    ClassName& operator=(const ClassName&) =delete;                   \
+  private:
+
+/**
+ * \brief Class-as-nocopy-nomove macro for declaration.
+ *
+ * This is a macro used to protect some methods in classes intended as
+ * non-copyable non-moveable.
+ */
+#define RDM_DECLARE_CLASS_AS_NOCPNOMV(ClassName)                      \
+  public:                                                             \
+    ClassName(const ClassName&) =delete;                              \
+    ClassName& operator=(const ClassName&) =delete;                   \
+  private:

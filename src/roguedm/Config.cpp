@@ -31,8 +31,6 @@ Config::Config() {
   sections = {};
 }
 
-Config::~Config() =default;
-
 bool Config::loadFromFile() {
   std::ifstream cfgFile;
   if(!openConfigFile(cfgFile))

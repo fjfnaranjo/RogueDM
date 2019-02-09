@@ -31,12 +31,12 @@ class Game :
   public roguedm::CommandHandlerInterface,
          roguedm::GameComponentInterface
 {
+
+  RDM_DECLARE_CLASS_AS_NOCPNOMV(Game);
+
   public:
 
-    Game();
-    ~Game();
-    Game(const Game & ) =delete;
-    Game & operator = (const Game & ) =delete;
+    Game() =default;
 
     /**
      * Used to ask the command handler a response for a command.

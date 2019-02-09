@@ -37,7 +37,7 @@ Application::Application() {
 
 void Application::process_arguments (
   int argc, char* argv[],
-  const ConfigReference& configuration
+  const ConfigSharedPtr& configuration
 ) {
 
   bool skipNextArguments = false;
@@ -86,7 +86,7 @@ int Application::run(int argc, char *argv[]) {
   // System locale
   setlocale(LC_ALL, "");
 
-  ConfigReference configuration = Config::instance();
+  ConfigSharedPtr configuration = Config::instance();
 
   // Load configuration
   if(!configuration->loadFromFile()) {

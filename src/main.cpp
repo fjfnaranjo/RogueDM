@@ -26,6 +26,8 @@
 
 #include "roguedm/Application.hpp"
 
+#include <memory>
+
 /**
  * \brief Common C++ program entry point.
  *
@@ -34,7 +36,7 @@
  */
 int main(int argc, char *argv[]) {
 
-  roguedm::Application app = roguedm::Application();
-  return app.run(argc, argv);
+  auto app = std::make_unique<roguedm::Application>();
+  return app->run(argc, argv);
 
 }

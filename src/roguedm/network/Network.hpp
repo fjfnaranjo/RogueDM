@@ -36,12 +36,12 @@ namespace roguedm {
 class Network : CommandHandlerInterface, GameComponentInterface
 {
 
+  RDM_DECLARE_CLASS_AS_NOCPNOMV(Network);
+
   public:
 
     Network();
     ~Network();
-    Network(const Network & ) =delete;
-    Network & operator = (const Network & ) =delete;
 
     /**
      * Method used when the main app has time to allow a network management
@@ -77,10 +77,8 @@ class Network : CommandHandlerInterface, GameComponentInterface
     int errorCode;
 
     /** Link to configuration class */
-    ConfigReference config;
+    ConfigSharedPtr config;
 
 };
-
-typedef std::shared_ptr<Network> NetworkReference;
 
 } // namespace roguedm

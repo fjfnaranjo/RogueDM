@@ -31,6 +31,8 @@ namespace roguedm {
  */
 class Application {
 
+  RDM_DECLARE_CLASS_AS_NOCPNOMV(Application);
+
   public:
 
     Application();
@@ -58,7 +60,7 @@ class Application {
      */
     void process_arguments (
       int argc, char* argv[],
-      const ConfigReference& configuration
+      const ConfigSharedPtr& configuration
     );
 
     int exitStatus;

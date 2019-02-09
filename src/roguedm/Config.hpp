@@ -66,6 +66,8 @@ class Config
 
   public:
 
+    Config();
+
     /** Try to load the settings from the configuration file. */
     bool loadFromFile();
 
@@ -172,6 +174,6 @@ class Config
 
 };
 
-typedef std::shared_ptr<Config> ConfigReference;
+typedef std::shared_ptr<Config> ConfigSharedPtr;
 
 } // namespace roguedm

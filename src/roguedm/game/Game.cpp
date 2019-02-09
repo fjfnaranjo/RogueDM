@@ -21,10 +21,6 @@
 
 namespace roguedm_game {
 
-Game::Game() {}
-
-Game::~Game() {}
-
 int Game::processCommand(const roguedm::Sentence&) {
   return RDM_COMMAND_UNKNOWN;
 }

@@ -65,12 +65,12 @@ class Sdl2IO :
     roguedm::GameComponentInterface
 {
 
+  RDM_DECLARE_CLASS_AS_NOCPNOMV(Sdl2IO);
+
   public:
 
     Sdl2IO();
     ~Sdl2IO();
-    Sdl2IO(const Sdl2IO & ) =delete;
-    Sdl2IO & operator = (const Sdl2IO & ) =delete;
 
     /**
      * Method used when the main app has time to allow a network management
@@ -129,7 +129,7 @@ class Sdl2IO :
   private:
 
     /** App configuration singleton reference. */
-    roguedm::ConfigReference config;
+    roguedm::ConfigSharedPtr config;
 
     /**
      * Keep the SDL_GetTicks return value to implement a FPS lock.
@@ -378,7 +378,5 @@ class Sdl2IO :
     SDL_Rect dialogText;
 
 };
-
-typedef std::shared_ptr<Sdl2IO> Sdl2IOReference;
 
 } // namespace roguedm_gui

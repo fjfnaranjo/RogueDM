@@ -30,19 +30,11 @@ namespace roguedm {
 class GuiStage : public StageInterface
 {
 
+  RDM_DECLARE_CLASS_AS_NOCPNOMV(GuiStage);
+
   public:
 
-    /**
-     * Default constructor (project guidelines requires always a constructor,
-     * even if it will be empty).
-     */
     GuiStage();
-
-    /**
-     * Default destructor (project guidelines requires always a destructor,
-     * even if it will be empty).
-     */
-    virtual ~GuiStage();
 
     /**
      * \brief The GUI stage code.
@@ -50,12 +42,6 @@ class GuiStage : public StageInterface
     StageResponse execute() override;
 
   private:
-
-    /** Copy operator (private because is disabled by default). */
-    GuiStage(const GuiStage&);
-
-    /** Assign operator (private because is disabled by default). */
-    void operator=(const GuiStage&);
 
     /** Member to store the stage desired application exit code. */
     int status;
