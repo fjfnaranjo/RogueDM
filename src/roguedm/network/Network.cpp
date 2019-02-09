@@ -24,48 +24,35 @@
 
 namespace roguedm {
 
-// Set up networking.
 Network::Network() {
-
-  errorCode = 0;
+  initSuccess = false;
   config = Config::instance();
-
-  if(config->getSettingBoolValue("general", "skipNetworking", false)) {
-    SDL_Log(_(RDM_STR_NOT_NETWORKING));
-    return;
-  }
-
-  // Init SDL Net
-  if(-1==SDLNet_Init()) {
-    errorCode = 3;
-    SDL_Log(_(RDM_STR_SDL_NET_ERROR), SDLNet_GetError());
-  }
-
-};
-
-// Set down networking.
-Network::~Network() {
-
-  // Do NOT close SDLNet if networking is disabled.
-  if(config->getSettingBoolValue("general", "skipNetworking", false))
-    return;
-
-  if(0==errorCode)
-    SDLNet_Quit();
-
-};
-
-int Network::getErrorCode() const {
-  return errorCode;
 }
 
+Network::~Network() {
+  if(initSuccess)
+    SDLNet_Quit();
+};
+
+bool Network::initNetwork() {
+  if(-1==SDLNet_Init()) {
+    SDL_Log(_(RDM_STR_SDL_NET_ERROR), SDLNet_GetError());
+    return false;
+  }
+  initSuccess = true;
+  return true;
+};
+
 void Network::update() {}
+
 int Network::processCommand(const Sentence& a) {
   return RDM_COMMAND_UNKNOWN;
 }
+
 int Network::autocomplete(Sentence& a) const {
   return RDM_COMMAND_AC_NEXT;
 }
+
 SentenceListReference Network::autocompleteListOptions(
   const Sentence& a
 ) const {

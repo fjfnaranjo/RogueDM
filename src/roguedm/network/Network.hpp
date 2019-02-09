@@ -43,6 +43,8 @@ class Network : CommandHandlerInterface, GameComponentInterface
     Network();
     ~Network();
 
+    bool initNetwork();
+
     /**
      * Method used when the main app has time to allow a network management
      * step from the game loop.
@@ -65,16 +67,9 @@ class Network : CommandHandlerInterface, GameComponentInterface
     SentenceListReference autocompleteListOptions(const Sentence&) const
       override;
 
-    /**
-     * Get the error code value (detecting contruction failures).
-     * \return Status code to be returned with cstdlib exit() or 0 if ok.
-     */
-    int getErrorCode() const;
-
   private:
 
-    /** Error code */
-    int errorCode;
+    bool initSuccess;
 
     /** Link to configuration class */
     ConfigSharedPtr config;

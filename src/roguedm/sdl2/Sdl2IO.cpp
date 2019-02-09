@@ -28,7 +28,108 @@
 
 namespace roguedm_gui {
 
-// Repaint window
+Sdl2IO::Sdl2IO() {
+
+  initSuccess = false;
+
+  config = roguedm::Config::instance();
+
+  appDone = 0;
+
+  ticks = 0;
+
+  defaultCWidth = 0;
+  defaultCHeight = 0;
+  maxCols = 0;
+  maxRows = 0;
+
+  currentWord = 0;
+  wordRShift = 0;
+  historyCurrent = 0;
+
+}
+
+Sdl2IO::~Sdl2IO() {
+  if(initSuccess) {
+    defaultStamper.reset();
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+  }
+}
+
+bool Sdl2IO::initSdl2IO() {
+
+  if(0!=SDL_Init(SDL_INIT_VIDEO)) {
+    SDL_LogError(
+      SDL_LOG_CATEGORY_APPLICATION,
+      _(RDM_STR_SDL_ERROR),
+      SDL_GetError()
+    );
+    return false;
+  }
+
+  int createStatus = SDL_CreateWindowAndRenderer(
+    800, 500,
+    SDL_WINDOW_RESIZABLE,
+    &window,
+    &renderer
+  );
+
+  if(createStatus || NULL==window || NULL==renderer) {
+    SDL_LogError(
+      SDL_LOG_CATEGORY_APPLICATION,
+      _(RDM_STR_SDL_ERROR),
+      SDL_GetError()
+    );
+    SDL_Quit();
+    return false;
+  }
+
+  // Clear color
+  SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
+
+  // Words, command line and history init
+  if(!initCharmaps()) {
+    SDL_LogError(
+      SDL_LOG_CATEGORY_APPLICATION,
+      _(RDM_STR_SDL_ERROR),
+      SDL_GetError()
+    );
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    return false;
+  }
+
+  resetLine();
+  historyCurrent = 0;
+  historyBackup = commandLine;
+
+  // Default word
+  roguedm::Word newDefaultWord;
+  newDefaultWord.wordContent = RDM_CMD_PSAY;
+  newDefaultWord.wordClass = RDM_WCLASS_COMMAND;
+  setDefaultWord(newDefaultWord);
+
+  // Local command handler
+  registerCommandHandler(this);
+
+  // More SDL Init
+  ticks = SDL_GetTicks();
+  resetScreenSize();
+  SDL_ShowCursor(true);
+  SDL_StartTextInput();
+
+  initSuccess = true;
+  return true;
+
+}
+
+void Sdl2IO::quitSdl2IO() {
+
+}
+
 void Sdl2IO::update() {
 
   // FPS lock
@@ -236,10 +337,6 @@ void Sdl2IO::update() {
 
 }
 
-int Sdl2IO::mustHalt() {
-  return appDone;
-}
-
 int Sdl2IO::processCommand(const roguedm::Sentence& a) {
   if(a[0].wordContent==RDM_CMD_QUIT && a[0].wordClass==RDM_WCLASS_COMMAND) {
     appDone = 1;
@@ -259,6 +356,7 @@ int Sdl2IO::autocomplete(roguedm::Sentence& a) const {
   return RDM_COMMAND_AC_NEXT;
 
 }
+
 roguedm::SentenceListReference Sdl2IO::autocompleteListOptions(
   const roguedm::Sentence& a
 ) const {
@@ -293,105 +391,57 @@ roguedm::SentenceListReference Sdl2IO::autocompleteListOptions(
 
 }
 
-Sdl2IO::Sdl2IO() {
+void Sdl2IO::registerCommandHandler(CommandHandlerInterface *c) {
+  unregisterCommandHandler(c);
+  commandHandlers.push_back(c);
+}
 
-  config = roguedm::Config::instance();
-
-  errorCode = 0;
-  appDone = 0;
-
-  // SDL init checks
-  if(0!=SDL_Init(SDL_INIT_VIDEO)) {
-    errorCode = 1;
-    SDL_LogError(
-      SDL_LOG_CATEGORY_APPLICATION,
-      _(RDM_STR_SDL_ERROR),
-      SDL_GetError()
-    );
-    return;
-  }
-
-  int createStatus = SDL_CreateWindowAndRenderer(
-    800, 500,
-    SDL_WINDOW_RESIZABLE,
-    &window,
-    &renderer
+void Sdl2IO::unregisterCommandHandler(CommandHandlerInterface *c) {
+  commandHandlers.erase(
+    std::remove(commandHandlers.begin(), commandHandlers.end(), c),
+    commandHandlers.end()
   );
+}
 
-  if(createStatus || NULL==window || NULL==renderer) {
-    errorCode = 2;
-    SDL_LogError(
-      SDL_LOG_CATEGORY_APPLICATION,
-      _(RDM_STR_SDL_ERROR),
-      SDL_GetError()
-    );
-    SDL_Quit();
-    return;
+int Sdl2IO::mustHalt() {
+  return appDone;
+}
+
+void Sdl2IO::eventsManager() {
+
+  // TODO: Fix memory leak with event
+
+  SDL_Event event;
+
+  while ( SDL_PollEvent(&event) ) {
+    switch (event.type) {
+      case SDL_QUIT:
+        appDone = 1;
+        break;
+      case SDL_WINDOWEVENT:
+        switch (event.window.event)  {
+          case SDL_WINDOWEVENT_SIZE_CHANGED:
+            resetScreenSize();
+            break;
+        }
+        break;
+      // TODO: Resolve substitution/replace mode
+      case SDL_TEXTINPUT:
+        processText(&event);
+        break;
+      case SDL_KEYDOWN:
+        processKey(&event);
+        break;
+    }
   }
 
-  // Clear color
-  SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
-
-  // Words, command line and history init
-  if(!initCharmaps()) {
-    // TODO: Segfault in this branch
-    errorCode = 3;
-    SDL_LogError(
-      SDL_LOG_CATEGORY_APPLICATION,
-      _(RDM_STR_SDL_ERROR),
-      SDL_GetError()
-    );
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-    return;
-  }
-  resetLine();
-  historyCurrent = 0;
-  historyBackup = commandLine;
-
-  // Default word
-  roguedm::Word newDefaultWord;
-  newDefaultWord.wordContent = RDM_CMD_PSAY;
-  newDefaultWord.wordClass = RDM_WCLASS_COMMAND;
-  setDefaultWord(newDefaultWord);
-
-  // Local command handler
-  registerCommandHandler(this);
-
-  // More SDL Init
-  ticks = SDL_GetTicks();
-  initScreenSize();
-  SDL_ShowCursor(true);
-  SDL_StartTextInput();
-
 }
 
-Sdl2IO::~Sdl2IO() {
-
-  if(0!=errorCode)
-    return;
-
-  defaultStamper.reset();
-
-  SDL_DestroyRenderer(renderer);
-  SDL_DestroyWindow(window);
-  SDL_Quit();
-
-}
-
-int Sdl2IO::getErrorCode() const {
-  return errorCode;
-}
-
-void Sdl2IO::resetLine() {
-  roguedm::Word emptyWord;
-  emptyWord.wordContent = u8"";
-  emptyWord.wordClass = RDM_WCLASS_NORMAL;
-  commandLine.clear();
-  commandLine.push_back(emptyWord);
-  currentWord = 0;
-  wordRShift = 0;
+void Sdl2IO::resetScreenSize() {
+  int ww, wh;
+  SDL_GetWindowSize(window, &ww, &wh);
+  maxCols=floor(ww/defaultCWidth)-1;
+  maxRows=floor(wh/defaultCHeight)-1;
 }
 
 bool Sdl2IO::initCharmaps() {
@@ -413,43 +463,14 @@ bool Sdl2IO::initCharmaps() {
 
 }
 
-// Recalculate window coords and zones after term resize
-void Sdl2IO::initScreenSize() {
-  int ww, wh;
-  SDL_GetWindowSize(window, &ww, &wh);
-  maxCols=floor(ww/defaultCWidth)-1;
-  maxRows=floor(wh/defaultCHeight)-1;
-}
-
-// Process the user keyboard input
-void Sdl2IO::eventsManager() {
-
-  // TODO: Fix memory leak with event
-
-  SDL_Event event;
-
-  while ( SDL_PollEvent(&event) ) {
-    switch (event.type) {
-      case SDL_QUIT:
-        appDone = 1;
-        break;
-      case SDL_WINDOWEVENT:
-        switch (event.window.event)  {
-          case SDL_WINDOWEVENT_SIZE_CHANGED:
-            initScreenSize();
-            break;
-        }
-        break;
-      // TODO: Resolve substitution/replace mode
-      case SDL_TEXTINPUT:
-        processText(&event);
-        break;
-      case SDL_KEYDOWN:
-        processKey(&event);
-        break;
-    }
-  }
-
+void Sdl2IO::resetLine() {
+  roguedm::Word emptyWord;
+  emptyWord.wordContent = u8"";
+  emptyWord.wordClass = RDM_WCLASS_NORMAL;
+  commandLine.clear();
+  commandLine.push_back(emptyWord);
+  currentWord = 0;
+  wordRShift = 0;
 }
 
 void Sdl2IO::processText(SDL_Event* event) {
@@ -708,6 +729,46 @@ void Sdl2IO::processKey(SDL_Event* event) {
 
 }
 
+void Sdl2IO::processLine() {
+
+  // Ignore empty lines
+  if(!commandLine.empty()) {
+
+    // If first word is empty, inserts the say command
+    if(multibyteLenght(commandLine[0].wordContent)==0) {
+      commandLine.erase(commandLine.begin());
+      commandLine.insert(commandLine.begin(),defaultWord);
+    }
+
+    // If first word is not a command, inserts the say command
+    if(commandLine[0].wordClass!=RDM_WCLASS_COMMAND)
+      commandLine.insert(commandLine.begin(),defaultWord);
+
+    // Process action
+    for(const auto & commandHandler : commandHandlers)
+      if(RDM_COMMAND_DONE==commandHandler->processCommand(commandLine))
+        break;
+
+    // Push the command in the historic
+    history.push_back(commandLine);
+
+    // Print the command to the console
+    consoleHistory.push_back(commandLine);
+
+    // Limit the command historic size
+    if(history.size()>RDM_CL_MAX_HISTORY)
+      history.erase(history.begin());
+
+    // Reset the history pointer
+    historyCurrent = 0;
+
+    // Reset the command line
+    resetLine();
+
+  }
+
+}
+
 void Sdl2IO::tryAutocompletion() {
 
   // empty word to insert when expanding commands
@@ -751,60 +812,8 @@ void Sdl2IO::tryAutocompletion() {
 
 }
 
-void Sdl2IO::processLine() {
-
-  // Ignore empty lines
-  if(!commandLine.empty()) {
-
-    // If first word is empty, inserts the say command
-    if(multibyteLenght(commandLine[0].wordContent)==0) {
-      commandLine.erase(commandLine.begin());
-      commandLine.insert(commandLine.begin(),defaultWord);
-    }
-
-    // If first word is not a command, inserts the say command
-    if(commandLine[0].wordClass!=RDM_WCLASS_COMMAND)
-      commandLine.insert(commandLine.begin(),defaultWord);
-
-    // Process action
-    for(const auto & commandHandler : commandHandlers)
-      if(RDM_COMMAND_DONE==commandHandler->processCommand(commandLine))
-        break;
-
-    // Push the command in the historic
-    history.push_back(commandLine);
-
-    // Print the command to the console
-    consoleHistory.push_back(commandLine);
-
-    // Limit the command historic size
-    if(history.size()>RDM_CL_MAX_HISTORY)
-      history.erase(history.begin());
-
-    // Reset the history pointer
-    historyCurrent = 0;
-
-    // Reset the command line
-    resetLine();
-
-  }
-
-}
-
 void Sdl2IO::setDefaultWord(roguedm::Word c) {
   defaultWord = c;
-}
-
-void Sdl2IO::registerCommandHandler(CommandHandlerInterface *c) {
-  unregisterCommandHandler(c);
-  commandHandlers.push_back(c);
-}
-
-void Sdl2IO::unregisterCommandHandler(CommandHandlerInterface *c) {
-  commandHandlers.erase(
-    std::remove(commandHandlers.begin(), commandHandlers.end(), c),
-    commandHandlers.end()
-  );
 }
 
 } // namespace roguedm_gui

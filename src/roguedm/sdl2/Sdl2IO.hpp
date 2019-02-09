@@ -64,6 +64,9 @@ class Sdl2IO :
     Sdl2IO();
     ~Sdl2IO();
 
+    bool initSdl2IO();
+    void quitSdl2IO();
+
     /**
      * Method used when the main app has time to allow a network management
      * step from the game loop.
@@ -88,12 +91,6 @@ class Sdl2IO :
     ) const override;
 
     /**
-     * Get the error code value (detecting construction failures).
-     * \return Status code to be returned with cstdlib exit() or 0 if ok.
-     */
-    int getErrorCode() const;
-
-    /**
      * Add a new command handler to the internal list, after erasing any
      * previous occurrence of that handler.
      * \param c The command handler.
@@ -107,26 +104,14 @@ class Sdl2IO :
     void unregisterCommandHandler(CommandHandlerInterface *c);
 
     /**
-     * Set a new default word.
-     * \param c The new word.
-     */
-    void setDefaultWord(roguedm::Word c);
-
-    /**
-     * Tell the outside that the user wants to quit de app.
+     * Tell the outside that the user wants to quit the app.
      * \return 1 if user want to quit, 0 if not
      */
     int mustHalt();
 
   private:
 
-    /** App configuration singleton reference. */
-    roguedm::ConfigSharedPtr config;
-
-    /**
-     * Keep the SDL_GetTicks return value to implement a FPS lock.
-     */
-    int ticks;
+    bool initSuccess;
 
     /**
      * Method internally called to manage the SDL event queue.
@@ -134,7 +119,7 @@ class Sdl2IO :
     void eventsManager();
 
     /** Updates the screen if window resizes. */
-    void initScreenSize();
+    void resetScreenSize();
 
     /** Define the initial word type table. */
     bool initCharmaps();
@@ -154,17 +139,26 @@ class Sdl2IO :
     /** Try to find a valid autocompletion for the current command. */
     void tryAutocompletion();
 
+    /**
+     * Set a new default word.
+     * \param c The new word.
+     */
+    void setDefaultWord(roguedm::Word c);
+
+    /** App configuration singleton reference. */
+    roguedm::ConfigSharedPtr config;
+
+    /** True when user wants to quit. */
+    int appDone;
+
+    /** Keep the SDL_GetTicks return value to implement a FPS lock. */
+    int ticks;
+
     /** The default word to add when the user autocompletes an empty line. */
     roguedm::Word defaultWord;
 
     /** The command handlers list. */
     std::vector<CommandHandlerInterface*> commandHandlers;
-
-    /** Error code */
-    int errorCode;
-
-    /** True when user wants to quit. */
-    int appDone;
 
     /** SDL window */
     SDL_Window *window = nullptr;
@@ -174,9 +168,6 @@ class Sdl2IO :
 
     /** The current command line contents. */
     roguedm::Sentence commandLine;
-
-    /** Current history position when using up-down keys. */
-    int historyCurrent;
 
     /** The current command line contents. */
     roguedm::SentenceList consoleHistory;
@@ -190,17 +181,26 @@ class Sdl2IO :
      */
     roguedm::Sentence historyBackup;
 
+    /** Character width of the default charmap. */
+    int defaultCWidth;
+
+    /** Character height of the default charmap. */
+    int defaultCHeight;
+
+    /** Screen size in columns. */
+    int maxCols;
+
+    /** Screen size in rows. */
+    int maxRows;
+
     /** Line exploration current displacement in words. */
     int currentWord;
 
     /** Line exploration current displacement in characters. */
     int wordRShift;
 
-    /** Screen size in rows. */
-    int maxRows;
-
-    /** Screen size in columns. */
-    int maxCols;
+    /** Current history position when using up-down keys. */
+    int historyCurrent;
 
     /** Coordinates for the main window inside the terminal. */
     SDL_Rect dialogMain;
@@ -219,12 +219,6 @@ class Sdl2IO :
 
     /** Shared pointer to the default charmap drawing class. */
     std::unique_ptr<CharmapStamper> defaultStamper;
-
-    /** Character height of the default charmap. */
-    int defaultCHeight;
-
-    /** Character width of the default charmap. */
-    int defaultCWidth;
 
 };
 

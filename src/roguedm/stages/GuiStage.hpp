@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include "../Config.hpp"
 #include "../StageInterface.hpp"
 
 namespace roguedm {
@@ -42,6 +43,9 @@ class GuiStage : public StageInterface
     StageResponse execute() override;
 
   private:
+
+    /** App configuration singleton reference. */
+    ConfigSharedPtr config;
 
     /** Member to store the stage desired application exit code. */
     int status;

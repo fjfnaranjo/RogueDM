@@ -185,6 +185,8 @@ class CharmapStamper {
 
   private:
 
+    bool initSuccess;
+
     /** App configuration singleton shared pointer. */
     roguedm::ConfigSharedPtr config;
 

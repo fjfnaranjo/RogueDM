@@ -33,24 +33,27 @@ CharmapStamper::CharmapStamper () {
   txtWSep = 0;
   txtHStart = 0;
   txtWStart = 0;
+  initSuccess = false;
 }
 
 CharmapStamper::~CharmapStamper() {
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_NORMAL].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_COMMAND].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ALLIED].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_NEUTRAL].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ENEMY].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_PLACE].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_MAGIC].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_SET].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_UNIQ].texture);
-  SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_EPIC].texture);
+  if(initSuccess) {
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NORMAL].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_COMMAND].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ALLIED].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_NEUTRAL].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ENEMY].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_PLACE].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_MAGIC].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_SET].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_UNIQ].texture);
+    SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_EPIC].texture);
+  }
 }
 
 bool CharmapStamper::loadDefaultCharmap(
@@ -88,6 +91,7 @@ bool CharmapStamper::loadDefaultCharmap(
 
   initTransTable();
 
+  initSuccess = true;
   return true;
 
 }
@@ -646,7 +650,7 @@ int CharmapStamper::transChar(std::string c) {
   for (auto const & entry : transUtf8)
     if (0==c.compare(entry.first))
       return entry.second;
-    // TODO: Remove magic constant
+    // TODO: Remove magic constants like this one
     return 254;
 }
 

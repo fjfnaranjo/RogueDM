@@ -62,6 +62,8 @@
 
 #define RDM_ERR_SETTINGS_ERROR   1
 #define RDM_ERR_ARGS_ERROR       2
+#define RDM_ERR_SDL2_ERROR       3
+#define RDM_ERR_NETWORK_ERROR    4
 
 namespace roguedm {
 
