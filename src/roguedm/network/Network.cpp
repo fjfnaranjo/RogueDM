@@ -55,7 +55,7 @@ Network::~Network() {
 
 };
 
-int Network::getErrorCode() {
+const int Network::getErrorCode() const {
   return errorCode;
 }
 

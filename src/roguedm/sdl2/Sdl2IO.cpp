@@ -378,7 +378,7 @@ Sdl2IO::~Sdl2IO() {
 
 }
 
-int Sdl2IO::getErrorCode() {
+const int Sdl2IO::getErrorCode() const {
   return errorCode;
 }
 

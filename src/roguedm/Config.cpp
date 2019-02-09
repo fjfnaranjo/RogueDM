@@ -42,7 +42,7 @@ bool Config::loadFromFile() {
   return true;
 }
 
-std::string Config::getConfigurationLoadError() const {
+const std::string Config::getConfigurationLoadError() const {
   return configurationLoadError;
 }
 

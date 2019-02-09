@@ -100,7 +100,7 @@ class Sdl2IO :
      * Get the error code value (detecting contruction failures).
      * \return Status code to be returned with cstdlib exit() or 0 if ok.
      */
-    int getErrorCode();
+    const int getErrorCode() const;
 
     /**
      * Add a new command handler to the internal list, after erasing any

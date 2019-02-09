@@ -70,7 +70,7 @@ class Config
     bool loadFromFile();
 
     /** Returns the last error produced in \ref loadFromFile . */
-    std::string getConfigurationLoadError() const;
+    const std::string getConfigurationLoadError() const;
 
     /**
      * Check if a section exists by its name.

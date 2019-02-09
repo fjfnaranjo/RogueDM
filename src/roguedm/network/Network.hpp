@@ -69,7 +69,7 @@ class Network : CommandHandlerInterface, GameComponentInterface
      * Get the error code value (detecting contruction failures).
      * \return Status code to be returned with cstdlib exit() or 0 if ok.
      */
-    int getErrorCode();
+    const int getErrorCode() const;
 
   private:
 
