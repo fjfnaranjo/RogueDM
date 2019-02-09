@@ -26,23 +26,21 @@
 
 namespace roguedm {
 
-Config::Config() {
-
-  std::ifstream cfgFile;
-  configurationStatus = openConfigFile(cfgFile);
-  if(!configurationStatus)
-    throw ConfigException(configurationLastError.c_str());
-
-  configurationStatus = parseConfigFile(cfgFile);
-  if(!configurationStatus)
-    throw ConfigException(configurationLastError.c_str());
-
-}
+Config::Config() =default;
 
 Config::~Config() =default;
 
-const bool Config::getConfigurationStatus() const {
-  return configurationStatus;
+bool Config::loadFromFile() {
+  std::ifstream cfgFile;
+  if(!openConfigFile(cfgFile))
+    return false;
+  if(!parseConfigFile(cfgFile))
+    return false;
+  return true;
+}
+
+std::string Config::getConfigurationLoadError() const {
+  return configurationLoadError;
 }
 
 bool Config::hasSection(const std::string &section) const {
@@ -146,7 +144,7 @@ bool Config::makeConfigFile() {
   );
   if(!cfgFileIn) {
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,_ (RDM_STR_CFG_BASE_ERROR));
-    configurationLastError = std::strerror(errno);
+    configurationLoadError = std::strerror(errno);
     return false;
   }
 
@@ -155,13 +153,13 @@ bool Config::makeConfigFile() {
     std::ios_base::binary
   );
   if(!cfgFileOut) {
-    configurationLastError = std::strerror(errno);
+    configurationLoadError = std::strerror(errno);
     return false;
   }
 
   cfgFileOut << cfgFileIn.rdbuf();
   if(!cfgFileOut || !cfgFileIn) {
-    configurationLastError = std::strerror(errno);
+    configurationLoadError = std::strerror(errno);
     return false;
   }
 
@@ -188,7 +186,7 @@ bool Config::openConfigFile(std::ifstream &aFile) {
       std::ios_base::in
     );
     if(!aFile) {
-      configurationLastError = std::strerror(errno);
+      configurationLoadError = std::strerror(errno);
       return false;
     }
 
@@ -226,7 +224,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
 
       // .. if we were parsing a section name, raise an error
       if(inSection) {
-        configurationLastError = _ (RDM_STR_PARSER_INCP_SEC);
+        configurationLoadError = _ (RDM_STR_PARSER_INCP_SEC);
         return false;
       }
 
@@ -257,7 +255,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     if (ch==RDM_CFG_PARSER_COMMENT) {
       // but fail if we were parsing something else
       if(inSection || inValue || !currentContent.empty() ) {
-        configurationLastError = _ (RDM_STR_PARSER_CMT_OOP);
+        configurationLoadError = _ (RDM_STR_PARSER_CMT_OOP);
         return false;
       }
       inComment = true;
@@ -268,7 +266,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     if (ch==RDM_CFG_PARSER_GROUP_START) {
       // but fail if we were parsing something else
       if(inSection || inValue || !currentContent.empty() ) {
-        configurationLastError = _ (RDM_STR_PARSER_SEC_OOP);
+        configurationLoadError = _ (RDM_STR_PARSER_SEC_OOP);
         return false;
       }
       inSection = true;
@@ -279,12 +277,12 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     if (inSection && ch==RDM_CFG_PARSER_GROUP_END) {
       // sections can't be empty
       if(currentContent.empty()) {
-        configurationLastError = _ (RDM_STR_PARSER_SEC_EMTY);
+        configurationLoadError = _ (RDM_STR_PARSER_SEC_EMTY);
         return false;
       }
       // section ends can't overlap values
       if(inValue) {
-        configurationLastError = _ (RDM_STR_PARSER_SEC_IVA);
+        configurationLoadError = _ (RDM_STR_PARSER_SEC_IVA);
         return false;
       }
       currentSection = currentContent.substr(0, currentContent.length());
@@ -297,7 +295,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     if (ch==RDM_CFG_PARSER_VALUE_SEP) {
       // fail if not after a setting
       if(currentContent.empty()) {
-        configurationLastError = _ (RDM_STR_PARSER_VSP_OOP);
+        configurationLoadError = _ (RDM_STR_PARSER_VSP_OOP);
         return false;
       }
       currentSetting = currentContent.substr(0, currentContent.length());
@@ -313,14 +311,6 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
 
   return true;
 
-}
-
-ConfigException::ConfigException(const char* why) {
-  reason = std::string(format_string(_ (RDM_STR_CFG_LOAD_ERROR), why));
-}
-
-const char* ConfigException::what() const throw() {
-  return reason.c_str();
 }
 
 } // namespace roguedm

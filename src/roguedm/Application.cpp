@@ -80,15 +80,14 @@ int Application::run(int argc, char *argv[]) {
   // System locale
   setlocale(LC_ALL, "");
 
-  ConfigReference configuration;
+  ConfigReference configuration = Config::instance();
 
   // Load configuration
-  try {
-    configuration = Config::instance();
-  } catch (const ConfigException& e) {
+  if(!configuration->loadFromFile()) {
     SDL_LogError(
       SDL_LOG_CATEGORY_APPLICATION,
-      e.what()
+      _ (RDM_STR_CFG_LOAD_ERROR),
+      configuration->getConfigurationLoadError().c_str()
     );
     exitStatus = RDM_ERR_SETTINGS_ERROR;
     keepRunning = false;

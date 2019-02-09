@@ -66,11 +66,11 @@ class Config
 
   public:
 
-    /**
-     * Gets the current configuration status.
-     * \return Returns false if config is on an inconsistent state.
-     */
-    const bool getConfigurationStatus() const;
+    /** Try to load the settings from the configuration file. */
+    bool loadFromFile();
+
+    /** Returns the last error produced in \ref loadFromFile . */
+    std::string getConfigurationLoadError() const;
 
     /**
      * Check if a section exists by its name.
@@ -150,11 +150,8 @@ class Config
      */
     bool openConfigFile(std::ifstream &aFile);
 
-    /** Configuration status to detect errors. */
-    bool configurationStatus = false;
-
-    /** Configuration status message. */
-    std::string configurationLastError = std::string();
+    /** Configuration load error message if any. */
+    std::string configurationLoadError = std::string();
 
     /**
      * Parses a configuration file into the \ref sections member
@@ -176,15 +173,5 @@ class Config
 };
 
 typedef std::shared_ptr<Config> ConfigReference;
-
-// TODO: Should I improve this exception?
-class ConfigException : public std::exception {
-  public:
-    ConfigException() =delete;
-    ConfigException(const char*);
-    const char* what() const throw();
-  private:
-    std::string reason;
-};
 
 } // namespace roguedm
