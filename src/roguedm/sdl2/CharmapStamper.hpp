@@ -185,6 +185,7 @@ class CharmapStamper {
 
   private:
 
+    /** Stores if SDL resources have been initialized successfully. */
     bool initSuccess;
 
     /** App configuration singleton shared pointer. */

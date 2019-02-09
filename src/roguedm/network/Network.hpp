@@ -43,6 +43,7 @@ class Network : CommandHandlerInterface, GameComponentInterface
     Network();
     ~Network();
 
+    /** SDL resources class initializer */
     bool initNetwork();
 
     /**
@@ -69,6 +70,7 @@ class Network : CommandHandlerInterface, GameComponentInterface
 
   private:
 
+    /** Stores if SDL resources have been initialized successfully. */
     bool initSuccess;
 
     /** Link to configuration class */

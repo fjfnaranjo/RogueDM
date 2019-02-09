@@ -63,8 +63,8 @@ class Sdl2IO :
     Sdl2IO();
     ~Sdl2IO();
 
+    /** SDL resources class initializer */
     bool initSdl2IO();
-    void quitSdl2IO();
 
     /**
      * Method used when the main app has time to allow a network management
@@ -110,6 +110,7 @@ class Sdl2IO :
 
   private:
 
+    /** Stores if SDL resources have been initialized successfully. */
     bool initSuccess;
 
     /**

@@ -126,10 +126,6 @@ bool Sdl2IO::initSdl2IO() {
 
 }
 
-void Sdl2IO::quitSdl2IO() {
-
-}
-
 void Sdl2IO::update() {
 
   // FPS lock
