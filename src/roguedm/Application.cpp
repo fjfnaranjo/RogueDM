@@ -29,6 +29,12 @@
 
 namespace roguedm {
 
+Application::Application() {
+  exitStatus = 0;
+  keepRunning = true;
+  argumentsError = false;
+}
+
 void Application::process_arguments (
   int argc, char* argv[],
   const ConfigReference& configuration

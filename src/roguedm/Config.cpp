@@ -26,7 +26,10 @@
 
 namespace roguedm {
 
-Config::Config() =default;
+Config::Config() {
+  configurationLoadError = std::string();
+  sections = {};
+}
 
 Config::~Config() =default;
 

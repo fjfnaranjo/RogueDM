@@ -33,6 +33,8 @@ class Application {
 
   public:
 
+    Application();
+
     /**
      * Runs the actual program inner/main code.
      * \param argc main() arguments count.
@@ -59,9 +61,9 @@ class Application {
       const ConfigReference& configuration
     );
 
-    int exitStatus = 0;
-    bool keepRunning = true;
-    bool argumentsError = false;
+    int exitStatus;
+    bool keepRunning;
+    bool argumentsError;
 
 };
 

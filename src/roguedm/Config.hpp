@@ -151,7 +151,7 @@ class Config
     bool openConfigFile(std::ifstream &aFile);
 
     /** Configuration load error message if any. */
-    std::string configurationLoadError = std::string();
+    std::string configurationLoadError;
 
     /**
      * Parses a configuration file into the \ref sections member
@@ -168,7 +168,7 @@ class Config
      *
      * See \ref app-configuration.
      */
-    ConfigSections sections = {};
+    ConfigSections sections;
 
 };
 

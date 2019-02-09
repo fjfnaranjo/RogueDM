@@ -77,7 +77,7 @@ class Network : CommandHandlerInterface, GameComponentInterface
     int errorCode;
 
     /** Link to configuration class */
-    ConfigReference configuration;
+    ConfigReference config;
 
 };
 

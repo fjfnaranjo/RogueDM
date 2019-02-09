@@ -27,11 +27,10 @@ namespace roguedm {
 // Set up networking.
 Network::Network() {
 
-  // Scope configuration to check if network must be disabled.
-  configuration = Config::instance();
   errorCode = 0;
+  config = Config::instance();
 
-  if(configuration->getSettingBoolValue("general", "skipNetworking", false)) {
+  if(config->getSettingBoolValue("general", "skipNetworking", false)) {
     SDL_Log(_(RDM_STR_NOT_NETWORKING));
     return;
   }
@@ -48,7 +47,7 @@ Network::Network() {
 Network::~Network() {
 
   // Do NOT close SDLNet if networking is disabled.
-  if(configuration->getSettingBoolValue("general", "skipNetworking", false))
+  if(config->getSettingBoolValue("general", "skipNetworking", false))
     return;
 
   if(0==errorCode)
