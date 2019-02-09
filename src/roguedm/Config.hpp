@@ -70,7 +70,7 @@ class Config
     bool loadFromFile();
 
     /** Returns the last error produced in \ref loadFromFile . */
-    const std::string getConfigurationLoadError() const;
+    std::string getConfigurationLoadError() const;
 
     /**
      * Check if a section exists by its name.
@@ -116,21 +116,21 @@ class Config
      *
      * See \ref app-configuration.
      */
-    const std::string getSettingValue(
+    std::string getSettingValue(
         const std::string&, const std::string&, const std::string&
     ) const;
 
     /**
      * Works like \ref getSettingValue but returns values of type int.
      */
-    const int getSettingIntValue(
+    int getSettingIntValue(
         const std::string&, const std::string&, const int&
     ) const;
 
     /**
      * Works like \ref getSettingValue but returns values of type bool.
      */
-    const bool getSettingBoolValue(
+    bool getSettingBoolValue(
         const std::string&, const std::string&, const bool&
     ) const;
 

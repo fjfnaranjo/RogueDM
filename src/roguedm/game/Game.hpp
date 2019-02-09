@@ -46,14 +46,14 @@ class Game :
     /**
      * Used to ask the command handler an autocomplete suggestion.
      */
-    const int autocomplete(roguedm::Sentence&) override;
+    int autocomplete(roguedm::Sentence&) const override;
 
     /**
      * Used to ask the command handler an autocomplete candidate list.
      */
-    const roguedm::SentenceListReference autocompleteListOptions(
+    roguedm::SentenceListReference autocompleteListOptions(
       const roguedm::Sentence&
-    ) override;
+    ) const override;
 
     /**
      * Method used when the main app has time to allow a network management

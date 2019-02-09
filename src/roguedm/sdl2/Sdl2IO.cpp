@@ -241,7 +241,7 @@ int Sdl2IO::processCommand(const roguedm::Sentence& a) {
   return RDM_COMMAND_UNKNOWN;
 }
 
-const int Sdl2IO::autocomplete(roguedm::Sentence& a) {
+int Sdl2IO::autocomplete(roguedm::Sentence& a) const {
 
   // quit command completion
   if(a[0].wordContent==RDM_CMD_QUIT && a[0].wordClass==RDM_WCLASS_NORMAL) {
@@ -252,9 +252,9 @@ const int Sdl2IO::autocomplete(roguedm::Sentence& a) {
   return RDM_COMMAND_AC_NEXT;
 
 }
-const roguedm::SentenceListReference Sdl2IO::autocompleteListOptions(
+roguedm::SentenceListReference Sdl2IO::autocompleteListOptions(
   const roguedm::Sentence& a
-) {
+) const {
 
   roguedm::Word psayCmd;
   psayCmd.wordContent = RDM_CMD_PSAY;
@@ -378,7 +378,7 @@ Sdl2IO::~Sdl2IO() {
 
 }
 
-const int Sdl2IO::getErrorCode() const {
+int Sdl2IO::getErrorCode() const {
   return errorCode;
 }
 
@@ -1443,7 +1443,7 @@ void Sdl2IO::unregisterCommandHandler(CommandHandlerInterface *c) {
   );
 }
 
-std::size_t Sdl2IO::multibyteLenght(const std::string &string) {
+std::size_t Sdl2IO::multibyteLenght(const std::string &string) const {
   std::size_t characterCount = 0;
   int currentShift = 0;
   int bytesReaded = 0;

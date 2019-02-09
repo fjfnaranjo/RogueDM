@@ -63,7 +63,7 @@ class CommandHandlerInterface
      * \param[out] s The command sentence.
      * \return 0 or 1, see method description.
      */
-    virtual const int autocomplete(Sentence& s) =0;
+    virtual int autocomplete(Sentence& s) const =0;
 
     /**
      * \brief Used to ask the command handler an autocomplete candidate list.
@@ -73,9 +73,9 @@ class CommandHandlerInterface
      * \param s A reference to the current command line.
      * \return The Sentence vector or an empty one.
      */
-    virtual const SentenceListReference autocompleteListOptions(
+    virtual SentenceListReference autocompleteListOptions(
       const Sentence& s
-    ) =0;
+    ) const =0;
 
 };
 

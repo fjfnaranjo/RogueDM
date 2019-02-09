@@ -55,7 +55,7 @@ Network::~Network() {
 
 };
 
-const int Network::getErrorCode() const {
+int Network::getErrorCode() const {
   return errorCode;
 }
 
@@ -63,12 +63,12 @@ void Network::update() {}
 int Network::processCommand(const Sentence& a) {
   return RDM_COMMAND_UNKNOWN;
 }
-const int Network::autocomplete(Sentence& a) {
+int Network::autocomplete(Sentence& a) const {
   return RDM_COMMAND_AC_NEXT;
 }
-const SentenceListReference Network::autocompleteListOptions(
+SentenceListReference Network::autocompleteListOptions(
   const Sentence& a
-) {
+) const {
   return std::make_shared<SentenceList>();
 }
 

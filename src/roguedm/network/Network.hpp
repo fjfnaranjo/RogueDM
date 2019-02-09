@@ -57,19 +57,19 @@ class Network : CommandHandlerInterface, GameComponentInterface
     /**
      * Used to ask the command handler an autocomplete suggestion.
      */
-    const int autocomplete(Sentence&) override;
+    int autocomplete(Sentence&) const override;
 
     /**
      * Used to ask the command handler an autocomplete candidate list.
      */
-    const SentenceListReference autocompleteListOptions(const Sentence&)
+    SentenceListReference autocompleteListOptions(const Sentence&) const
       override;
 
     /**
      * Get the error code value (detecting contruction failures).
      * \return Status code to be returned with cstdlib exit() or 0 if ok.
      */
-    const int getErrorCode() const;
+    int getErrorCode() const;
 
   private:
 

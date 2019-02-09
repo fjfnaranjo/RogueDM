@@ -42,7 +42,7 @@ bool Config::loadFromFile() {
   return true;
 }
 
-const std::string Config::getConfigurationLoadError() const {
+std::string Config::getConfigurationLoadError() const {
   return configurationLoadError;
 }
 
@@ -101,7 +101,7 @@ void Config::setSettingBoolValue(
     setSettingValue(section, setting, RDM_CFG_PARSER_FALSE);
 }
 
-const std::string Config::getSettingValue(
+std::string Config::getSettingValue(
   const std::string &section,
   const std::string &setting,
   const std::string &default_
@@ -114,7 +114,7 @@ const std::string Config::getSettingValue(
     return default_;
 }
 
-const int Config::getSettingIntValue(
+int Config::getSettingIntValue(
   const std::string &section,
   const std::string &setting,
   const int &default_
@@ -124,7 +124,7 @@ const int Config::getSettingIntValue(
   );
 }
 
-const bool Config::getSettingBoolValue(
+bool Config::getSettingBoolValue(
   const std::string &section,
   const std::string &setting,
   const bool &default_

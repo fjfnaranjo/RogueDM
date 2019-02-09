@@ -86,21 +86,20 @@ class Sdl2IO :
     /**
      * Used to ask the command handler an autocomplete suggestion.
      */
-    const int autocomplete(roguedm::Sentence&) override;
+    int autocomplete(roguedm::Sentence&) const override;
 
     /**
      * Used to ask the command handler an autocomplete candidate list.
      */
-    const roguedm::SentenceListReference autocompleteListOptions(
+    roguedm::SentenceListReference autocompleteListOptions(
       const roguedm::Sentence&
-    )
-      override;
+    ) const override;
 
     /**
      * Get the error code value (detecting contruction failures).
      * \return Status code to be returned with cstdlib exit() or 0 if ok.
      */
-    const int getErrorCode() const;
+    int getErrorCode() const;
 
     /**
      * Add a new command handler to the internal list, after erasing any
@@ -271,7 +270,7 @@ class Sdl2IO :
      * \return The total number of complete characters in the string or the
      *         error value returned by mbrtowc in its last failed operation.
      */
-    std::size_t multibyteLenght(const std::string&);
+    std::size_t multibyteLenght(const std::string&) const;
 
     /** Get a particular character by index in a std::string. */
     std::string multibyteCharacterByIndex(const std::string&, const std::size_t);
