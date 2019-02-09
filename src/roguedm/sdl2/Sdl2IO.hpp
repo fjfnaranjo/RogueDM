@@ -23,6 +23,7 @@
 
 #include <SDL2/SDL.h>
 
+#include "CharmapStamper.hpp"
 #include "../CommandHandlerInterface.hpp"
 #include "../Config.hpp"
 #include "../GameComponentInterface.hpp"
@@ -35,15 +36,6 @@
 #define RDM_CMD_PSAY         u8"psay"       // Player say to all.
 
 namespace roguedm_gui {
-
-/** \brief Struct wordclass to contain word color and decorators. */
-struct WordClass {
-  SDL_Color color;
-  SDL_Color clearColor;
-  std::string lDecorator;
-  std::string rDecorator;
-  SDL_Texture *charsTexture;
-};
 
 /** \brief Struct Player for the name and so. */
 struct Player {
@@ -145,114 +137,10 @@ class Sdl2IO :
     void initScreenSize();
 
     /** Define the initial word type table. */
-    void initWordTypes();
-
-    /**
-     * Used by method initWordTypes to set the words color textures.
-     * \param wordTypeSurface Reference to the surface to be colored.
-     * \param rf Foreground red color component.
-     * \param gf Foreground green color component.
-     * \param bf Foreground blue color component.
-     * \param br Background red color component.
-     * \param bg Background green color component.
-     * \param bb Background blue color component.
-     * \see initWordTypes()
-     */
-    void colorizeWordType(
-      SDL_Texture* wordTypeSurface,
-      int rf,
-      int gf,
-      int bf,
-      int br,
-      int bg,
-      int bb
-    );
-
-    /**
-     * Define the table used to translate a UTF-8 input character to a ASCII 850
-     * page character set.
-     */
-    void initTransTable();
+    void initCharmaps();
 
     /** Reser the command line and its history navigation cursor */
     void resetLine();
-
-    /**
-     * Draw a box using the ASCII 850 pipe characters.
-     * \param t Box type.
-     * \param x Box starting x coordinate.
-     * \param y Box starting y coordinate.
-     * \param w Box widht.
-     * \param h Box height.
-     */
-    void drawBox(
-      int t,
-      int x,
-      int y,
-      int w,
-      int h
-    );
-
-    /**
-     * Draw a horizontal separator line using the ASCII 850 pipe characters.
-     * \param t Separator type.
-     * \param x Separator starting x coordinate.
-     * \param y Separator starting y coordinate.
-     * \param s Separator length.
-     */
-    void drawHSeparator(
-      int t,
-      int x,
-      int y,
-      int s
-    );
-
-    /**
-     * Draw a vertical separator line using the ASCII 850 pipe characters.
-     * \param t Separator type.
-     * \param x Separator starting x coordinate.
-     * \param y Separator starting y coordinate.
-     * \param s Separator length.
-     */
-    void drawVSeparator(
-      int t,
-      int x,
-      int y,
-      int s
-    );
-
-    /**
-     * Translate a multibyte character to its ASCII 850 position.
-     * \param c The multibyte character.
-     * \return The ASCII 850 position.
-     */
-    int transChar(std::string);
-
-    /**
-     * Write a 850 ASCII char in the interface.
-     * \param n ASCII position.
-     * \param t Word type.
-     * \param x Char x coordinate.
-     * \param y Char y coordinate.
-     */
-    void stampChar(
-      int n,
-      int t,
-      int x,
-      int y
-    );
-
-    /**
-     * Write a 850 ASCII cross character.
-     * \param t Word type.
-     * \param x Cross x coordinate.
-     * \param y Cross y coordinate.
-     */
-    void drawCross(
-      int t,
-      int x,
-      int y
-    );
 
     /** Manage a text composition from the SDL events manager */
     void processText(SDL_Event*);
@@ -266,18 +154,6 @@ class Sdl2IO :
     /** Try to find a valid autocompletion for the current command. */
     void tryAutocompletion();
 
-    /** Get the total character lenght in a std::string.
-     * \return The total number of complete characters in the string or the
-     *         error value returned by mbrtowc in its last failed operation.
-     */
-    std::size_t multibyteLenght(const std::string&) const;
-
-    /** Get a particular character by index in a std::string. */
-    std::string multibyteCharacterByIndex(const std::string&, const std::size_t);
-
-    /** Get a segment in a std::string. */
-    std::string multibyteSubstr(const std::string&, const std::size_t, const std::size_t);
-
     /** The default word to add when the user autocomplete with an empy line. */
     roguedm::Word defaultWord;
 
@@ -289,12 +165,6 @@ class Sdl2IO :
 
     /** True when user wants to quit. */
     int appDone;
-
-    /** Table holding all the word types */
-    WordClass wordTypes[RDM_WCLASS_TOTAL];
-
-    /** Table used to translate a UTF-8 input character to a ASCII 850 */
-    std::map<std::string,int> transUtf8;
 
     /** SDL window */
     SDL_Window *window = nullptr;
@@ -326,36 +196,6 @@ class Sdl2IO :
     /** Line exploration current displacement in characters. */
     int wordRShift;
 
-    /** Characters texture chars-by-row. */
-    int txtCpr;
-
-    /** Full character texture height. */
-    int txtHeight;
-
-    /** Full character texture width. */
-    int txtWidth;
-
-    /** Single character texture height. */
-    int txtCHeight;
-
-    /** Single character texture width. */
-    int txtCWidth;
-
-    /** Texture vertical character separation. */
-    int txtHSep;
-
-    /** Texture horizontal character separation. */
-    int txtWSep;
-
-    /** Texture vertical first character position. */
-    int txtHStart;
-
-    /** Texture horizontal first character position. */
-    int txtWStart;
-
-    /** Insertion point graphic surface. */
-    SDL_Texture *ipI;
-
     /** Screen size in rows. */
     int maxRows;
 
@@ -376,6 +216,12 @@ class Sdl2IO :
 
     /** Coordinates for the text window inside the terminal. */
     SDL_Rect dialogText;
+
+    std::unique_ptr<CharmapStamper> defaultStamper;
+
+    int defaultCHeight;
+
+    int defaultCWidth;
 
 };
 
