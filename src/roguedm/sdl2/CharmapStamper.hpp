@@ -22,34 +22,68 @@
 
 #include <SDL2/SDL.h>
 
-#include "mbtools.hpp"
 #include "../Config.hpp"
 #include "../commands.hpp"
 
 namespace roguedm_gui {
 
-/** \brief Struct wordclass to contain word color and decorators. */
+/**
+ * Struct to define word-type colors and enclosing decorations.
+ *
+ * * fgColor: Color for the foreground.
+ * * bgColor: Color for the background.
+ * * lDecorator: Left-side of the enclosing decoration.
+ * * rDecorator: Right-side of the enclosing decoration.
+ * * texture: The actual texture with the colorization applied.
+ */
 struct WordClass {
-  SDL_Color color;
-  SDL_Color clearColor;
+  SDL_Color fgColor;
+  SDL_Color bgColor;
   std::string lDecorator;
   std::string rDecorator;
-  SDL_Texture *charsTexture;
+  SDL_Texture *texture;
 };
 
+/**
+ * This class is responsible of storing a particular character map (charmap)
+ * image and use it to write characters to the screen.
+ */
 class CharmapStamper {
 
   public:
 
     CharmapStamper();
     ~CharmapStamper();
-    void loadDefaultCharmap(SDL_Renderer*, std::string);
+
+    /** Loads a charmap image using the config section values for it. */
+    bool loadDefaultCharmap(SDL_Renderer*, std::string);
+
+    /**
+     * Returns the character size for all enclosing decoration characters.
+     */
     int decoratorsLength(int) const;
+
+    /**
+     * Returns the character size for the left enclosing decoration
+     * characters.
+     */
     int lDecoratorsLength(int) const;
+
+    /**
+     * Returns the character size for the right enclosing decoration
+     * characters.
+     */
     int rDecoratorsLength(int) const;
+
+    /** Returns the character height for the charmap. */
     int getCHeight() const;
+
+    /** Returns the character width for the charmap. */
     int getCWidth() const;
 
+    /**
+     * Proxy for the \ref stampChar method used for writing a single character.
+     */
     void stampInnerChar(
       std::string,
       int,
@@ -60,6 +94,10 @@ class CharmapStamper {
       int
     );
 
+    /**
+     * Proxy for the \ref stampChar method used for writing a particular
+     * character from the left enclosing decoration characters.
+     */
     void stampLDecoratorChar(
       int,
       int,
@@ -70,6 +108,10 @@ class CharmapStamper {
       int
     );
 
+    /**
+     * Proxy for the \ref stampChar method used for writing a particular
+     * character from the right enclosing decoration characters.
+     */
     void stampRDecoratorChar(
       int,
       int,
@@ -80,6 +122,7 @@ class CharmapStamper {
       int
     );
 
+    /** Stamps the insertion point character in a particular coordinate. */
     void stampIp(
       SDL_Renderer*,
       int,
@@ -87,15 +130,13 @@ class CharmapStamper {
     );
 
     /**
-     * Draw a box using the ASCII 850 pipe characters.
-     * \param t Box type.
+     * Draws a box using the ASCII 850 double pipe characters.
      * \param x Box starting x coordinate.
      * \param y Box starting y coordinate.
-     * \param w Box widht.
+     * \param w Box width.
      * \param h Box height.
      */
     void drawBox(
-      int t,
       int x,
       int y,
       int w,
@@ -104,14 +145,13 @@ class CharmapStamper {
     );
 
     /**
-     * Draw a horizontal separator line using the ASCII 850 pipe characters.
-     * \param t Separator type.
+     * Draws a horizontal separator line using the ASCII 850 double pipe
+     * characters.
      * \param x Separator starting x coordinate.
      * \param y Separator starting y coordinate.
      * \param s Separator length.
      */
     void drawHSeparator(
-      int t,
       int x,
       int y,
       int s,
@@ -119,14 +159,13 @@ class CharmapStamper {
     );
 
     /**
-     * Draw a vertical separator line using the ASCII 850 pipe characters.
-     * \param t Separator type.
+     * Draws a vertical separator line using the ASCII 850 double pipe
+     * characters.
      * \param x Separator starting x coordinate.
      * \param y Separator starting y coordinate.
      * \param s Separator length.
      */
     void drawVSeparator(
-      int t,
       int x,
       int y,
       int s,
@@ -134,13 +173,11 @@ class CharmapStamper {
     );
 
     /**
-     * Write a 850 ASCII cross character.
-     * \param t Word type.
+     * Draws a ASCII 850 double cross character.
      * \param x Cross x coordinate.
      * \param y Cross y coordinate.
      */
     void drawCross(
-      int t,
       int x,
       int y,
       SDL_Renderer*
@@ -148,10 +185,11 @@ class CharmapStamper {
 
   private:
 
-    /** App configuration singleton reference. */
+    /** App configuration singleton shared pointer. */
     roguedm::ConfigSharedPtr config;
 
-    void colorizeTexture(SDL_Renderer*, SDL_Surface*);
+    /** Define the static word types and colorize them. */
+    void defineAndColorizeWordTypes(SDL_Renderer*, SDL_Surface*);
 
     /**
      * Define the table used to translate a UTF-8 input character to a ASCII 850
@@ -159,19 +197,10 @@ class CharmapStamper {
      */
     void initTransTable();
 
-    /**
-     * Used by method initWordTypes to set the words color textures.
-     * \param wordTypeSurface Reference to the surface to be colored.
-     * \param rf Foreground red color component.
-     * \param gf Foreground green color component.
-     * \param bf Foreground blue color component.
-     * \param br Background red color component.
-     * \param bg Background green color component.
-     * \param bb Background blue color component.
-     * \see initWordTypes()
-     */
-    void colorizeWordType(
-      SDL_Texture* wordTypeSurface,
+    /** Used to color the word types textures. */
+    SDL_Texture* colorizeWordType(
+      SDL_Renderer* renderer,
+      SDL_Surface* srf,
       int rf,
       int gf,
       int bf,
@@ -181,35 +210,46 @@ class CharmapStamper {
     );
 
     /**
-     * Translate a multibyte character to its ASCII 850 position.
+     * Translate a UTF-8 to its ASCII 850 position.
      * \param c The multibyte character.
      * \return The ASCII 850 position.
      */
     int transChar(std::string);
 
     /**
-     * Write a 850 ASCII char in the interface.
-     * \param n ASCII position.
+     * Draws a ASCII 850 char.
+     * \param n ASCII 850 position.
      * \param t Word type.
      * \param x Char x coordinate.
      * \param y Char y coordinate.
+     * \param renderer The current SDL render context.
+     * \param maxCols Upper limit for columns.
+     * \param maxRows Upper limit for rows.
      */
     void stampChar(
-      int,
-      int,
-      int,
-      int,
-      SDL_Renderer*,
-      int,
-      int
+      int n,
+      int t,
+      int x,
+      int y,
+      SDL_Renderer* renderer,
+      int maxCols,
+      int maxRows
     );
 
+    /**
+     * Draws a ASCII 850 char (simple).
+     * \param n ASCII 850 position.
+     * \param t Word type.
+     * \param x Char x coordinate.
+     * \param y Char y coordinate.
+     * \param renderer The current SDL render context.
+     */
     void mStampChar(
-      int,
-      int,
-      int,
-      int,
-      SDL_Renderer*
+      int n,
+      int t,
+      int x,
+      int y,
+      SDL_Renderer* renderer
     );
 
     /** Table used to translate a UTF-8 input character to a ASCII 850 */
@@ -217,12 +257,6 @@ class CharmapStamper {
 
     /** Characters texture chars-by-row. */
     int txtCpr;
-
-    /** Full character texture height. */
-    int txtHeight;
-
-    /** Full character texture width. */
-    int txtWidth;
 
     /** Single character texture height. */
     int txtCHeight;
@@ -244,9 +278,6 @@ class CharmapStamper {
 
     /** Table holding all the word types */
     WordClass wordTypes[RDM_WCLASS_TOTAL];
-
-    /** Insertion point graphic surface. */
-    SDL_Texture *ipI;
 
 };
 

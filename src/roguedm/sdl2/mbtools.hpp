@@ -17,21 +17,33 @@
 
 #pragma once
 
-#include <cwchar>
 #include <string>
 
 namespace roguedm_gui {
 
-/** Get the total character lenght in a std::string.
- * \return The total number of complete characters in the string or the
- *         error value returned by mbrtowc in its last failed operation.
+/**
+ * Get the total character length for a std::string having the current
+ * multibyte context into account.
+ *
+ * \return Count of characters or the error value returned by mbrtowc in its
+ *         last failed operation.
  */
 std::size_t multibyteLenght(const std::string &string);
 
-/** Get a particular character by index in a std::string. */
+/**
+ * Get a character by index in a std::string having the current multibyte
+ * context into account.
+ *
+ * \return A single character or an empty string if something failed.
+ */
 std::string multibyteCharacterByIndex(const std::string &string, const std::size_t position);
 
-/** Get a segment in a std::string. */
+/**
+ * Get a substr by index and size in a std::string having the current multibyte
+ * context into account.
+ *
+ * \return The substr or an empty string if something failed.
+ */
 std::string multibyteSubstr(const std::string &string, const std::size_t start, const std::size_t size);
 
 } // namespace roguedm_gui

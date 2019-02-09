@@ -19,10 +19,6 @@
 
 namespace roguedm_gui {
 
-/** Get the total character lenght in a std::string.
- * \return The total number of complete characters in the string or the
- *         error value returned by mbrtowc in its last failed operation.
- */
 std::size_t multibyteLenght(const std::string &string) {
   std::size_t characterCount = 0;
   int currentShift = 0;
@@ -35,7 +31,6 @@ std::size_t multibyteLenght(const std::string &string) {
   return (bytesReaded<0) ? bytesReaded : characterCount;
 }
 
-/** Get a particular character by index in a std::string. */
 std::string multibyteCharacterByIndex(const std::string &string, const std::size_t position) {
   std::string lastCharacterString(MB_CUR_MAX, '\0');
   wchar_t lastCharacter;
@@ -56,7 +51,6 @@ std::string multibyteCharacterByIndex(const std::string &string, const std::size
   return u8"";
 }
 
-/** Get a segment in a std::string. */
 std::string multibyteSubstr(const std::string &string, const std::size_t start, const std::size_t size) {
   if(size==0)
     return u8"";

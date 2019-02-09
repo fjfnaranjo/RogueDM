@@ -88,14 +88,14 @@ class Sdl2IO :
     ) const override;
 
     /**
-     * Get the error code value (detecting contruction failures).
+     * Get the error code value (detecting construction failures).
      * \return Status code to be returned with cstdlib exit() or 0 if ok.
      */
     int getErrorCode() const;
 
     /**
      * Add a new command handler to the internal list, after erasing any
-     * previous ocurrence of that handler.
+     * previous occurrence of that handler.
      * \param c The command handler.
      */
     void registerCommandHandler(CommandHandlerInterface *c);
@@ -129,7 +129,7 @@ class Sdl2IO :
     int ticks;
 
     /**
-     * Method internally called to manage the SDL event queque.
+     * Method internally called to manage the SDL event queue.
      */
     void eventsManager();
 
@@ -137,7 +137,7 @@ class Sdl2IO :
     void initScreenSize();
 
     /** Define the initial word type table. */
-    void initCharmaps();
+    bool initCharmaps();
 
     /** Reser the command line and its history navigation cursor */
     void resetLine();
@@ -145,7 +145,7 @@ class Sdl2IO :
     /** Manage a text composition from the SDL events manager */
     void processText(SDL_Event*);
 
-    /** Manage a key senden from the SDL events manager */
+    /** Manage a key sent from the SDL events manager */
     void processKey(SDL_Event*);
 
     /** Process the command line. */
@@ -154,10 +154,10 @@ class Sdl2IO :
     /** Try to find a valid autocompletion for the current command. */
     void tryAutocompletion();
 
-    /** The default word to add when the user autocomplete with an empy line. */
+    /** The default word to add when the user autocompletes an empty line. */
     roguedm::Word defaultWord;
 
-    /** The command hanlders list. */
+    /** The command handlers list. */
     std::vector<CommandHandlerInterface*> commandHandlers;
 
     /** Error code */
@@ -199,7 +199,7 @@ class Sdl2IO :
     /** Screen size in rows. */
     int maxRows;
 
-    /** Screen size in colums. */
+    /** Screen size in columns. */
     int maxCols;
 
     /** Coordinates for the main window inside the terminal. */
@@ -217,10 +217,13 @@ class Sdl2IO :
     /** Coordinates for the text window inside the terminal. */
     SDL_Rect dialogText;
 
+    /** Shared pointer to the default charmap drawing class. */
     std::unique_ptr<CharmapStamper> defaultStamper;
 
+    /** Character height of the default charmap. */
     int defaultCHeight;
 
+    /** Character width of the default charmap. */
     int defaultCWidth;
 
 };

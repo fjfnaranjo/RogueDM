@@ -43,7 +43,8 @@ void Sdl2IO::update() {
   SDL_RenderClear(renderer);
 
   // Panels
-  defaultStamper->drawBox        (2,0,0,maxCols,maxRows,renderer);
+  // TODO: Move box drawing to the stamper class or a helper function
+  defaultStamper->drawBox        (0,0,maxCols,maxRows,renderer);
   dialogMain.x = 1;
   dialogMain.y = 1;
   dialogMain.w = (int)(maxCols-(maxCols/4));
@@ -52,19 +53,22 @@ void Sdl2IO::update() {
   dialogText.y = dialogMain.h+3;
   dialogText.w = dialogMain.w;
   dialogText.h = maxRows-dialogMain.h-4;
-  defaultStamper->drawVSeparator(2,dialogText.w+2,0,maxRows,renderer);
-  defaultStamper->drawHSeparator(2,0,dialogText.y-1,dialogText.w+2,renderer);
+  defaultStamper->drawVSeparator(dialogText.w+2,0,maxRows,renderer);
+  defaultStamper->drawHSeparator(0,dialogText.y-1,dialogText.w+2,renderer);
   dialogCell.x = dialogText.w+3;
   dialogCell.y = 1;
   dialogCell.w = maxCols-dialogMain.w-4;
   dialogCell.h = (int)(maxRows-((maxRows/8)*2));
-  defaultStamper->drawHSeparator(2,dialogCell.x-1,dialogCell.y+dialogCell.h+1,dialogCell.w+2,renderer);
+  defaultStamper->drawHSeparator(
+    dialogCell.x-1,dialogCell.y+dialogCell.h+1,dialogCell.w+2,renderer
+  );
   dialogCreature.x = dialogCell.x;
   dialogCreature.y = dialogCell.y+dialogCell.h+2;
   dialogCreature.w = dialogCell.w;
   dialogCreature.h = dialogCell.h*2;
   defaultStamper->drawHSeparator(
-    2,dialogCreature.x-1,dialogCreature.y+dialogCreature.h+1,dialogCreature.w+2,renderer
+    dialogCreature.x-1,dialogCreature.y+dialogCreature.h+1,
+    dialogCreature.w+2,renderer
   );
   dialogPlayers.x = dialogCell.x;
   dialogPlayers.y = dialogCreature.y+dialogCreature.h+2;
@@ -193,7 +197,9 @@ void Sdl2IO::update() {
               )*defaultCWidth
             );
           defaultStamper->stampIp(renderer, dest.x, dest.y);
-        } else if (wordRShift==(int)multibyteLenght(commandLine[c].wordContent)) {
+        } else if (
+          wordRShift==(int)multibyteLenght(commandLine[c].wordContent)
+        ) {
           dest.x =
             (
               (
@@ -326,8 +332,20 @@ Sdl2IO::Sdl2IO() {
   // Clear color
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
 
-  // Words, comand line and history init
-  initCharmaps();
+  // Words, command line and history init
+  if(!initCharmaps()) {
+    // TODO: Segfault in this branch
+    errorCode = 3;
+    SDL_LogError(
+      SDL_LOG_CATEGORY_APPLICATION,
+      _(RDM_STR_SDL_ERROR),
+      SDL_GetError()
+    );
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    return;
+  }
   resetLine();
   historyCurrent = 0;
   historyBackup = commandLine;
@@ -376,7 +394,7 @@ void Sdl2IO::resetLine() {
   wordRShift = 0;
 }
 
-void Sdl2IO::initCharmaps() {
+bool Sdl2IO::initCharmaps() {
 
   // Default charmap texture
   std::string defaultCharmap =
@@ -385,10 +403,13 @@ void Sdl2IO::initCharmaps() {
     );
 
   defaultStamper = std::make_unique<CharmapStamper>();
-  defaultStamper->loadDefaultCharmap(renderer, defaultCharmap);
+  if(!defaultStamper->loadDefaultCharmap(renderer, defaultCharmap))
+    return false;
 
   defaultCHeight = defaultStamper->getCHeight();
   defaultCWidth = defaultStamper->getCWidth();
+
+  return true;
 
 }
 
@@ -515,9 +536,14 @@ void Sdl2IO::processKey(SDL_Event* event) {
 
     // Backspace
     case SDLK_BACKSPACE:
-      if(wordRShift==(int)multibyteLenght(commandLine[currentWord].wordContent)) {
+      if(
+        wordRShift==(int)multibyteLenght(commandLine[currentWord].wordContent)
+      ) {
         if(currentWord>0) {
-          if(1==currentWord && multibyteLenght(commandLine[currentWord].wordContent)!=0)
+          if(
+            1==currentWord
+            && multibyteLenght(commandLine[currentWord].wordContent)!=0
+          )
             commandLine[currentWord-1].wordClass = RDM_WCLASS_NORMAL;
           wordRShift=multibyteLenght(commandLine[currentWord].wordContent);
           commandLine[currentWord-1].wordContent =
@@ -579,7 +605,9 @@ void Sdl2IO::processKey(SDL_Event* event) {
     // H-movement keys
     case SDLK_LEFT:
       if (!(kevent.keysym.mod&KMOD_CTRL)) {
-        if(wordRShift<(int)multibyteLenght(commandLine[currentWord].wordContent))
+        if(
+          wordRShift<(int)multibyteLenght(commandLine[currentWord].wordContent)
+        )
           wordRShift++;
         else if (currentWord>0) {
           currentWord--;
@@ -587,7 +615,9 @@ void Sdl2IO::processKey(SDL_Event* event) {
         }
         historyCurrent = 0;
       } else {
-        if(wordRShift<(int)multibyteLenght(commandLine[currentWord].wordContent)) {
+        if(
+          wordRShift<(int)multibyteLenght(commandLine[currentWord].wordContent)
+        ) {
           wordRShift = multibyteLenght(commandLine[currentWord].wordContent);
         } else if (currentWord>0) {
           currentWord--;
