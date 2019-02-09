@@ -47,6 +47,9 @@ class Application {
 
   private:
 
+    /** Do an early search for a --verbose param to enable detailed logging. */
+    void process_verbosity(int argc, char *argv[]);
+
     /**
      * Processes the program arguments.
      *

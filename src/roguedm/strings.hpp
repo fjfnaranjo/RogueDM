@@ -38,8 +38,9 @@
 #define RDM_STR_VERSION_STRING   "Rogue's Dungeon Master Version %s .\n"
 #define RDM_STR_USAGE_VERSION    "--version"
 #define RDM_STR_USAGE_HELP       "--help"
+#define RDM_STR_USAGE_VERBOSE    "--verbose"
 #define RDM_STR_USAGE_LOCAL      "--local"
-#define RDM_STR_USAGE            "usage: %s [--version] [--help] [--local]\n"
+#define RDM_STR_USAGE            "usage: %s [--version] [--help] [--verbose] [--local]\n"
 
 #define RDM_STR_USAGE_UKNOWN     "Unknown program argument: %s\n"
 

@@ -35,6 +35,14 @@ Application::Application() {
   argumentsError = false;
 }
 
+void Application::process_verbosity(int argc, char* argv[]) {
+  SDL_LogPriority level = SDL_LOG_PRIORITY_WARN;
+  for (int c = 1; c < argc; c++)
+    if (0==std::string(argv[c]).compare(RDM_STR_USAGE_VERBOSE))
+      level = SDL_LOG_PRIORITY_VERBOSE;
+  SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, level);
+}
+
 void Application::process_arguments (
   int argc, char* argv[],
   const ConfigSharedPtr& configuration
@@ -42,12 +50,11 @@ void Application::process_arguments (
 
   bool skipNextArguments = false;
 
-  // Notice how this parses arguments from the end of the list
-  for (int c = argc; c > 1 && !skipNextArguments; c--) {
+  for (int c = 1; c < argc && !skipNextArguments; c++) {
 
-    auto current_argument = std::string(argv[c - 1]);
+    auto currentArgument = std::string(argv[c]);
 
-    if (0==current_argument.compare(RDM_STR_USAGE_VERSION)) {    // --usage
+    if (0==currentArgument.compare(RDM_STR_USAGE_VERSION)) {    // --usage
       std::cout << format_string(
         _ (RDM_STR_VERSION_STRING), RDM_STR_VERSION_FULL
       );
@@ -55,7 +62,7 @@ void Application::process_arguments (
       keepRunning = false;
     }
 
-    else if (0==current_argument.compare(RDM_STR_USAGE_HELP)) {  // --help
+    else if (0==currentArgument.compare(RDM_STR_USAGE_HELP)) {  // --help
       std::cout << format_string(
         _ (RDM_STR_VERSION_STRING), RDM_STR_VERSION_FULL
       );
@@ -66,12 +73,20 @@ void Application::process_arguments (
       keepRunning = false;
     }
 
-    else if (0==current_argument.compare(RDM_STR_USAGE_LOCAL)) { // --local
+    else if (0==currentArgument.compare(RDM_STR_USAGE_LOCAL)) { // --local
       configuration->setSettingBoolValue("general", "skipNetworking", true);
     }
 
+    else if (0==currentArgument.compare(RDM_STR_USAGE_VERBOSE)) { // --verbose
+      ;
+    }
+
     else {                                                 // Unknown argument
-      std::cout << format_string(_ (RDM_STR_USAGE_UKNOWN), argv[c - 1]);
+      SDL_LogError(
+        SDL_LOG_CATEGORY_APPLICATION,
+        _ (RDM_STR_USAGE_UKNOWN),
+        currentArgument.c_str()
+      );
       skipNextArguments = true;
       argumentsError = true;
       exitStatus = RDM_ERR_ARGS_ERROR;
@@ -98,6 +113,8 @@ int Application::run(int argc, char *argv[]) {
     exitStatus = RDM_ERR_SETTINGS_ERROR;
     keepRunning = false;
   }
+
+  process_verbosity(argc, argv);
 
   // Parse program arguments
   if(keepRunning)
