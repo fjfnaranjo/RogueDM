@@ -16,8 +16,6 @@
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstdarg>
-#include <cstring>
-#include <regex>
 #include <string>
 
 #include "strings.hpp"
