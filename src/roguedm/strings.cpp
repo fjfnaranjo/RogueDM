@@ -16,6 +16,7 @@
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstdarg>
+#include <regex>
 #include <string>
 
 #include "strings.hpp"
@@ -29,6 +30,14 @@ std::string format_string(const char* format, ...) {
   vsnprintf(buffer, RDM_STR_MAX, format, args);
   va_end(args);
   return std::string(buffer);
+}
+
+std::string translate_path_separator(std::string path) {
+  std::string path_string = path;
+  if(RDM_PATH_SEP==RDM_PATH_LINUX_SEP)
+    return path_string;
+  std::regex_replace(path_string, std::regex(RDM_PATH_LINUX_SEP), RDM_PATH_SEP);
+  return path_string;
 }
 
 }

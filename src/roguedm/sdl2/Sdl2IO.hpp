@@ -20,7 +20,7 @@
 #include <map>
 #include <memory>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "CharmapStamper.hpp"
 #include "../CommandHandlerInterface.hpp"
@@ -56,7 +56,7 @@ class Sdl2IO :
     roguedm::GameComponentInterface
 {
 
-  RDM_DECLARE_CLASS_AS_NOCPNOMV(Sdl2IO);
+  RDM_DECLARE_CLASS_AS_NOCPNOMV(Sdl2IO)
 
   public:
 

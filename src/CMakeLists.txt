@@ -19,6 +19,8 @@ project(roguedm VERSION 1.0 LANGUAGES CXX)
 
 add_compile_options(-std=c++14)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
+
 # Verbose version (also update in project above)
 set(roguedm_VERSION_MAJOR 1)
 set(roguedm_VERSION_MINOR 0)
@@ -30,8 +32,8 @@ configure_file("${roguedm_SOURCE_DIR}/roguedm/version.hpp.in"
 # Basic directories sensible to platform
 set(roguedm_CONFIG_DIRECTORY env/config CACHE PATH "User configuration")
 set(roguedm_SHARE_DIRECTORY env/share CACHE PATH "Application data")
-set(roguedm_PATH_HERE "" CACHE PATH "Base path")
-set(roguedm_PATH_SEP "/" CACHE PATH "Path separator")
+set(roguedm_PATH_HERE "." CACHE PATH "Base path")
+set(roguedm_PATH_SEP "/" CACHE STRING "Path separator")
 configure_file("${roguedm_SOURCE_DIR}/roguedm/paths.hpp.in"
                "${roguedm_BINARY_DIR}/roguedm/paths.hpp")
 

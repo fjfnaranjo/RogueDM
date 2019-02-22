@@ -31,7 +31,7 @@ namespace roguedm {
 class GuiStage : public StageInterface
 {
 
-  RDM_DECLARE_CLASS_AS_NOCPNOMV(GuiStage);
+  RDM_DECLARE_CLASS_AS_NOCPNOMV(GuiStage)
 
   public:
 

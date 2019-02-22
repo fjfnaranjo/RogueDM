@@ -25,15 +25,13 @@
 
 #pragma once
 
-#include <locale>
 #include <string>
-
-#define _ gettext
 
 #include "paths.hpp"
 #include "version.hpp"
 
 #define RDM_STR_MAX              255
+#define RDM_PATH_LINUX_SEP       "/"
 
 #define RDM_STR_VERSION_STRING   "Rogue's Dungeon Master Version %s .\n"
 #define RDM_STR_USAGE_VERSION    "--version"
@@ -69,5 +67,7 @@
 namespace roguedm {
 
 std::string format_string(const char* format, ...);
+
+std::string translate_path_separator(std::string path);
 
 }

@@ -26,13 +26,13 @@ int Game::processCommand(const roguedm::Sentence&) {
 }
 int Game::autocomplete(roguedm::Sentence&) const {
   return RDM_COMMAND_AC_NEXT;
-};
+}
 
 roguedm::SentenceListReference Game::autocompleteListOptions(
   const roguedm::Sentence&
 ) const {
   return std::make_shared<roguedm::SentenceList>();
-};
+}
 
 void Game::update() {}
 

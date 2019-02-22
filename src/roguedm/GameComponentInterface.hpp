@@ -31,7 +31,7 @@ namespace roguedm {
 class GameComponentInterface
 {
 
-  RDM_DECLARE_CLASS_AS_INTERFACE(GameComponentInterface);
+  RDM_DECLARE_CLASS_AS_INTERFACE(GameComponentInterface)
 
   public:
 

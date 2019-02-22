@@ -17,7 +17,7 @@
 
 #include "CharmapStamper.hpp"
 
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 
 #include "mbtools.hpp"
 #include "../strings.hpp"
@@ -62,12 +62,15 @@ bool CharmapStamper::loadDefaultCharmap(
 ) {
 
   // Default charmap texture file path
-  std::string defaultCharmapPath =
+  std::string defaultCharmapPath = roguedm::translate_path_separator(
+    std::string(RDM_PATH_HERE) +
+    std::string(RDM_PATH_SEP) +
     std::string(RDM_PATH_SHARE) +
     std::string(RDM_PATH_SEP) +
     config->getSettingValue(
       defaultCharmap, "path", "imgs/codepage-850-9-14.png"
-    );
+    )
+  );
 
   // Texture data
   txtCHeight = config->getSettingIntValue(defaultCharmap, "txtCHeight", 14);
@@ -96,17 +99,17 @@ bool CharmapStamper::loadDefaultCharmap(
 
 }
 
-int CharmapStamper::decoratorsLength(int idx) const {
+unsigned int CharmapStamper::decoratorsLength(int idx) const {
   return
     multibyteLenght(wordTypes[idx].lDecorator) +
     multibyteLenght(wordTypes[idx].rDecorator);
 }
 
-int CharmapStamper::lDecoratorsLength(int idx) const {
+unsigned int CharmapStamper::lDecoratorsLength(int idx) const {
   return multibyteLenght(wordTypes[idx].lDecorator);
 }
 
-int CharmapStamper::rDecoratorsLength(int idx) const {
+unsigned int CharmapStamper::rDecoratorsLength(int idx) const {
   return multibyteLenght(wordTypes[idx].rDecorator);
 }
 
@@ -227,10 +230,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_NORMAL].fgColor.r,
       wordTypes[RDM_WCLASS_NORMAL].fgColor.g,
-      wordTypes[RDM_WCLASS_NORMAL].fgColor.b,
+      wordTypes[RDM_WCLASS_NORMAL].fgColor.b/*,
       wordTypes[RDM_WCLASS_NORMAL].bgColor.r,
       wordTypes[RDM_WCLASS_NORMAL].bgColor.g,
-      wordTypes[RDM_WCLASS_NORMAL].bgColor.b
+      wordTypes[RDM_WCLASS_NORMAL].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_COMMAND].fgColor.r = 255;
@@ -246,10 +249,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_COMMAND].fgColor.r,
       wordTypes[RDM_WCLASS_COMMAND].fgColor.g,
-      wordTypes[RDM_WCLASS_COMMAND].fgColor.b,
+      wordTypes[RDM_WCLASS_COMMAND].fgColor.b/*,
       wordTypes[RDM_WCLASS_COMMAND].bgColor.r,
       wordTypes[RDM_WCLASS_COMMAND].bgColor.g,
-      wordTypes[RDM_WCLASS_COMMAND].bgColor.b
+      wordTypes[RDM_WCLASS_COMMAND].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_NPC_ALLIED].fgColor.r = 0;
@@ -265,10 +268,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_NPC_ALLIED].fgColor.r,
       wordTypes[RDM_WCLASS_NPC_ALLIED].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ALLIED].fgColor.b,
+      wordTypes[RDM_WCLASS_NPC_ALLIED].fgColor.b/*,
       wordTypes[RDM_WCLASS_NPC_ALLIED].bgColor.r,
       wordTypes[RDM_WCLASS_NPC_ALLIED].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ALLIED].bgColor.b
+      wordTypes[RDM_WCLASS_NPC_ALLIED].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].fgColor.r = 0;
@@ -284,10 +287,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].fgColor.r,
       wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].fgColor.b,
+      wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].fgColor.b/*,
       wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].bgColor.r,
       wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].bgColor.b
+      wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_NPC_NEUTRAL].fgColor.r = 0;
@@ -303,10 +306,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_NPC_NEUTRAL].fgColor.r,
       wordTypes[RDM_WCLASS_NPC_NEUTRAL].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL].fgColor.b,
+      wordTypes[RDM_WCLASS_NPC_NEUTRAL].fgColor.b/*,
       wordTypes[RDM_WCLASS_NPC_NEUTRAL].bgColor.r,
       wordTypes[RDM_WCLASS_NPC_NEUTRAL].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL].bgColor.b
+      wordTypes[RDM_WCLASS_NPC_NEUTRAL].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].fgColor.r = 0;
@@ -322,10 +325,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].fgColor.r,
       wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].fgColor.b,
+      wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].fgColor.b/*,
       wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].bgColor.r,
       wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].bgColor.b
+      wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_NPC_ENEMY].fgColor.r = 255;
@@ -341,10 +344,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_NPC_ENEMY].fgColor.r,
       wordTypes[RDM_WCLASS_NPC_ENEMY].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ENEMY].fgColor.b,
+      wordTypes[RDM_WCLASS_NPC_ENEMY].fgColor.b/*,
       wordTypes[RDM_WCLASS_NPC_ENEMY].bgColor.r,
       wordTypes[RDM_WCLASS_NPC_ENEMY].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ENEMY].bgColor.b
+      wordTypes[RDM_WCLASS_NPC_ENEMY].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].fgColor.r = 128;
@@ -360,10 +363,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].fgColor.r,
       wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].fgColor.b,
+      wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].fgColor.b/*,
       wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].bgColor.r,
       wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].bgColor.b
+      wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].fgColor.r = 255;
@@ -379,10 +382,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].fgColor.r,
       wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].fgColor.b,
+      wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].fgColor.b/*,
       wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].bgColor.r,
       wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].bgColor.b
+      wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_PLACE].fgColor.r = 255;
@@ -398,10 +401,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_PLACE].fgColor.r,
       wordTypes[RDM_WCLASS_PLACE].fgColor.g,
-      wordTypes[RDM_WCLASS_PLACE].fgColor.b,
+      wordTypes[RDM_WCLASS_PLACE].fgColor.b/*,
       wordTypes[RDM_WCLASS_PLACE].bgColor.r,
       wordTypes[RDM_WCLASS_PLACE].bgColor.g,
-      wordTypes[RDM_WCLASS_PLACE].bgColor.b
+      wordTypes[RDM_WCLASS_PLACE].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_OBJECT].fgColor.r = 224;
@@ -417,10 +420,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_OBJECT].fgColor.r,
       wordTypes[RDM_WCLASS_OBJECT].fgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT].fgColor.b,
+      wordTypes[RDM_WCLASS_OBJECT].fgColor.b/*,
       wordTypes[RDM_WCLASS_OBJECT].bgColor.r,
       wordTypes[RDM_WCLASS_OBJECT].bgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT].bgColor.b
+      wordTypes[RDM_WCLASS_OBJECT].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_OBJECT_MAGIC].fgColor.r = 255;
@@ -436,10 +439,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_OBJECT_MAGIC].fgColor.r,
       wordTypes[RDM_WCLASS_OBJECT_MAGIC].fgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_MAGIC].fgColor.b,
+      wordTypes[RDM_WCLASS_OBJECT_MAGIC].fgColor.b/*,
       wordTypes[RDM_WCLASS_OBJECT_MAGIC].bgColor.r,
       wordTypes[RDM_WCLASS_OBJECT_MAGIC].bgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_MAGIC].bgColor.b
+      wordTypes[RDM_WCLASS_OBJECT_MAGIC].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_OBJECT_SET].fgColor.r = 192;
@@ -455,10 +458,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_OBJECT_SET].fgColor.r,
       wordTypes[RDM_WCLASS_OBJECT_SET].fgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_SET].fgColor.b,
+      wordTypes[RDM_WCLASS_OBJECT_SET].fgColor.b/*,
       wordTypes[RDM_WCLASS_OBJECT_SET].bgColor.r,
       wordTypes[RDM_WCLASS_OBJECT_SET].bgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_SET].bgColor.b
+      wordTypes[RDM_WCLASS_OBJECT_SET].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_OBJECT_UNIQ].fgColor.r = 192;
@@ -474,10 +477,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_OBJECT_UNIQ].fgColor.r,
       wordTypes[RDM_WCLASS_OBJECT_UNIQ].fgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_UNIQ].fgColor.b,
+      wordTypes[RDM_WCLASS_OBJECT_UNIQ].fgColor.b/*,
       wordTypes[RDM_WCLASS_OBJECT_UNIQ].bgColor.r,
       wordTypes[RDM_WCLASS_OBJECT_UNIQ].bgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_UNIQ].bgColor.b
+      wordTypes[RDM_WCLASS_OBJECT_UNIQ].bgColor.b*/
   );
 
   wordTypes[RDM_WCLASS_OBJECT_EPIC].fgColor.r = 255;
@@ -493,10 +496,10 @@ void CharmapStamper::defineAndColorizeWordTypes(
       baseSurface,
       wordTypes[RDM_WCLASS_OBJECT_EPIC].fgColor.r,
       wordTypes[RDM_WCLASS_OBJECT_EPIC].fgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_EPIC].fgColor.b,
+      wordTypes[RDM_WCLASS_OBJECT_EPIC].fgColor.b/*,
       wordTypes[RDM_WCLASS_OBJECT_EPIC].bgColor.r,
       wordTypes[RDM_WCLASS_OBJECT_EPIC].bgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_EPIC].bgColor.b
+      wordTypes[RDM_WCLASS_OBJECT_EPIC].bgColor.b*/
   );
 
 }
@@ -632,10 +635,10 @@ SDL_Texture* CharmapStamper::colorizeWordType(
   SDL_Surface *srf,
   int fgr,
   int fgg,
-  int fgb,
+  int fgb/*,
   int bgr,
   int bgg,
-  int bgb
+  int bgb*/
 ) {
   SDL_Palette *palette = srf->format->palette;
   for(int i=0;i < srf->format->palette->ncolors;i++) {
@@ -650,8 +653,8 @@ int CharmapStamper::transChar(std::string c) {
   for (auto const & entry : transUtf8)
     if (0==c.compare(entry.first))
       return entry.second;
-    // TODO: Remove magic constants like this one
-    return 254;
+  // TODO: Remove magic constants like this one
+  return 254;
 }
 
 void CharmapStamper::stampChar(

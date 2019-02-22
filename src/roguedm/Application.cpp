@@ -21,7 +21,7 @@
 #include <locale>
 #include <string>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "stages/GuiStage.hpp"
 #include "strings.hpp"
@@ -56,7 +56,7 @@ void Application::process_arguments (
 
     if (0==currentArgument.compare(RDM_STR_USAGE_VERSION)) {    // --usage
       std::cout << format_string(
-        _ (RDM_STR_VERSION_STRING), RDM_STR_VERSION_FULL
+        RDM_STR_VERSION_STRING, RDM_STR_VERSION_FULL
       );
       skipNextArguments = true;
       keepRunning = false;
@@ -64,10 +64,10 @@ void Application::process_arguments (
 
     else if (0==currentArgument.compare(RDM_STR_USAGE_HELP)) {  // --help
       std::cout << format_string(
-        _ (RDM_STR_VERSION_STRING), RDM_STR_VERSION_FULL
+        RDM_STR_VERSION_STRING, RDM_STR_VERSION_FULL
       );
       std::cout << format_string(
-        _ (RDM_STR_USAGE), argv[0]
+        RDM_STR_USAGE, argv[0]
       );
       skipNextArguments = true;
       keepRunning = false;
@@ -84,7 +84,7 @@ void Application::process_arguments (
     else {                                                 // Unknown argument
       SDL_LogError(
         SDL_LOG_CATEGORY_APPLICATION,
-        _ (RDM_STR_USAGE_UKNOWN),
+        RDM_STR_USAGE_UKNOWN,
         currentArgument.c_str()
       );
       skipNextArguments = true;
@@ -107,7 +107,7 @@ int Application::run(int argc, char *argv[]) {
   if(!configuration->loadFromFile()) {
     SDL_LogError(
       SDL_LOG_CATEGORY_APPLICATION,
-      _ (RDM_STR_CFG_LOAD_ERROR),
+      RDM_STR_CFG_LOAD_ERROR,
       configuration->getConfigurationLoadError().c_str()
     );
     exitStatus = RDM_ERR_SETTINGS_ERROR;
@@ -129,7 +129,7 @@ int Application::run(int argc, char *argv[]) {
     do {
       lastResponse = currentStage->execute();
       currentStage = lastResponse.nextStage;
-    } while (lastResponse.status!=0 and RDM_STAGE_EXIT!=currentStage);
+    } while (lastResponse.status!=0 && RDM_STAGE_EXIT!=currentStage);
     exitStatus = lastResponse.status;
 
   }

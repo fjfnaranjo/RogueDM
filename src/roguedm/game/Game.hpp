@@ -32,7 +32,7 @@ class Game :
          roguedm::GameComponentInterface
 {
 
-  RDM_DECLARE_CLASS_AS_NOCPNOMV(Game);
+  RDM_DECLARE_CLASS_AS_NOCPNOMV(Game)
 
   public:
 

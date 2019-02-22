@@ -17,8 +17,8 @@
 
 #include "Network.hpp"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_net.h>
+#include <SDL.h>
+#include <SDL_net.h>
 
 #include "../strings.hpp"
 
@@ -32,16 +32,16 @@ Network::Network() {
 Network::~Network() {
   if(initSuccess)
     SDLNet_Quit();
-};
+}
 
 bool Network::initNetwork() {
   if(-1==SDLNet_Init()) {
-    SDL_Log(_(RDM_STR_SDL_NET_ERROR), SDLNet_GetError());
+    SDL_Log(RDM_STR_SDL_NET_ERROR, SDLNet_GetError());
     return false;
   }
   initSuccess = true;
   return true;
-};
+}
 
 void Network::update() {}
 

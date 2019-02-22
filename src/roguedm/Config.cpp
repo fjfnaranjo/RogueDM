@@ -20,7 +20,7 @@
 #include <cstring>
 #include <fstream>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "strings.hpp"
 
@@ -140,17 +140,21 @@ bool Config::getSettingBoolValue(
 bool Config::makeConfigFile() {
 
   std::ifstream cfgFileIn(
-    RDM_PATH_HERE RDM_PATH_SHARE RDM_PATH_SEP "config.ini",
+    translate_path_separator(
+      RDM_PATH_HERE RDM_PATH_SHARE RDM_PATH_SEP "config.ini"
+    ),
     std::ios_base::binary
   );
   if(!cfgFileIn) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,_ (RDM_STR_CFG_BASE_ERROR));
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,RDM_STR_CFG_BASE_ERROR);
     configurationLoadError = std::strerror(errno);
     return false;
   }
 
   std::ofstream cfgFileOut(
-    RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
+    translate_path_separator(
+      RDM_PATH_HERE RDM_PATH_SEP RDM_PATH_CONFIG RDM_PATH_SEP "config.ini"
+    ),
     std::ios_base::binary
   );
   if(!cfgFileOut) {
@@ -171,19 +175,23 @@ bool Config::makeConfigFile() {
 bool Config::openConfigFile(std::ifstream &aFile) {
 
   aFile.open(
-    RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
+    translate_path_separator(
+      RDM_PATH_HERE RDM_PATH_SEP RDM_PATH_CONFIG RDM_PATH_SEP "config.ini"
+    ),
     std::ios_base::in
   );
 
   // If opening the config file fails create a new one from the base.
   if(!aFile) {
 
-    SDL_Log(_ (RDM_STR_CFG_CREATE_NEW));
+    SDL_Log(RDM_STR_CFG_CREATE_NEW);
     if(!makeConfigFile())
       return false;
 
     aFile.open(
-      RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
+      translate_path_separator(
+        RDM_PATH_HERE RDM_PATH_SEP RDM_PATH_CONFIG RDM_PATH_SEP "config.ini"
+      ),
       std::ios_base::in
     );
     if(!aFile) {
@@ -225,7 +233,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
 
       // .. if we were parsing a section name, raise an error
       if(inSection) {
-        configurationLoadError = _ (RDM_STR_PARSER_INCP_SEC);
+        configurationLoadError = RDM_STR_PARSER_INCP_SEC;
         return false;
       }
 
@@ -233,7 +241,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
       if (inValue) {
         SDL_LogDebug(
           SDL_LOG_CATEGORY_APPLICATION,
-          _ (RDM_STR_CFG_DEBUG),
+          RDM_STR_CFG_DEBUG,
           currentSection.c_str(),
           currentSetting.c_str(),
           currentContent.c_str()
@@ -256,7 +264,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     if (ch==RDM_CFG_PARSER_COMMENT) {
       // but fail if we were parsing something else
       if(inSection || inValue || !currentContent.empty() ) {
-        configurationLoadError = _ (RDM_STR_PARSER_CMT_OOP);
+        configurationLoadError = RDM_STR_PARSER_CMT_OOP;
         return false;
       }
       inComment = true;
@@ -267,7 +275,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     if (ch==RDM_CFG_PARSER_GROUP_START) {
       // but fail if we were parsing something else
       if(inSection || inValue || !currentContent.empty() ) {
-        configurationLoadError = _ (RDM_STR_PARSER_SEC_OOP);
+        configurationLoadError = RDM_STR_PARSER_SEC_OOP;
         return false;
       }
       inSection = true;
@@ -278,12 +286,12 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     if (inSection && ch==RDM_CFG_PARSER_GROUP_END) {
       // sections can't be empty
       if(currentContent.empty()) {
-        configurationLoadError = _ (RDM_STR_PARSER_SEC_EMTY);
+        configurationLoadError = RDM_STR_PARSER_SEC_EMTY;
         return false;
       }
       // section ends can't overlap values
       if(inValue) {
-        configurationLoadError = _ (RDM_STR_PARSER_SEC_IVA);
+        configurationLoadError = RDM_STR_PARSER_SEC_IVA;
         return false;
       }
       currentSection = currentContent.substr(0, currentContent.length());
@@ -296,7 +304,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     if (ch==RDM_CFG_PARSER_VALUE_SEP) {
       // fail if not after a setting
       if(currentContent.empty()) {
-        configurationLoadError = _ (RDM_STR_PARSER_VSP_OOP);
+        configurationLoadError = RDM_STR_PARSER_VSP_OOP;
         return false;
       }
       currentSetting = currentContent.substr(0, currentContent.length());

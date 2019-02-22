@@ -36,7 +36,7 @@ namespace roguedm {
 class Network : CommandHandlerInterface, GameComponentInterface
 {
 
-  RDM_DECLARE_CLASS_AS_NOCPNOMV(Network);
+  RDM_DECLARE_CLASS_AS_NOCPNOMV(Network)
 
   public:
 

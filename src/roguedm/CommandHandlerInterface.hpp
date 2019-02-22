@@ -39,7 +39,7 @@ namespace roguedm {
 class CommandHandlerInterface
 {
 
-  RDM_DECLARE_CLASS_AS_INTERFACE(CommandHandlerInterface);
+  RDM_DECLARE_CLASS_AS_INTERFACE(CommandHandlerInterface)
 
   public:
 

@@ -63,7 +63,7 @@ bool Sdl2IO::initSdl2IO() {
   if(0!=SDL_Init(SDL_INIT_VIDEO)) {
     SDL_LogError(
       SDL_LOG_CATEGORY_APPLICATION,
-      _(RDM_STR_SDL_ERROR),
+      RDM_STR_SDL_ERROR,
       SDL_GetError()
     );
     return false;
@@ -79,7 +79,7 @@ bool Sdl2IO::initSdl2IO() {
   if(createStatus || NULL==window || NULL==renderer) {
     SDL_LogError(
       SDL_LOG_CATEGORY_APPLICATION,
-      _(RDM_STR_SDL_ERROR),
+      RDM_STR_SDL_ERROR,
       SDL_GetError()
     );
     SDL_Quit();
@@ -93,7 +93,7 @@ bool Sdl2IO::initSdl2IO() {
   if(!initCharmaps()) {
     SDL_LogError(
       SDL_LOG_CATEGORY_APPLICATION,
-      _(RDM_STR_SDL_ERROR),
+      RDM_STR_SDL_ERROR,
       SDL_GetError()
     );
     SDL_DestroyRenderer(renderer);
@@ -436,8 +436,8 @@ void Sdl2IO::eventsManager() {
 void Sdl2IO::resetScreenSize() {
   int ww, wh;
   SDL_GetWindowSize(window, &ww, &wh);
-  maxCols=floor(ww/defaultCWidth)-1;
-  maxRows=floor(wh/defaultCHeight)-1;
+  maxCols=(int)floor(ww/defaultCWidth)-1;
+  maxRows=(int)floor(wh/defaultCHeight)-1;
 }
 
 bool Sdl2IO::initCharmaps() {

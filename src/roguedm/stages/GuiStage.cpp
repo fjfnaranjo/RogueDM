@@ -52,7 +52,7 @@ StageResponse GuiStage::execute() {
       return {status, RDM_STAGE_EXIT};
     }
   } else {
-    SDL_Log(_(RDM_STR_NOT_NETWORKING));
+    SDL_Log(RDM_STR_NOT_NETWORKING);
   }
 
   // input checking and scene drawing (game loop)

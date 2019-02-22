@@ -20,7 +20,7 @@
 #include <map>
 #include <string>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "../Config.hpp"
 #include "../commands.hpp"
@@ -61,19 +61,19 @@ class CharmapStamper {
     /**
      * Returns the character size for all enclosing decoration characters.
      */
-    int decoratorsLength(int) const;
+    unsigned int decoratorsLength(int) const;
 
     /**
      * Returns the character size for the left enclosing decoration
      * characters.
      */
-    int lDecoratorsLength(int) const;
+    unsigned int lDecoratorsLength(int) const;
 
     /**
      * Returns the character size for the right enclosing decoration
      * characters.
      */
-    int rDecoratorsLength(int) const;
+    unsigned int rDecoratorsLength(int) const;
 
     /** Returns the character height for the charmap. */
     int getCHeight() const;
@@ -204,12 +204,12 @@ class CharmapStamper {
     SDL_Texture* colorizeWordType(
       SDL_Renderer* renderer,
       SDL_Surface* srf,
-      int rf,
-      int gf,
-      int bf,
-      int br,
-      int bg,
-      int bb
+      int fgr,
+      int fgg,
+      int fgb/*,
+      int bgr,
+      int bgg,
+      int bgb*/
     );
 
     /**

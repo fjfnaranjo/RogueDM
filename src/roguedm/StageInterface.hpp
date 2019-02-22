@@ -55,7 +55,7 @@ struct StageResponse {
 class StageInterface
 {
 
-  RDM_DECLARE_CLASS_AS_INTERFACE(StageInterface);
+  RDM_DECLARE_CLASS_AS_INTERFACE(StageInterface)
 
   public:
 

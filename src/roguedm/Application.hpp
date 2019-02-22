@@ -31,7 +31,7 @@ namespace roguedm {
  */
 class Application {
 
-  RDM_DECLARE_CLASS_AS_NOCPNOMV(Application);
+  RDM_DECLARE_CLASS_AS_NOCPNOMV(Application)
 
   public:
 
