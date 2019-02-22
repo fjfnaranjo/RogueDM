@@ -101,6 +101,8 @@ int Application::run(int argc, char *argv[]) {
   // System locale
   setlocale(LC_ALL, "");
 
+  process_verbosity(argc, argv);
+
   ConfigSharedPtr configuration = Config::instance();
 
   // Load configuration
@@ -113,8 +115,6 @@ int Application::run(int argc, char *argv[]) {
     exitStatus = RDM_ERR_SETTINGS_ERROR;
     keepRunning = false;
   }
-
-  process_verbosity(argc, argv);
 
   // Parse program arguments
   if(keepRunning)
