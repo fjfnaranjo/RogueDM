@@ -24,5 +24,3 @@
 
 #define RDM_PATH_CONFIG   "env/config"
 #define RDM_PATH_SHARE    "env/share"
-#define RDM_PATH_HERE     "."
-#define RDM_PATH_SEP      "/"

@@ -140,9 +140,7 @@ bool Config::getSettingBoolValue(
 bool Config::makeConfigFile() {
 
   std::ifstream cfgFileIn(
-    translate_path_separator(
-      RDM_PATH_HERE RDM_PATH_SHARE RDM_PATH_SEP "config.ini"
-    ),
+    RDM_PATH_HERE RDM_PATH_SHARE RDM_PATH_SEP "config.ini",
     std::ios_base::binary
   );
   if(!cfgFileIn) {
@@ -152,9 +150,7 @@ bool Config::makeConfigFile() {
   }
 
   std::ofstream cfgFileOut(
-    translate_path_separator(
-      RDM_PATH_HERE RDM_PATH_SEP RDM_PATH_CONFIG RDM_PATH_SEP "config.ini"
-    ),
+    RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
     std::ios_base::binary
   );
   if(!cfgFileOut) {
@@ -175,9 +171,7 @@ bool Config::makeConfigFile() {
 bool Config::openConfigFile(std::ifstream &aFile) {
 
   aFile.open(
-    translate_path_separator(
-      RDM_PATH_HERE RDM_PATH_SEP RDM_PATH_CONFIG RDM_PATH_SEP "config.ini"
-    ),
+    RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
     std::ios_base::in
   );
 
@@ -189,9 +183,7 @@ bool Config::openConfigFile(std::ifstream &aFile) {
       return false;
 
     aFile.open(
-      translate_path_separator(
-        RDM_PATH_HERE RDM_PATH_SEP RDM_PATH_CONFIG RDM_PATH_SEP "config.ini"
-      ),
+      RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
       std::ios_base::in
     );
     if(!aFile) {

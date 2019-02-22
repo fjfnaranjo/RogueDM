@@ -33,12 +33,4 @@ std::string format_string(const char* format, ...) {
   return std::string(buffer);
 }
 
-std::string translate_path_separator(std::string path) {
-  std::string path_string = path;
-  if(0==strcmp(RDM_PATH_SEP, RDM_PATH_LINUX_SEP))
-    return path_string;
-  std::regex_replace(path_string, std::regex(RDM_PATH_LINUX_SEP), RDM_PATH_SEP);
-  return path_string;
-}
-
 }

@@ -62,15 +62,13 @@ bool CharmapStamper::loadDefaultCharmap(
 ) {
 
   // Default charmap texture file path
-  std::string defaultCharmapPath = roguedm::translate_path_separator(
+  std::string defaultCharmapPath =
     std::string(RDM_PATH_HERE) +
-    std::string(RDM_PATH_SEP) +
     std::string(RDM_PATH_SHARE) +
     std::string(RDM_PATH_SEP) +
     config->getSettingValue(
       defaultCharmap, "path", "imgs/codepage-850-9-14.png"
-    )
-  );
+    );
 
   // Texture data
   txtCHeight = config->getSettingIntValue(defaultCharmap, "txtCHeight", 14);
