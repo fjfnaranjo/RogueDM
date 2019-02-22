@@ -146,7 +146,7 @@ bool Config::makeConfigFile() {
     std::ios_base::binary
   );
   if(!cfgFileIn) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,RDM_STR_CFG_BASE_ERROR);
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, RDM_STR_CFG_BASE_ERROR);
     configurationLoadError = std::strerror(errno);
     return false;
   }
