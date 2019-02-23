@@ -22,17 +22,10 @@
 
 #include <SDL.h>
 
-#include "CharmapStamper.hpp"
+#include "Gui.hpp"
 #include "../CommandHandlerInterface.hpp"
 #include "../Config.hpp"
 #include "../GameComponentInterface.hpp"
-
-// Max command history lines..
-#define RDM_CL_MAX_HISTORY         128
-
-// Command's words.
-#define RDM_CMD_QUIT         u8"quit"       // End app.
-#define RDM_CMD_PSAY         u8"psay"       // Player say to all.
 
 namespace roguedm_gui {
 
@@ -75,18 +68,18 @@ class Sdl2IO :
     /**
      * Used to ask the command handler a response for a command.
      */
-    int processCommand(const roguedm::Sentence&) override;
+    int processCommand(const roguedm::SentenceReference&) override;
 
     /**
      * Used to ask the command handler an autocomplete suggestion.
      */
-    int autocomplete(roguedm::Sentence&) const override;
+    int autocomplete(const roguedm::SentenceReference&) const override;
 
     /**
      * Used to ask the command handler an autocomplete candidate list.
      */
     roguedm::SentenceListReference autocompleteListOptions(
-      const roguedm::Sentence&
+      const roguedm::SentenceReference&
     ) const override;
 
     /**
@@ -118,32 +111,17 @@ class Sdl2IO :
      */
     void eventsManager();
 
-    /** Updates the screen if window resizes. */
-    void resetScreenSize();
-
-    /** Define the initial word type table. */
-    bool initCharmaps();
-
-    /** Reser the command line and its history navigation cursor */
-    void resetLine();
-
     /** Manage a text composition from the SDL events manager */
     void processText(SDL_Event*);
 
     /** Manage a key sent from the SDL events manager */
     void processKey(SDL_Event*);
 
-    /** Process the command line. */
-    void processLine();
-
     /** Try to find a valid autocompletion for the current command. */
     void tryAutocompletion();
 
-    /**
-     * Set a new default word.
-     * \param c The new word.
-     */
-    void setDefaultWord(roguedm::Word c);
+    /** Process the command line. */
+    void processLine();
 
     /** App configuration singleton reference. */
     roguedm::ConfigSharedPtr config;
@@ -154,9 +132,6 @@ class Sdl2IO :
     /** Keep the SDL_GetTicks return value to implement a FPS lock. */
     int ticks;
 
-    /** The default word to add when the user autocompletes an empty line. */
-    roguedm::Word defaultWord;
-
     /** The command handlers list. */
     std::vector<CommandHandlerInterface*> commandHandlers;
 
@@ -166,59 +141,8 @@ class Sdl2IO :
     /** SDL main rendering surface */
     SDL_Renderer *renderer = nullptr;
 
-    /** The current command line contents. */
-    roguedm::Sentence commandLine;
-
-    /** The current command line contents. */
-    roguedm::SentenceList consoleHistory;
-
-    /** Sentences vector for the history. */
-    roguedm::SentenceList history;
-
-    /**
-     * Sentence currently written when the player starts using the history
-     * exploration control
-     */
-    roguedm::Sentence historyBackup;
-
-    /** Character width of the default charmap. */
-    int defaultCWidth;
-
-    /** Character height of the default charmap. */
-    int defaultCHeight;
-
-    /** Screen size in columns. */
-    int maxCols;
-
-    /** Screen size in rows. */
-    int maxRows;
-
-    /** Line exploration current displacement in words. */
-    int currentWord;
-
-    /** Line exploration current displacement in characters. */
-    int wordRShift;
-
-    /** Current history position when using up-down keys. */
-    int historyCurrent;
-
-    /** Coordinates for the main window inside the terminal. */
-    SDL_Rect dialogMain;
-
-    /** Coordinates for the cell info window inside the terminal. */
-    SDL_Rect dialogCell;
-
-    /** Coordinates for the creature info window inside the terminal. */
-    SDL_Rect dialogCreature;
-
-    /** Coordinates for the players info window inside the terminal. */
-    SDL_Rect dialogPlayers;
-
-    /** Coordinates for the text window inside the terminal. */
-    SDL_Rect dialogText;
-
-    /** Shared pointer to the default charmap drawing class. */
-    std::unique_ptr<CharmapStamper> defaultStamper;
+    /** Unique pointer to the default GUI drawing class. */
+    std::unique_ptr<Gui> gui;
 
 };
 

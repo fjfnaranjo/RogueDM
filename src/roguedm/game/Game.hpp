@@ -41,18 +41,18 @@ class Game :
     /**
      * Used to ask the command handler a response for a command.
      */
-    int processCommand(const roguedm::Sentence&) override;
+    int processCommand(const roguedm::SentenceReference&) override;
 
     /**
      * Used to ask the command handler an autocomplete suggestion.
      */
-    int autocomplete(roguedm::Sentence&) const override;
+    int autocomplete(const roguedm::SentenceReference&) const override;
 
     /**
      * Used to ask the command handler an autocomplete candidate list.
      */
     roguedm::SentenceListReference autocompleteListOptions(
-      const roguedm::Sentence&
+      const roguedm::SentenceReference&
     ) const override;
 
     /**

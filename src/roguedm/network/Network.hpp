@@ -55,18 +55,18 @@ class Network : CommandHandlerInterface, GameComponentInterface
     /**
      * Used to ask the command handler a response for a command.
      */
-    int processCommand(const Sentence&) override;
+    int processCommand(const SentenceReference&) override;
 
     /**
      * Used to ask the command handler an autocomplete suggestion.
      */
-    int autocomplete(Sentence&) const override;
+    int autocomplete(const SentenceReference&) const override;
 
     /**
      * Used to ask the command handler an autocomplete candidate list.
      */
-    SentenceListReference autocompleteListOptions(const Sentence&) const
-      override;
+    SentenceListReference autocompleteListOptions(const SentenceReference&)
+      const override;
 
   private:
 

@@ -45,16 +45,16 @@ bool Network::initNetwork() {
 
 void Network::update() {}
 
-int Network::processCommand(const Sentence& a) {
+int Network::processCommand(const SentenceReference&) {
   return RDM_COMMAND_UNKNOWN;
 }
 
-int Network::autocomplete(Sentence& a) const {
+int Network::autocomplete(const SentenceReference&) const {
   return RDM_COMMAND_AC_NEXT;
 }
 
 SentenceListReference Network::autocompleteListOptions(
-  const Sentence& a
+  const SentenceReference&
 ) const {
   return std::make_shared<SentenceList>();
 }
