@@ -101,6 +101,7 @@ bool Sdl2IO::initSdl2IO() {
 
 void Sdl2IO::resetSdl2IO() {
   if(initSuccess) {
+    gui->resetGui();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
