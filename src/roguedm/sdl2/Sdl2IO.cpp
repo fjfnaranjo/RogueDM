@@ -122,8 +122,8 @@ void Sdl2IO::update() {
 
 }
 
-int Sdl2IO::processCommand(const roguedm::SentenceReference &a) {
-  if(a->begin()[0].wordContent==RDM_CMD_QUIT && a->begin()[0].wordClass==RDM_WCLASS_COMMAND) {
+int Sdl2IO::processCommand(const roguedm::Sentence &a) {
+  if(a.begin()[0].wordContent==RDM_CMD_QUIT && a.begin()[0].wordClass==RDM_WCLASS_COMMAND) {
     appDone = 1;
     return RDM_COMMAND_DONE;
   }
@@ -131,11 +131,11 @@ int Sdl2IO::processCommand(const roguedm::SentenceReference &a) {
   return RDM_COMMAND_DONE;
 }
 
-int Sdl2IO::autocomplete(const roguedm::SentenceReference &a) const {
+int Sdl2IO::autocomplete(roguedm::Sentence &a) const {
 
   // quit command completion
-  if(a->begin()[0].wordContent==RDM_CMD_QUIT && a->begin()[0].wordClass==RDM_WCLASS_NORMAL) {
-    a->begin()[0].wordClass=RDM_WCLASS_COMMAND;
+  if(a.begin()[0].wordContent==RDM_CMD_QUIT && a.begin()[0].wordClass==RDM_WCLASS_NORMAL) {
+    a.begin()[0].wordClass=RDM_WCLASS_COMMAND;
     return RDM_COMMAND_AC_COMPLETED;
   }
 
@@ -143,8 +143,8 @@ int Sdl2IO::autocomplete(const roguedm::SentenceReference &a) const {
 
 }
 
-roguedm::SentenceListReference Sdl2IO::autocompleteListOptions(
-  const roguedm::SentenceReference &a
+roguedm::SentenceListSharedPtr Sdl2IO::autocompleteListOptions(
+  const roguedm::Sentence &a
 ) const {
 
   roguedm::Word psayCmd;
@@ -155,12 +155,12 @@ roguedm::SentenceListReference Sdl2IO::autocompleteListOptions(
   quitCmd.wordContent = RDM_CMD_QUIT;
   quitCmd.wordClass = RDM_WCLASS_COMMAND;
 
-  if(a->size()==1 && multibyteLenght(a->begin()[0].wordContent)==0) {
+  if(a.size()==1 && multibyteLenght(a.begin()[0].wordContent)==0) {
 
-    roguedm::SentenceListReference l =
+    roguedm::SentenceListSharedPtr l =
         std::make_shared<roguedm::SentenceList>();
 
-    roguedm::SentenceReference o =
+    roguedm::SentenceSharedPtr o =
         std::make_shared<roguedm::Sentence>();
 
     o->push_back(psayCmd);
@@ -313,8 +313,8 @@ void Sdl2IO::processKey(SDL_Event* event) {
 
 void Sdl2IO::tryAutocompletion() {
 
-  roguedm::SentenceReference commandLine = gui->getCommandLine();
-  roguedm::SentenceListReference options;
+  roguedm::Sentence commandLine = gui->getCommandLine();
+  roguedm::SentenceListSharedPtr options;
 
   // check for empty line to list all commands
   if(0==gui->commandLength()) {
@@ -335,8 +335,10 @@ void Sdl2IO::tryAutocompletion() {
   // Process action
   for(const auto & commandHandler : commandHandlers) {
 
-    if(RDM_COMMAND_AC_COMPLETED==commandHandler->autocomplete(commandLine))
+    if(RDM_COMMAND_AC_COMPLETED==commandHandler->autocomplete(commandLine)) {
+      gui->setCommandLine(commandLine);
       break;
+    }
 
     options = commandHandler->autocompleteListOptions(commandLine);
 
@@ -354,21 +356,28 @@ void Sdl2IO::tryAutocompletion() {
 
 void Sdl2IO::processLine() {
 
-  roguedm::SentenceReference currentCommand = gui->getCommandLine();
-  if(currentCommand->begin()[0].wordContent == RDM_WEMPTY)
+  if(0==gui->commandLength())
     return;
+
+  roguedm::Sentence currentCommand = gui->getCommandLine();
+
+  // TODO: Move this responsibility to other place
+  if(currentCommand[0].wordClass==RDM_WCLASS_NORMAL) {
+    roguedm::Word newPsayCommand;
+    newPsayCommand.wordContent = RDM_CMD_PSAY;
+    newPsayCommand.wordClass = RDM_WCLASS_COMMAND;
+    currentCommand.insert(currentCommand.begin(), newPsayCommand);
+  }
 
   // Process action
   for(const auto & commandHandler : commandHandlers)
     if(RDM_COMMAND_DONE==commandHandler->processCommand(currentCommand)) {
 
-      roguedm::Sentence newCommand = roguedm::Sentence(*currentCommand);
-
       // Push the command in the historic
-      gui->commandHistoryPush(newCommand);
+      gui->commandHistoryPush(currentCommand);
 
       // Print the command to the console
-      gui->consoleHistoryPush(newCommand);
+      gui->consoleHistoryPush(currentCommand);
 
       // Reset the history pointer
       gui->resetHistoryCurrent();

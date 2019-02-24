@@ -43,7 +43,8 @@ class Gui {
     ~Gui();
     void update(SDL_Renderer*);
     bool initGui(SDL_Renderer*);
-    roguedm::SentenceReference getCommandLine();
+    roguedm::Sentence getCommandLine();
+    void setCommandLine(const roguedm::Sentence&);
     int commandLength();
     bool hasCommand();
     void addReplaceCommand();

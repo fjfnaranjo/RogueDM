@@ -259,8 +259,12 @@ bool Gui::initGui(SDL_Renderer *renderer) {
 
 }
 
-roguedm::SentenceReference Gui::getCommandLine() {
-  return std::make_shared<roguedm::Sentence>(commandLine);
+roguedm::Sentence Gui::getCommandLine() {
+  return commandLine;
+}
+
+void Gui::setCommandLine(const roguedm::Sentence& newCommandLine) {
+  commandLine = newCommandLine;
 }
 
 int Gui::commandLength() {

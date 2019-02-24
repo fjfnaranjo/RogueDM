@@ -19,6 +19,8 @@
 
 #include "commands.hpp"
 
+// TODO: This should be bool
+
 #define RDM_COMMAND_DONE    0
 #define RDM_COMMAND_UNKNOWN 1
 
@@ -44,37 +46,44 @@ class CommandHandlerInterface
   public:
 
     /**
-     * \brief Used to ask the command handler a response for a command.
+     * \brief Request to process a command.
+     *
+     * Used to ask a command handler to process a command if he can.
      *
      * If a command handler returns \ref RDM_COMMAND_DONE, the command can
      * be considered completed. If it returns \ref RDM_COMMAND_UNKNOWN, the
      * command should be issued to another command handler.
-     * \param s The command sentence.
-     * \return 0 or 1, see method description.
+     * \param command The command.
+     * \return See method description.
      */
-    virtual int processCommand(const SentenceReference& s) =0;
+    virtual int processCommand(const Sentence& command) =0;
 
     /**
-     * \brief Used to ask the command handler an autocomplete suggestion.
+     * \brief Request to autocomplete a command.
      *
-     * Modify the command sentence and complete it if possible, returning
+     * Used to ask a command handler to autocomplete a partial command if he
+     * can.
+     *
+     * It will complete the command it if possible, returning
      * \ref RDM_COMMAND_AC_COMPLETED on success or \ref RDM_COMMAND_AC_NEXT to
      * signify that another command handler should try to complete it.
-     * \param[out] s The command sentence.
+     * \param[out] command The command.
      * \return 0 or 1, see method description.
      */
-    virtual int autocomplete(const SentenceReference& s) const =0;
+    virtual int autocomplete(Sentence& command) const =0;
+
+    // TODO: Check if we should return by copy instead
 
     /**
-     * \brief Used to ask the command handler an autocomplete candidate list.
+     * \brief Request a list of autocomplete options.
      *
      * This method builds an autocomplete candidate list for the current
      * command or an empty list if there is not valid complete options.
-     * \param s A reference to the current command line.
-     * \return The Sentence vector or an empty one.
+     * \param command The current command.
+     * \return The list of valid autocomplete options.
      */
-    virtual SentenceListReference autocompleteListOptions(
-      const SentenceReference& s
+    virtual SentenceListSharedPtr autocompleteListOptions(
+      const Sentence& command
     ) const =0;
 
 };

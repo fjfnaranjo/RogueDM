@@ -21,15 +21,15 @@
 
 namespace roguedm_game {
 
-int Game::processCommand(const roguedm::SentenceReference&) {
+int Game::processCommand(const roguedm::Sentence&) {
   return RDM_COMMAND_UNKNOWN;
 }
-int Game::autocomplete(const roguedm::SentenceReference&) const {
+int Game::autocomplete(roguedm::Sentence&) const {
   return RDM_COMMAND_AC_NEXT;
 }
 
-roguedm::SentenceListReference Game::autocompleteListOptions(
-  const roguedm::SentenceReference&
+roguedm::SentenceListSharedPtr Game::autocompleteListOptions(
+  const roguedm::Sentence&
 ) const {
   return std::make_shared<roguedm::SentenceList>();
 }

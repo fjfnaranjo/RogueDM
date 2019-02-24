@@ -68,18 +68,18 @@ class Sdl2IO :
     /**
      * Used to ask the command handler a response for a command.
      */
-    int processCommand(const roguedm::SentenceReference&) override;
+    int processCommand(const roguedm::Sentence&) override;
 
     /**
      * Used to ask the command handler an autocomplete suggestion.
      */
-    int autocomplete(const roguedm::SentenceReference&) const override;
+    int autocomplete(roguedm::Sentence&) const override;
 
     /**
      * Used to ask the command handler an autocomplete candidate list.
      */
-    roguedm::SentenceListReference autocompleteListOptions(
-      const roguedm::SentenceReference&
+    roguedm::SentenceListSharedPtr autocompleteListOptions(
+      const roguedm::Sentence&
     ) const override;
 
     /**

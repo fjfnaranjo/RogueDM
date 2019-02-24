@@ -69,13 +69,13 @@ struct Word {
 /** \brief Word's vector to contain full sentences. */
 typedef std::vector<Word> Sentence;
 
-/** \brief Reference to a sentence. */
-typedef std::shared_ptr<Sentence> SentenceReference;
+/** \brief Shared pointer to a sentence. */
+typedef std::shared_ptr<Sentence> SentenceSharedPtr;
 
 /** \brief Senteces's vector to contain a list of sentences. */
 typedef std::vector<Sentence> SentenceList;
 
-/** \brief Reference to a vector of sentences. */
-typedef std::shared_ptr<SentenceList> SentenceListReference;
+/** \brief Shared pointer to a vector of sentences. */
+typedef std::shared_ptr<SentenceList> SentenceListSharedPtr;
 
 } // namespace roguedm
