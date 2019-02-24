@@ -22,34 +22,20 @@
 
 #include <SDL.h>
 
-#include "CharmapStamper.hpp"
-#include "../CommandHandlerInterface.hpp"
+#include "Gui.hpp"
 #include "../Config.hpp"
 #include "../GameComponentInterface.hpp"
-
-// Max command history lines..
-#define RDM_CL_MAX_HISTORY         128
-
-// Command's words.
-#define RDM_CMD_QUIT         u8"quit"       // End app.
-#define RDM_CMD_PSAY         u8"psay"       // Player say to all.
+#include "../commands/CommandHandlerInterface.hpp"
 
 namespace roguedm_gui {
 
-/** \brief Struct Player for the name and so. */
-struct Player {
-  std::string name;
-  WordClass word;
-};
-
 /**
- * \brief The interface management class.
+ * \brief Manages the fundamental SDL2 state and interactions between the GUI
+ *        and other IO classes.
  *
  * Manage the SDL interface with the player. The console graphical output and
  * the texts input. Also handles the vast majority of the console command line
  * features.
- *
- * Pattern Singleton.
  */
 class Sdl2IO :
     roguedm::CommandHandlerInterface,
@@ -63,31 +49,25 @@ class Sdl2IO :
     Sdl2IO();
     ~Sdl2IO();
 
-    /** SDL resources class initializer */
+    /** Init state and SDL2 resources. */
     bool initSdl2IO();
 
-    /**
-     * Method used when the main app has time to allow a network management
-     * step from the game loop.
-     */
+    /** Clear the state and free SDL2 resources. */
+    void resetSdl2IO();
+
+    /** Update the state each game tick and interact with SDL2. */
     void update() override;
 
-    /**
-     * Used to ask the command handler a response for a command.
-     */
-    int processCommand(const roguedm::Sentence&) override;
+    /** Request to process a command. */
+    bool processCommand(const roguedm::Command&) override;
 
-    /**
-     * Used to ask the command handler an autocomplete suggestion.
-     */
-    int autocomplete(roguedm::Sentence&) const override;
+    /** Request to identify a command in a sentence. */
+    bool identifyCommand(const roguedm::Sentence&, roguedm::Command&)
+      const override;
 
-    /**
-     * Used to ask the command handler an autocomplete candidate list.
-     */
-    roguedm::SentenceListReference autocompleteListOptions(
-      const roguedm::Sentence&
-    ) const override;
+    /** Request a list of autocomplete options for a command. */
+    roguedm::CommandList getCompletionCandidates(const roguedm::Command&)
+      const override;
 
     /**
      * Add a new command handler to the internal list, after erasing any
@@ -118,32 +98,17 @@ class Sdl2IO :
      */
     void eventsManager();
 
-    /** Updates the screen if window resizes. */
-    void resetScreenSize();
-
-    /** Define the initial word type table. */
-    bool initCharmaps();
-
-    /** Reser the command line and its history navigation cursor */
-    void resetLine();
-
     /** Manage a text composition from the SDL events manager */
     void processText(SDL_Event*);
 
     /** Manage a key sent from the SDL events manager */
     void processKey(SDL_Event*);
 
-    /** Process the command line. */
-    void processLine();
-
     /** Try to find a valid autocompletion for the current command. */
     void tryAutocompletion();
 
-    /**
-     * Set a new default word.
-     * \param c The new word.
-     */
-    void setDefaultWord(roguedm::Word c);
+    /** Process the command line. */
+    void processLine();
 
     /** App configuration singleton reference. */
     roguedm::ConfigSharedPtr config;
@@ -154,9 +119,6 @@ class Sdl2IO :
     /** Keep the SDL_GetTicks return value to implement a FPS lock. */
     int ticks;
 
-    /** The default word to add when the user autocompletes an empty line. */
-    roguedm::Word defaultWord;
-
     /** The command handlers list. */
     std::vector<CommandHandlerInterface*> commandHandlers;
 
@@ -166,59 +128,8 @@ class Sdl2IO :
     /** SDL main rendering surface */
     SDL_Renderer *renderer = nullptr;
 
-    /** The current command line contents. */
-    roguedm::Sentence commandLine;
-
-    /** The current command line contents. */
-    roguedm::SentenceList consoleHistory;
-
-    /** Sentences vector for the history. */
-    roguedm::SentenceList history;
-
-    /**
-     * Sentence currently written when the player starts using the history
-     * exploration control
-     */
-    roguedm::Sentence historyBackup;
-
-    /** Character width of the default charmap. */
-    int defaultCWidth;
-
-    /** Character height of the default charmap. */
-    int defaultCHeight;
-
-    /** Screen size in columns. */
-    int maxCols;
-
-    /** Screen size in rows. */
-    int maxRows;
-
-    /** Line exploration current displacement in words. */
-    int currentWord;
-
-    /** Line exploration current displacement in characters. */
-    int wordRShift;
-
-    /** Current history position when using up-down keys. */
-    int historyCurrent;
-
-    /** Coordinates for the main window inside the terminal. */
-    SDL_Rect dialogMain;
-
-    /** Coordinates for the cell info window inside the terminal. */
-    SDL_Rect dialogCell;
-
-    /** Coordinates for the creature info window inside the terminal. */
-    SDL_Rect dialogCreature;
-
-    /** Coordinates for the players info window inside the terminal. */
-    SDL_Rect dialogPlayers;
-
-    /** Coordinates for the text window inside the terminal. */
-    SDL_Rect dialogText;
-
-    /** Shared pointer to the default charmap drawing class. */
-    std::unique_ptr<CharmapStamper> defaultStamper;
+    /** Unique pointer to the default GUI drawing class. */
+    std::unique_ptr<Gui> gui;
 
 };
 

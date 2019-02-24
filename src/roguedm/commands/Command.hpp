@@ -15,13 +15,35 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file paths.hpp
- * \brief File containing the paths used by the application and overridden at
- *        compile time.
- */
-
 #pragma once
 
-#define RDM_PATH_CONFIG   "env/config"
-#define RDM_PATH_SHARE    "env/share"
+#include <string>
+#include <vector>
+
+#include "Sentence.hpp"
+#include "Word.hpp"
+
+// Command's words.
+#define RDM_CMD_QUIT         u8"quit"       // End app.
+#define RDM_CMD_PSAY         u8"psay"       // Player say to all.
+
+namespace roguedm {
+
+/**
+ * \brief Struct to contain a command name and its parameters.
+ *
+ * A Command consist in a name identifying the particular command (its function)
+ * and a list of params.
+ */
+struct Command {
+  std::string name;
+  Sentence params;
+};
+
+/** \brief Command's vector to contain a list of commands. */
+typedef std::vector<Command> CommandList;
+
+/** \brief Shared pointer to a vector of commands. */
+typedef std::shared_ptr<CommandList> CommandListSharedPtr;
+
+} // namespace roguedm

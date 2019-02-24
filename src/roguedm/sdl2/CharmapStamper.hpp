@@ -19,32 +19,18 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 #include <SDL.h>
 
 #include "../Config.hpp"
-#include "../commands.hpp"
+#include "../commands/Sentence.hpp"
 
 namespace roguedm_gui {
 
 /**
- * Struct to define word-type colors and enclosing decorations.
+ * \brief Write over the screen using a character map.
  *
- * * fgColor: Color for the foreground.
- * * bgColor: Color for the background.
- * * lDecorator: Left-side of the enclosing decoration.
- * * rDecorator: Right-side of the enclosing decoration.
- * * texture: The actual texture with the colorization applied.
- */
-struct WordClass {
-  SDL_Color fgColor;
-  SDL_Color bgColor;
-  std::string lDecorator;
-  std::string rDecorator;
-  SDL_Texture *texture;
-};
-
-/**
  * This class is responsible of storing a particular character map (charmap)
  * image and use it to write characters to the screen.
  */
@@ -54,6 +40,9 @@ class CharmapStamper {
 
     CharmapStamper();
     ~CharmapStamper();
+
+    /** Clear the state and free SDL2 resources. */
+    void resetCharmapStamper();
 
     /** Loads a charmap image using the config section values for it. */
     bool loadDefaultCharmap(SDL_Renderer*, std::string);
@@ -122,7 +111,12 @@ class CharmapStamper {
       int
     );
 
-    /** Stamps the insertion point character in a particular coordinate. */
+    /**
+     * Stamps the insertion point character in a particular coordinate.
+     * \param renderer The SDL2 renderer pointer.
+     * \param x Exact x destination.
+     * \param y Exact y destination.
+     */
     void stampIp(
       SDL_Renderer*,
       int,
@@ -135,13 +129,14 @@ class CharmapStamper {
      * \param y Box starting y coordinate.
      * \param w Box width.
      * \param h Box height.
+     * \param renderer The SDL2 renderer pointer.
      */
     void drawBox(
       int x,
       int y,
       int w,
       int h,
-      SDL_Renderer*
+      SDL_Renderer* renderer
     );
 
     /**
@@ -150,12 +145,13 @@ class CharmapStamper {
      * \param x Separator starting x coordinate.
      * \param y Separator starting y coordinate.
      * \param s Separator length.
+     * \param renderer The SDL2 renderer pointer.
      */
     void drawHSeparator(
       int x,
       int y,
       int s,
-      SDL_Renderer*
+      SDL_Renderer *renderer
     );
 
     /**
@@ -164,23 +160,25 @@ class CharmapStamper {
      * \param x Separator starting x coordinate.
      * \param y Separator starting y coordinate.
      * \param s Separator length.
+     * \param renderer The SDL2 renderer pointer.
      */
     void drawVSeparator(
       int x,
       int y,
       int s,
-      SDL_Renderer*
+      SDL_Renderer *renderer
     );
 
     /**
      * Draws a ASCII 850 double cross character.
      * \param x Cross x coordinate.
      * \param y Cross y coordinate.
+     * \param renderer The SDL2 renderer pointer.
      */
     void drawCross(
       int x,
       int y,
-      SDL_Renderer*
+      SDL_Renderer *renderer
     );
 
   private:
@@ -279,8 +277,8 @@ class CharmapStamper {
     /** Texture horizontal first character position. */
     int txtWStart;
 
-    /** Table holding all the word types */
-    WordClass wordTypes[RDM_WCLASS_TOTAL];
+    /** Table holding all the word kinds textures */
+    std::vector<SDL_Texture *> wordKindTexture;
 
 };
 

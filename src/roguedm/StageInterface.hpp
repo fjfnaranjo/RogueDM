@@ -28,21 +28,21 @@
 
 namespace roguedm {
 
-// This is a forward declaration for usage in the StageInterfaceReference
+// This is a forward declaration for usage in the StageInterfaceSharedPtr
 // declaration.
 class StageInterface;
 
 /**
  * \brief Shared pointer to a stage.
  */
-typedef std::shared_ptr<StageInterface> StageInterfaceReference;
+typedef std::shared_ptr<StageInterface> StageInterfaceSharedPtr;
 
 /**
  * \brief Response for stages implementing the StageInterface.
  */
 struct StageResponse {
   int status;
-  StageInterfaceReference nextStage;
+  StageInterfaceSharedPtr nextStage;
 };
 
 /**

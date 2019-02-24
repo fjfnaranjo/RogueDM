@@ -17,10 +17,19 @@
 
 /**
  * \file strings.hpp
- * \brief File containing the strings used by the application CLI.
+ * \brief File containing the strings used by the application CLI and some
+ *        other values related to strings in the general sense.
  *
  * This file should be used to store all strings and templates exposed to the
  * application CLI interface.
+ *
+ * It will also be use to keep some important definitions related to strings:
+ *
+ * * Limits to string UTF8 processing.
+ * * Path components.
+ * * Settings error identification.
+ * * A function to apply printf style formatting to the definitions in this same
+ *   file.
  */
 
 #pragma once
@@ -68,6 +77,7 @@
 
 namespace roguedm {
 
+/** \brief Apply printf style formatting to a const char*. */
 std::string format_string(const char* format, ...);
 
 }

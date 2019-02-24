@@ -15,13 +15,25 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file paths.hpp
- * \brief File containing the paths used by the application and overridden at
- *        compile time.
- */
-
 #pragma once
 
-#define RDM_PATH_CONFIG   "env/config"
-#define RDM_PATH_SHARE    "env/share"
+#include <memory>
+#include <vector>
+
+#include "Word.hpp"
+
+namespace roguedm {
+
+/** \brief Word's vector to contain full sentences. */
+typedef std::vector<Word> Sentence;
+
+/** \brief Shared pointer to a sentence. */
+typedef std::shared_ptr<Sentence> SentenceSharedPtr;
+
+/** \brief Senteces's vector to contain a list of sentences. */
+typedef std::vector<Sentence> SentenceList;
+
+/** \brief Shared pointer to a vector of sentences. */
+typedef std::shared_ptr<SentenceList> SentenceListSharedPtr;
+
+} // namespace roguedm

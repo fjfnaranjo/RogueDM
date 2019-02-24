@@ -15,6 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * \file mbtools.hpp
+ * \brief Functions to handle std::string objects with UTF8 encoded text.
+ */
+
 #pragma once
 
 #include <string>

@@ -17,7 +17,7 @@
 
 /**
  * \file macros.hpp
- * \brief File used for common define macros.
+ * \brief File used for some common macros affecting ctor/dtor declarations.
  */
 
 #pragma once

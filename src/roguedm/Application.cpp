@@ -123,7 +123,7 @@ int Application::run(int argc, char *argv[]) {
   if(keepRunning) {
 
     // Run the different application stages and handle their chaining
-    StageInterfaceReference currentStage =
+    StageInterfaceSharedPtr currentStage =
         std::make_shared<GuiStage>();
     StageResponse lastResponse;
     do {

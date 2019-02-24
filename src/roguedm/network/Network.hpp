@@ -19,10 +19,10 @@
 
 #include <memory>
 
-#include "../macros.hpp"
-#include "../CommandHandlerInterface.hpp"
 #include "../Config.hpp"
 #include "../GameComponentInterface.hpp"
+#include "../commands/CommandHandlerInterface.hpp"
+#include "../macros.hpp"
 
 namespace roguedm {
 
@@ -30,8 +30,6 @@ namespace roguedm {
  * \brief The network management class.
  *
  * Manage all networking related operations and abstract its complexity.
- *
- * Pattern Singleton.
  */
 class Network : CommandHandlerInterface, GameComponentInterface
 {
@@ -52,21 +50,15 @@ class Network : CommandHandlerInterface, GameComponentInterface
      */
     void update() override;
 
-    /**
-     * Used to ask the command handler a response for a command.
-     */
-    int processCommand(const Sentence&) override;
+    /** Request to process a command. */
+    bool processCommand(const Command&) override;
 
-    /**
-     * Used to ask the command handler an autocomplete suggestion.
-     */
-    int autocomplete(Sentence&) const override;
+    /** Request to identify a command in a sentence. */
+    bool identifyCommand(const Sentence&, Command&) const override;
 
-    /**
-     * Used to ask the command handler an autocomplete candidate list.
-     */
-    SentenceListReference autocompleteListOptions(const Sentence&) const
-      override;
+    /** Request a list of autocomplete options for a command. */
+    CommandList getCompletionCandidates(const Command&)
+      const override;
 
   private:
 

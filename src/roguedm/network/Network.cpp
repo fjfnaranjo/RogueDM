@@ -45,18 +45,18 @@ bool Network::initNetwork() {
 
 void Network::update() {}
 
-int Network::processCommand(const Sentence& a) {
-  return RDM_COMMAND_UNKNOWN;
+bool Network::processCommand(const Command&) {
+  return RDM_CMD_PROCESS_UNKNOWN;
 }
 
-int Network::autocomplete(Sentence& a) const {
-  return RDM_COMMAND_AC_NEXT;
+bool Network::identifyCommand(const Sentence&, Command&) const {
+  return RDM_CMD_IDENTIFY_UNKNOWN;
 }
 
-SentenceListReference Network::autocompleteListOptions(
-  const Sentence& a
+CommandList Network::getCompletionCandidates(
+  const Command&
 ) const {
-  return std::make_shared<SentenceList>();
+  return CommandList();
 }
 
 } // namespace roguedm
