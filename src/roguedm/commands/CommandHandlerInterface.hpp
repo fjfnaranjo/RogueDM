@@ -17,13 +17,13 @@
 
 #pragma once
 
-#include "commands.hpp"
+#include "Command.hpp"
 
-#define RDM_COMMAND_DONE    false
-#define RDM_COMMAND_UNKNOWN true
+#define RDM_CMD_PROCESS_UNKNOWN  false
+#define RDM_CMD_PROCESS_DONE     true
 
-#define RDM_COMMAND_AC_COMPLETED false
-#define RDM_COMMAND_AC_NEXT      true
+#define RDM_CMD_IDENTIFY_UNKNOWN false
+#define RDM_CMD_IDENTIFY_DONE    true
 
 namespace roguedm {
 
@@ -48,38 +48,42 @@ class CommandHandlerInterface
      *
      * Used to ask a command handler to process a command if he can.
      *
-     * If a command handler returns \ref RDM_COMMAND_DONE, the command can
-     * be considered completed. If it returns \ref RDM_COMMAND_UNKNOWN, the
+     * If a command handler returns \ref RDM_CMD_PROCESS_DONE, the command can
+     * be considered completed. If it returns \ref RDM_CMD_PROCESS_UNKNOWN, the
      * command should be issued to another command handler.
      * \param command The command.
      * \return See method description.
      */
-    virtual bool processCommand(const Sentence& command) =0;
+    virtual bool processCommand(const Command& command) =0;
 
     /**
-     * \brief Request to autocomplete a command.
+     * \brief Request to identify a command in a sentence.
      *
-     * Used to ask a command handler to autocomplete a partial command if he
-     * can.
+     * Used to ask a command handler to try to identify the command in a
+     * sentence. Usually using the first word.
      *
-     * It will complete the command it if possible, returning
-     * \ref RDM_COMMAND_AC_COMPLETED on success or \ref RDM_COMMAND_AC_NEXT to
-     * signify that another command handler should try to complete it.
-     * \param[out] command The command.
+     * A command should also be provided. If the command can be identified, the
+     * provided command will be modified to construct an equivalent to the
+     * sentence in command form and \ref RDM_CMD_IDENTIFY_UNKNOWN will be
+     * returned. If the command can't be identified, \ref RDM_CMD_IDENTIFY_DONE
+     * will be returned.
+     * \param sentence The sentence.
+     * \param[out] command The command to be modified. See method description.
      * \return See method description.
      */
-    virtual bool autocomplete(Sentence& command) const =0;
+    virtual bool identifyCommand(const Sentence& sentence, Command& command)
+      const =0;
 
     /**
-     * \brief Request a list of autocomplete options.
+     * \brief Request a list of autocomplete options for a command.
      *
-     * This method builds an autocomplete candidate list for the current
+     * This method builds an autocomplete candidate list for the provided
      * command or an empty list if there is not valid complete options.
      * \param command The current command.
      * \return The list of valid autocomplete options.
      */
-    virtual SentenceList autocompleteListOptions(
-      const Sentence& command
+    virtual CommandList getCompletionCandidates(
+      const Command& command
     ) const =0;
 
 };

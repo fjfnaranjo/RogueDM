@@ -17,8 +17,8 @@
 
 #pragma once
 
-#include "../CommandHandlerInterface.hpp"
 #include "../GameComponentInterface.hpp"
+#include "../commands/CommandHandlerInterface.hpp"
 
 namespace roguedm {
 

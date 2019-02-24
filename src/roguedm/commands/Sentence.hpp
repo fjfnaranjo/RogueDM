@@ -15,25 +15,32 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "../game/Game.hpp"
+/**
+ * \file Sentence.hpp
+ * \brief Declarations for the Sentence type.
+ *
+ * A Sentence is a list of words.
+ */
+
+#pragma once
 
 #include <memory>
+#include <vector>
 
-namespace roguedm_game {
+#include "Word.hpp"
 
-bool Game::processCommand(const roguedm::Command&) {
-  return RDM_CMD_PROCESS_UNKNOWN;
-}
-bool Game::identifyCommand(const roguedm::Sentence&, roguedm::Command&) const {
-  return RDM_CMD_IDENTIFY_UNKNOWN;
-}
+namespace roguedm {
 
-roguedm::CommandList Game::getCompletionCandidates(
-  const roguedm::Command&
-) const {
-  return roguedm::CommandList();
-}
+/** \brief Word's vector to contain full sentences. */
+typedef std::vector<Word> Sentence;
 
-void Game::update() {}
+/** \brief Shared pointer to a sentence. */
+typedef std::shared_ptr<Sentence> SentenceSharedPtr;
+
+/** \brief Senteces's vector to contain a list of sentences. */
+typedef std::vector<Sentence> SentenceList;
+
+/** \brief Shared pointer to a vector of sentences. */
+typedef std::shared_ptr<SentenceList> SentenceListSharedPtr;
 
 } // namespace roguedm

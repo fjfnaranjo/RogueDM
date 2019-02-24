@@ -15,48 +15,38 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "Network.hpp"
+/**
+ * \file Command.hpp
+ * \brief Declarations for the Command type.
+ *
+ * A Command consist in a name identifying the particular command (its function)
+ * and a list of params.
+ */
 
-#include <SDL.h>
-#include <SDL_net.h>
+#pragma once
 
-#include "../strings.hpp"
+#include <string>
+#include <vector>
+
+#include "Sentence.hpp"
+#include "Word.hpp"
+
+// Command's words.
+#define RDM_CMD_QUIT         u8"quit"       // End app.
+#define RDM_CMD_PSAY         u8"psay"       // Player say to all.
 
 namespace roguedm {
 
-Network::Network() {
-  initSuccess = false;
-  config = Config::instance();
-}
+/** \brief Struct to contain a command name and its parameters. */
+struct Command {
+  std::string name;
+  Sentence params;
+};
 
-Network::~Network() {
-  if(initSuccess)
-    SDLNet_Quit();
-}
+/** \brief Command's vector to contain a list of commands. */
+typedef std::vector<Command> CommandList;
 
-bool Network::initNetwork() {
-  if(-1==SDLNet_Init()) {
-    SDL_Log(RDM_STR_SDL_NET_ERROR, SDLNet_GetError());
-    return false;
-  }
-  initSuccess = true;
-  return true;
-}
-
-void Network::update() {}
-
-bool Network::processCommand(const Command&) {
-  return RDM_CMD_PROCESS_UNKNOWN;
-}
-
-bool Network::identifyCommand(const Sentence&, Command&) const {
-  return RDM_CMD_IDENTIFY_UNKNOWN;
-}
-
-CommandList Network::getCompletionCandidates(
-  const Command&
-) const {
-  return CommandList();
-}
+/** \brief Shared pointer to a vector of commands. */
+typedef std::shared_ptr<CommandList> CommandListSharedPtr;
 
 } // namespace roguedm

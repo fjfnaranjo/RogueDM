@@ -19,10 +19,10 @@
 
 #include <memory>
 
-#include "../macros.hpp"
-#include "../CommandHandlerInterface.hpp"
 #include "../Config.hpp"
 #include "../GameComponentInterface.hpp"
+#include "../commands/CommandHandlerInterface.hpp"
+#include "../macros.hpp"
 
 namespace roguedm {
 
@@ -53,13 +53,13 @@ class Network : CommandHandlerInterface, GameComponentInterface
     void update() override;
 
     /** Request to process a command. */
-    bool processCommand(const Sentence&) override;
+    bool processCommand(const Command&) override;
 
-    /** Request to autocomplete a command. */
-    bool autocomplete(Sentence&) const override;
+    /** Request to identify a command in a sentence. */
+    bool identifyCommand(const Sentence&, Command&) const override;
 
-    /** Used to ask the command handler an autocomplete candidate list. */
-    SentenceList autocompleteListOptions(const Sentence&)
+    /** Request a list of autocomplete options for a command. */
+    CommandList getCompletionCandidates(const Command&)
       const override;
 
   private:

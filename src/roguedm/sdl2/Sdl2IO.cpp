@@ -128,53 +128,49 @@ void Sdl2IO::update() {
 
 }
 
-bool Sdl2IO::processCommand(const roguedm::Sentence &a) {
-  if(a.begin()[0].wordContent==RDM_CMD_QUIT && a.begin()[0].wordClass==RDM_WCLASS_COMMAND) {
+bool Sdl2IO::processCommand(const roguedm::Command &command) {
+  if(command.name==RDM_CMD_QUIT) {
     appDone = 1;
-    return RDM_COMMAND_DONE;
+    return RDM_CMD_PROCESS_DONE;
   }
-  // TODO: This must be RDM_COMMAND_UNKNOWN or you will suffer
-  return RDM_COMMAND_DONE;
+  return RDM_CMD_PROCESS_UNKNOWN;
 }
 
-bool Sdl2IO::autocomplete(roguedm::Sentence &a) const {
-
-  // quit command completion
-  if(a.begin()[0].wordContent==RDM_CMD_QUIT && a.begin()[0].wordClass==RDM_WCLASS_NORMAL) {
-    a.begin()[0].wordClass=RDM_WCLASS_COMMAND;
-    return RDM_COMMAND_AC_COMPLETED;
-  }
-
-  return RDM_COMMAND_AC_NEXT;
-
-}
-
-roguedm::SentenceList Sdl2IO::autocompleteListOptions(
-  const roguedm::Sentence &a
+bool Sdl2IO::identifyCommand(
+  const roguedm::Sentence& sentence, roguedm::Command &command
 ) const {
 
-  roguedm::SentenceList options;
+  // quit command completion
+  if(sentence.size()>0 && sentence[0].content==RDM_CMD_QUIT) {
+    command.name = RDM_CMD_QUIT;
+    command.params.clear();
+    return RDM_CMD_IDENTIFY_DONE;
+  }
 
-  roguedm::Word psayCmd;
-  psayCmd.wordContent = RDM_CMD_PSAY;
-  psayCmd.wordClass = RDM_WCLASS_COMMAND;
-  roguedm::Sentence psaySentence = {psayCmd};
+  return RDM_CMD_IDENTIFY_UNKNOWN;
 
-  roguedm::Word quitCmd;
-  quitCmd.wordContent = RDM_CMD_QUIT;
-  quitCmd.wordClass = RDM_WCLASS_COMMAND;
-  roguedm::Sentence quitSentence = {quitCmd};
+}
 
-  if(a.size()==1 && multibyteLenght(a.begin()[0].wordContent)==0) {
+roguedm::CommandList Sdl2IO::getCompletionCandidates(
+  const roguedm::Command &command
+) const {
 
-    options.push_back(psaySentence);
-    options.push_back(quitSentence);
+  if(0==command.name.size() && 0==command.params.size()) {
+
+    roguedm::CommandList options;
+
+    roguedm::Command psayCmd;
+    psayCmd.name = RDM_CMD_PSAY;
+    options.push_back(psayCmd);
+    roguedm::Command quitCmd;
+    quitCmd.name = RDM_CMD_QUIT;
+    options.push_back(quitCmd);
 
     return options;
 
   }
 
-  return roguedm::SentenceList();
+  return roguedm::CommandList();
 
 }
 
@@ -227,20 +223,20 @@ void Sdl2IO::eventsManager() {
 void Sdl2IO::processText(SDL_Event* event) {
 
   roguedm::Word emptyWord;
-  emptyWord.wordContent = RDM_WEMPTY;
-  emptyWord.wordClass = RDM_WCLASS_NORMAL;
+  emptyWord.content = RDM_WEMPTY;
+  emptyWord.kind = RDM_WCLASS_NORMAL;
 
   std::string text = event->text.text;
 
   if(text == u8"") {
 
-    gui->keySpace();
+    gui->commandComposer.keySpace();
 
   } else {
 
     // TODO: SDL2New Implement SDL2 text input support
 
-    gui->keyCharacter(text);
+    gui->commandComposer.keyCharacter(text);
 
   }
 
@@ -259,47 +255,47 @@ void Sdl2IO::processKey(SDL_Event* event) {
 
     // Backspace
     case SDLK_BACKSPACE:
-      gui->keyBackspace();
+      gui->commandComposer.keyBackspace();
       break;
 
     // Delete
     case SDLK_DELETE:
-      gui->keyDelete();
+      gui->commandComposer.keyDelete();
       break;
 
     // H-movement keys
     case SDLK_LEFT:
       if (!(kevent.keysym.mod&KMOD_CTRL)) {
-        gui->keyLeft(false);
+        gui->commandComposer.keyLeft(false);
       } else {
-        gui->keyLeft(true);
+        gui->commandComposer.keyLeft(true);
       }
       break;
 
     case SDLK_RIGHT:
       if (!(kevent.keysym.mod&KMOD_CTRL)) {
-        gui->keyRight(false);
+        gui->commandComposer.keyRight(false);
       } else {
-        gui->keyRight(true);
+        gui->commandComposer.keyRight(true);
       }
       break;
 
     // Far-long h-movement keys
     case SDLK_HOME:
-      gui->keyHome();
+      gui->commandComposer.keyHome();
       break;
 
     case SDLK_END:
-      gui->keyEnd();
+      gui->commandComposer.keyEnd();
       break;
 
     // History keys
     case SDLK_UP:
-      gui->keyUp();
+      gui->commandComposer.keyUp();
       break;
 
     case SDLK_DOWN:
-      gui->keyDown();
+      gui->commandComposer.keyDown();
       break;
 
     // TAB
@@ -313,7 +309,7 @@ void Sdl2IO::processKey(SDL_Event* event) {
 }
 
 void Sdl2IO::tryAutocompletion() {
-
+/*
   roguedm::Sentence commandLine = gui->getCommandLine();
 
   // check for empty line to list all commands
@@ -321,8 +317,8 @@ void Sdl2IO::tryAutocompletion() {
 
     for(const auto & commandHandler : commandHandlers) {
 
-      roguedm::SentenceList options =
-        commandHandler->autocompleteListOptions(commandLine);
+      roguedm::CommandList options =
+        commandHandler->getCompletionCandidates(commandLine);
 
       if(!options.empty()) {
         for(const auto & option : options)
@@ -353,11 +349,11 @@ void Sdl2IO::tryAutocompletion() {
   }
 
   gui->resetHistoryCurrent();
-
+*/
 }
 
 void Sdl2IO::processLine() {
-
+/*
   if(0==gui->commandLength())
     return;
 
@@ -366,14 +362,14 @@ void Sdl2IO::processLine() {
   // TODO: Move this responsibility to other place
   if(!gui->hasCommand()) {
     roguedm::Word newPsayCommand;
-    newPsayCommand.wordContent = RDM_CMD_PSAY;
-    newPsayCommand.wordClass = RDM_WCLASS_COMMAND;
+    newPsayCommand.content = RDM_CMD_PSAY;
+    newPsayCommand.kind = RDM_WCLASS_COMMAND;
     currentCommand.insert(currentCommand.begin(), newPsayCommand);
   }
 
   // Process action
   for(const auto & commandHandler : commandHandlers)
-    if(RDM_COMMAND_DONE==commandHandler->processCommand(currentCommand)) {
+    if(RDM_CMD_PROCESS_DONE==commandHandler->processCommand(currentCommand)) {
 
       // Push the command in the historic
       gui->commandHistoryPush(currentCommand);
@@ -387,7 +383,7 @@ void Sdl2IO::processLine() {
       // Reset the command line
       gui->resetLine();
     }
-
+*/
 }
 
 } // namespace roguedm_gui

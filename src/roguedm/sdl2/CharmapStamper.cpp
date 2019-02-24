@@ -20,6 +20,7 @@
 #include <SDL_image.h>
 
 #include "mbtools.hpp"
+#include "../commands/Word.hpp"
 #include "../strings.hpp"
 
 namespace roguedm_gui {
@@ -45,21 +46,8 @@ CharmapStamper::~CharmapStamper() {
 
 void CharmapStamper::resetCharmapStamper() {
   if(initSuccess) {
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NORMAL].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_COMMAND].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ALLIED].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_NEUTRAL].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ENEMY].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_PLACE].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_MAGIC].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_SET].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_UNIQ].texture);
-    SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_EPIC].texture);
+    for(int kind = 0; kind < RDM_WCLASS_TOTAL; kind++)
+      SDL_DestroyTexture(wordKindTexture[kind]);
     initSuccess = false;
   }
 }
@@ -107,16 +95,16 @@ bool CharmapStamper::loadDefaultCharmap(
 
 unsigned int CharmapStamper::decoratorsLength(int idx) const {
   return
-    multibyteLenght(wordTypes[idx].lDecorator) +
-    multibyteLenght(wordTypes[idx].rDecorator);
+    multibyteLenght(roguedm::wordKinds[idx].lDecorator) +
+    multibyteLenght(roguedm::wordKinds[idx].rDecorator);
 }
 
 unsigned int CharmapStamper::lDecoratorsLength(int idx) const {
-  return multibyteLenght(wordTypes[idx].lDecorator);
+  return multibyteLenght(roguedm::wordKinds[idx].lDecorator);
 }
 
 unsigned int CharmapStamper::rDecoratorsLength(int idx) const {
-  return multibyteLenght(wordTypes[idx].rDecorator);
+  return multibyteLenght(roguedm::wordKinds[idx].rDecorator);
 }
 
 int CharmapStamper::getCHeight() const {
@@ -148,7 +136,7 @@ void CharmapStamper::stampLDecoratorChar(
   int my
 ) {
   stampChar(
-    transChar(multibyteCharacterByIndex(wordTypes[t].lDecorator, idx)),
+    transChar(multibyteCharacterByIndex(roguedm::wordKinds[t].lDecorator, idx)),
     t, x, y, renderer, mx, my
   );
 }
@@ -163,7 +151,7 @@ void CharmapStamper::stampRDecoratorChar(
   int my
 ) {
   stampChar(
-    transChar(multibyteCharacterByIndex(wordTypes[t].rDecorator, idx)),
+    transChar(multibyteCharacterByIndex(roguedm::wordKinds[t].rDecorator, idx)),
     t, x, y, renderer, mx, my
   );
 }
@@ -222,292 +210,17 @@ void CharmapStamper::drawCross(
 void CharmapStamper::defineAndColorizeWordTypes(
   SDL_Renderer *renderer, SDL_Surface *baseSurface
 ) {
-
-  wordTypes[RDM_WCLASS_NORMAL].fgColor.r = 200;
-  wordTypes[RDM_WCLASS_NORMAL].fgColor.g = 200;
-  wordTypes[RDM_WCLASS_NORMAL].fgColor.b = 200;
-  wordTypes[RDM_WCLASS_NORMAL].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_NORMAL].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_NORMAL].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_NORMAL].lDecorator = u8"";
-  wordTypes[RDM_WCLASS_NORMAL].rDecorator = u8"";
-  wordTypes[RDM_WCLASS_NORMAL].texture = colorizeWordType(
+  for(int kind = 0; kind < RDM_WCLASS_TOTAL; kind++)
+    wordKindTexture.insert(wordKindTexture.end(), colorizeWordType(
       renderer,
       baseSurface,
-      wordTypes[RDM_WCLASS_NORMAL].fgColor.r,
-      wordTypes[RDM_WCLASS_NORMAL].fgColor.g,
-      wordTypes[RDM_WCLASS_NORMAL].fgColor.b/*,
-      wordTypes[RDM_WCLASS_NORMAL].bgColor.r,
-      wordTypes[RDM_WCLASS_NORMAL].bgColor.g,
-      wordTypes[RDM_WCLASS_NORMAL].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_COMMAND].fgColor.r = 255;
-  wordTypes[RDM_WCLASS_COMMAND].fgColor.g = 255;
-  wordTypes[RDM_WCLASS_COMMAND].fgColor.b = 255;
-  wordTypes[RDM_WCLASS_COMMAND].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_COMMAND].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_COMMAND].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_COMMAND].lDecorator = u8"\\";
-  wordTypes[RDM_WCLASS_COMMAND].rDecorator = u8"";
-  wordTypes[RDM_WCLASS_COMMAND].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_COMMAND].fgColor.r,
-      wordTypes[RDM_WCLASS_COMMAND].fgColor.g,
-      wordTypes[RDM_WCLASS_COMMAND].fgColor.b/*,
-      wordTypes[RDM_WCLASS_COMMAND].bgColor.r,
-      wordTypes[RDM_WCLASS_COMMAND].bgColor.g,
-      wordTypes[RDM_WCLASS_COMMAND].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_NPC_ALLIED].fgColor.r = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED].fgColor.g = 128;
-  wordTypes[RDM_WCLASS_NPC_ALLIED].fgColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED].lDecorator = u8"'";
-  wordTypes[RDM_WCLASS_NPC_ALLIED].rDecorator = u8"'";
-  wordTypes[RDM_WCLASS_NPC_ALLIED].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_NPC_ALLIED].fgColor.r,
-      wordTypes[RDM_WCLASS_NPC_ALLIED].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ALLIED].fgColor.b/*,
-      wordTypes[RDM_WCLASS_NPC_ALLIED].bgColor.r,
-      wordTypes[RDM_WCLASS_NPC_ALLIED].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ALLIED].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].fgColor.r = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].fgColor.g = 255;
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].fgColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].lDecorator = u8"'";
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].rDecorator = u8"'";
-  wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].fgColor.r,
-      wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].fgColor.b/*,
-      wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].bgColor.r,
-      wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ALLIED_CMB].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].fgColor.r = 0;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].fgColor.g = 64;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].fgColor.b = 255;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].lDecorator = u8"";
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].rDecorator = u8"?";
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL].fgColor.r,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL].fgColor.b/*,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL].bgColor.r,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].fgColor.r = 0;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].fgColor.g = 192;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].fgColor.b = 255;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].lDecorator = u8"";
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].rDecorator = u8"?";
-  wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].fgColor.r,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].fgColor.b/*,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].bgColor.r,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_NEUTRAL_CMB].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_NPC_ENEMY].fgColor.r = 255;
-  wordTypes[RDM_WCLASS_NPC_ENEMY].fgColor.g = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY].fgColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY].lDecorator = u8"";
-  wordTypes[RDM_WCLASS_NPC_ENEMY].rDecorator = u8"!!";
-  wordTypes[RDM_WCLASS_NPC_ENEMY].texture =   colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_NPC_ENEMY].fgColor.r,
-      wordTypes[RDM_WCLASS_NPC_ENEMY].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ENEMY].fgColor.b/*,
-      wordTypes[RDM_WCLASS_NPC_ENEMY].bgColor.r,
-      wordTypes[RDM_WCLASS_NPC_ENEMY].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ENEMY].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].fgColor.r = 128;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].fgColor.g = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].fgColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].lDecorator = u8"";
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].rDecorator = u8"!";
-  wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].fgColor.r,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].fgColor.b/*,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].bgColor.r,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_LIGHT].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].fgColor.r = 255;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].fgColor.g = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].fgColor.b = 192;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].lDecorator = u8"";
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].rDecorator = u8"!!!";
-  wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].fgColor.r,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].fgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].fgColor.b/*,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].bgColor.r,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].bgColor.g,
-      wordTypes[RDM_WCLASS_NPC_ENEMY_HARD].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_PLACE].fgColor.r = 255;
-  wordTypes[RDM_WCLASS_PLACE].fgColor.g = 128;
-  wordTypes[RDM_WCLASS_PLACE].fgColor.b = 0;
-  wordTypes[RDM_WCLASS_PLACE].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_PLACE].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_PLACE].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_PLACE].lDecorator = u8"[";
-  wordTypes[RDM_WCLASS_PLACE].rDecorator = u8"]";
-  wordTypes[RDM_WCLASS_PLACE].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_PLACE].fgColor.r,
-      wordTypes[RDM_WCLASS_PLACE].fgColor.g,
-      wordTypes[RDM_WCLASS_PLACE].fgColor.b/*,
-      wordTypes[RDM_WCLASS_PLACE].bgColor.r,
-      wordTypes[RDM_WCLASS_PLACE].bgColor.g,
-      wordTypes[RDM_WCLASS_PLACE].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_OBJECT].fgColor.r = 224;
-  wordTypes[RDM_WCLASS_OBJECT].fgColor.g = 224;
-  wordTypes[RDM_WCLASS_OBJECT].fgColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_OBJECT].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_OBJECT].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT].lDecorator = u8"{";
-  wordTypes[RDM_WCLASS_OBJECT].rDecorator = u8"}";
-  wordTypes[RDM_WCLASS_OBJECT].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_OBJECT].fgColor.r,
-      wordTypes[RDM_WCLASS_OBJECT].fgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT].fgColor.b/*,
-      wordTypes[RDM_WCLASS_OBJECT].bgColor.r,
-      wordTypes[RDM_WCLASS_OBJECT].bgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].fgColor.r = 255;
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].fgColor.g = 255;
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].fgColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].lDecorator = u8"{";
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].rDecorator = u8"}*";
-  wordTypes[RDM_WCLASS_OBJECT_MAGIC].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_OBJECT_MAGIC].fgColor.r,
-      wordTypes[RDM_WCLASS_OBJECT_MAGIC].fgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_MAGIC].fgColor.b/*,
-      wordTypes[RDM_WCLASS_OBJECT_MAGIC].bgColor.r,
-      wordTypes[RDM_WCLASS_OBJECT_MAGIC].bgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_MAGIC].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_OBJECT_SET].fgColor.r = 192;
-  wordTypes[RDM_WCLASS_OBJECT_SET].fgColor.g = 255;
-  wordTypes[RDM_WCLASS_OBJECT_SET].fgColor.b = 64;
-  wordTypes[RDM_WCLASS_OBJECT_SET].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_OBJECT_SET].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_OBJECT_SET].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_SET].lDecorator = u8"{";
-  wordTypes[RDM_WCLASS_OBJECT_SET].rDecorator = u8"}s";
-  wordTypes[RDM_WCLASS_OBJECT_SET].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_OBJECT_SET].fgColor.r,
-      wordTypes[RDM_WCLASS_OBJECT_SET].fgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_SET].fgColor.b/*,
-      wordTypes[RDM_WCLASS_OBJECT_SET].bgColor.r,
-      wordTypes[RDM_WCLASS_OBJECT_SET].bgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_SET].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].fgColor.r = 192;
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].fgColor.g = 192;
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].fgColor.b = 64;
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].lDecorator = u8"{";
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].rDecorator = u8"}**";
-  wordTypes[RDM_WCLASS_OBJECT_UNIQ].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_OBJECT_UNIQ].fgColor.r,
-      wordTypes[RDM_WCLASS_OBJECT_UNIQ].fgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_UNIQ].fgColor.b/*,
-      wordTypes[RDM_WCLASS_OBJECT_UNIQ].bgColor.r,
-      wordTypes[RDM_WCLASS_OBJECT_UNIQ].bgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_UNIQ].bgColor.b*/
-  );
-
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].fgColor.r = 255;
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].fgColor.g = 255;
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].fgColor.b = 192;
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].bgColor.r = 0;
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].bgColor.g = 0;
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].bgColor.b = 0;
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].lDecorator = u8"{";
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].rDecorator = u8"}***";
-  wordTypes[RDM_WCLASS_OBJECT_EPIC].texture = colorizeWordType(
-      renderer,
-      baseSurface,
-      wordTypes[RDM_WCLASS_OBJECT_EPIC].fgColor.r,
-      wordTypes[RDM_WCLASS_OBJECT_EPIC].fgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_EPIC].fgColor.b/*,
-      wordTypes[RDM_WCLASS_OBJECT_EPIC].bgColor.r,
-      wordTypes[RDM_WCLASS_OBJECT_EPIC].bgColor.g,
-      wordTypes[RDM_WCLASS_OBJECT_EPIC].bgColor.b*/
-  );
-
+      roguedm::wordKinds[kind].fgColor.r,
+      roguedm::wordKinds[kind].fgColor.g,
+      roguedm::wordKinds[kind].fgColor.b/*,
+      roguedm::wordKinds[kind].bgColor.r,
+      roguedm::wordKinds[kind].bgColor.g,
+      roguedm::wordKinds[kind].bgColor.b*/
+    ));
 }
 
 void CharmapStamper::initTransTable() {
@@ -687,7 +400,7 @@ void CharmapStamper::stampChar(
   dstrect.y=y*txtCHeight;
   dstrect.w=txtCWidth;
   dstrect.h=txtCHeight;
-  SDL_RenderCopy(renderer,wordTypes[t].texture,&srcrect,&dstrect);
+  SDL_RenderCopy(renderer,wordKindTexture[t],&srcrect,&dstrect);
 }
 
 void CharmapStamper::mStampChar(
@@ -710,7 +423,7 @@ void CharmapStamper::mStampChar(
   dstrect.y=y*txtCHeight;
   dstrect.w=txtCWidth;
   dstrect.h=txtCHeight;
-  SDL_RenderCopy(renderer,wordTypes[t].texture,&srcrect,&dstrect);
+  SDL_RenderCopy(renderer,wordKindTexture[t],&srcrect,&dstrect);
 }
 
 } // namespace roguedm_gui

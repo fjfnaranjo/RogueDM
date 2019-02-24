@@ -15,21 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-
 #pragma once
 
 #include <SDL.h>
 
 #include "CharmapStamper.hpp"
+#include "CommandComposer.hpp"
 #include "../macros.hpp"
-#include "../CommandHandlerInterface.hpp"
-
-// Max command history lines..
-#define RDM_CL_MAX_HISTORY         128
-
-// Command's words.
-#define RDM_CMD_QUIT         u8"quit"       // End app.
-#define RDM_CMD_PSAY         u8"psay"       // Player say to all.
 
 namespace roguedm_gui {
 
@@ -51,68 +43,14 @@ class Gui {
     /** Update the state each game tick and interact with SDL2. */
     void update(SDL_Renderer*);
 
-    /** \ref commandLine getter. */
-    roguedm::Sentence getCommandLine();
-
-    /** \ref commandLine setter. */
-    void setCommandLine(const roguedm::Sentence&);
-
-    /** Get the current command full length. */
-    int commandLength();
-
-    /** Check if there is already a command in the command line. */
-    bool hasCommand();
-
-    /** Add a new command to the command history. */
-    void commandHistoryPush(roguedm::Sentence);
-
     /** Add a new command to the console log. */
     void consoleHistoryPush(roguedm::Sentence);
 
-    /** Process pressing of key backspace. */
-    void keyBackspace();
-
-    /** Process pressing of key delete. */
-    void keyDelete();
-
-    /**
-     * Process pressing of key left.
-     * \param fullWord Move in increments of full words.
-     */
-    void keyLeft(bool fullWord);
-
-    /**
-     * Process pressing of key right.
-     * \param fullWord Move in increments of full words.
-     */
-    void keyRight(bool fullWord);
-
-    /** Process pressing of key home. */
-    void keyHome();
-
-    /** Process pressing of key end. */
-    void keyEnd();
-
-    /** Process pressing of key up. */
-    void keyUp();
-
-    /** Process pressing of key down. */
-    void keyDown();
-
-    /** Process pressing of key space. */
-    void keySpace();
-
-    /** Process pressing of any normal character key (not space). */
-    void keyCharacter(std::string character);
-
-    /** Reset the history explorer. */
-    void resetHistoryCurrent();
-
-    /** Reset the command line and its history navigation cursor */
-    void resetLine();
-
     /** Updates the screen if window resizes. */
     void resetScreenSize(SDL_Window*);
+
+    /** The command composer for this GUI. */
+    CommandComposer commandComposer;
 
   private:
 
@@ -137,33 +75,6 @@ class Gui {
     /** Screen size in rows. */
     int maxRows;
 
-    /** An empty command to signify the absence of command. */
-    roguedm::Word emptyWord;
-
-    /** Line exploration current displacement in words. */
-    int currentWord;
-
-    /** Line exploration current displacement in characters. */
-    int wordRShift;
-
-    /** The current command line contents. */
-    roguedm::Sentence commandLine;
-
-    /** The current command line contents. */
-    roguedm::SentenceList consoleHistory;
-
-    /** Sentences vector for the history. */
-    roguedm::SentenceList history;
-
-    /** Current history position when using up-down keys. */
-    int historyCurrent;
-
-    /**
-     * Sentence currently written when the player starts using the history
-     * exploration control
-     */
-    roguedm::Sentence historyBackup;
-
     /** Coordinates for the main window inside the terminal. */
     SDL_Rect dialogMain;
 
@@ -179,8 +90,11 @@ class Gui {
     /** Coordinates for the text window inside the terminal. */
     SDL_Rect dialogText;
 
-    /** Unique pointer to the default charmap drawing class. */
-    std::unique_ptr<CharmapStamper> defaultStamper;
+    /** Shared pointer to the default charmap drawing class. */
+    std::shared_ptr<CharmapStamper> defaultStamper;
+
+    /** The current command line contents. */
+    roguedm::SentenceList consoleHistory;
 
 };
 

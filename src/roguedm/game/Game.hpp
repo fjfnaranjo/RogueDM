@@ -17,8 +17,8 @@
 
 #pragma once
 
-#include "../CommandHandlerInterface.hpp"
 #include "../GameComponentInterface.hpp"
+#include "../commands/CommandHandlerInterface.hpp"
 
 namespace roguedm_game {
 
@@ -39,13 +39,14 @@ class Game :
     Game() =default;
 
     /** Request to process a command. */
-    bool processCommand(const roguedm::Sentence&) override;
+    bool processCommand(const roguedm::Command&) override;
 
-    /** Request to autocomplete a command. */
-    bool autocomplete(roguedm::Sentence&) const override;
+    /** Request to identify a command in a sentence. */
+    bool identifyCommand(const roguedm::Sentence&, roguedm::Command&)
+      const override;
 
-    /** Used to ask the command handler an autocomplete candidate list. */
-    roguedm::SentenceList autocompleteListOptions(const roguedm::Sentence&)
+    /** Request a list of autocomplete options for a command. */
+    roguedm::CommandList getCompletionCandidates(const roguedm::Command&)
       const override;
 
     /**
