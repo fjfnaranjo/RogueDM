@@ -19,13 +19,11 @@
 
 #include "commands.hpp"
 
-// TODO: This should be bool
+#define RDM_COMMAND_DONE    false
+#define RDM_COMMAND_UNKNOWN true
 
-#define RDM_COMMAND_DONE    0
-#define RDM_COMMAND_UNKNOWN 1
-
-#define RDM_COMMAND_AC_COMPLETED 0
-#define RDM_COMMAND_AC_NEXT      1
+#define RDM_COMMAND_AC_COMPLETED false
+#define RDM_COMMAND_AC_NEXT      true
 
 namespace roguedm {
 
@@ -56,7 +54,7 @@ class CommandHandlerInterface
      * \param command The command.
      * \return See method description.
      */
-    virtual int processCommand(const Sentence& command) =0;
+    virtual bool processCommand(const Sentence& command) =0;
 
     /**
      * \brief Request to autocomplete a command.
@@ -68,9 +66,9 @@ class CommandHandlerInterface
      * \ref RDM_COMMAND_AC_COMPLETED on success or \ref RDM_COMMAND_AC_NEXT to
      * signify that another command handler should try to complete it.
      * \param[out] command The command.
-     * \return 0 or 1, see method description.
+     * \return See method description.
      */
-    virtual int autocomplete(Sentence& command) const =0;
+    virtual bool autocomplete(Sentence& command) const =0;
 
     /**
      * \brief Request a list of autocomplete options.

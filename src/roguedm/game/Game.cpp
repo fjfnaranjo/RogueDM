@@ -21,10 +21,10 @@
 
 namespace roguedm_game {
 
-int Game::processCommand(const roguedm::Sentence&) {
+bool Game::processCommand(const roguedm::Sentence&) {
   return RDM_COMMAND_UNKNOWN;
 }
-int Game::autocomplete(roguedm::Sentence&) const {
+bool Game::autocomplete(roguedm::Sentence&) const {
   return RDM_COMMAND_AC_NEXT;
 }
 

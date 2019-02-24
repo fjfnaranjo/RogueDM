@@ -45,11 +45,11 @@ bool Network::initNetwork() {
 
 void Network::update() {}
 
-int Network::processCommand(const Sentence&) {
+bool Network::processCommand(const Sentence&) {
   return RDM_COMMAND_UNKNOWN;
 }
 
-int Network::autocomplete(Sentence&) const {
+bool Network::autocomplete(Sentence&) const {
   return RDM_COMMAND_AC_NEXT;
 }
 

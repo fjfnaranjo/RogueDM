@@ -39,14 +39,14 @@ class Game :
     Game() =default;
 
     /**
-     * Used to ask the command handler a response for a command.
+     * Request to process a command.
      */
-    int processCommand(const roguedm::Sentence&) override;
+    bool processCommand(const roguedm::Sentence&) override;
 
     /**
-     * Used to ask the command handler an autocomplete suggestion.
+     * Request to autocomplete a command.
      */
-    int autocomplete(roguedm::Sentence&) const override;
+    bool autocomplete(roguedm::Sentence&) const override;
 
     /**
      * Used to ask the command handler an autocomplete candidate list.

@@ -122,7 +122,7 @@ void Sdl2IO::update() {
 
 }
 
-int Sdl2IO::processCommand(const roguedm::Sentence &a) {
+bool Sdl2IO::processCommand(const roguedm::Sentence &a) {
   if(a.begin()[0].wordContent==RDM_CMD_QUIT && a.begin()[0].wordClass==RDM_WCLASS_COMMAND) {
     appDone = 1;
     return RDM_COMMAND_DONE;
@@ -131,7 +131,7 @@ int Sdl2IO::processCommand(const roguedm::Sentence &a) {
   return RDM_COMMAND_DONE;
 }
 
-int Sdl2IO::autocomplete(roguedm::Sentence &a) const {
+bool Sdl2IO::autocomplete(roguedm::Sentence &a) const {
 
   // quit command completion
   if(a.begin()[0].wordContent==RDM_CMD_QUIT && a.begin()[0].wordClass==RDM_WCLASS_NORMAL) {
