@@ -55,6 +55,9 @@ class CharmapStamper {
     CharmapStamper();
     ~CharmapStamper();
 
+    /** Clear the state and free SDL2 resources. */
+    void resetCharmapStamper();
+
     /** Loads a charmap image using the config section values for it. */
     bool loadDefaultCharmap(SDL_Renderer*, std::string);
 

@@ -43,11 +43,7 @@ Sdl2IO::Sdl2IO() {
 }
 
 Sdl2IO::~Sdl2IO() {
-  if(initSuccess) {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-  }
+  resetSdl2IO();
 }
 
 bool Sdl2IO::initSdl2IO() {
@@ -101,6 +97,15 @@ bool Sdl2IO::initSdl2IO() {
   initSuccess = true;
   return true;
 
+}
+
+void Sdl2IO::resetSdl2IO() {
+  if(initSuccess) {
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    initSuccess = false;
+  }
 }
 
 void Sdl2IO::update() {

@@ -42,11 +42,14 @@ class Gui {
     Gui();
     ~Gui();
 
-    /** Update the state each game tick and interact with SDL2. */
-    void update(SDL_Renderer*);
-
     /** Init state and SDL2 resources. */
     bool initGui(SDL_Renderer*);
+
+    /** Clear the state and free SDL2 resources. */
+    void resetGui();
+
+    /** Update the state each game tick and interact with SDL2. */
+    void update(SDL_Renderer*);
 
     /** \ref commandLine getter. */
     roguedm::Sentence getCommandLine();

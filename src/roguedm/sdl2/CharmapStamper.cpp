@@ -25,6 +25,9 @@
 namespace roguedm_gui {
 
 CharmapStamper::CharmapStamper () {
+
+  initSuccess = false;
+
   config = roguedm::Config::instance();
   txtCHeight = 0;
   txtCWidth = 0;
@@ -33,10 +36,14 @@ CharmapStamper::CharmapStamper () {
   txtWSep = 0;
   txtHStart = 0;
   txtWStart = 0;
-  initSuccess = false;
+
 }
 
 CharmapStamper::~CharmapStamper() {
+  resetCharmapStamper();
+}
+
+void CharmapStamper::resetCharmapStamper() {
   if(initSuccess) {
     SDL_DestroyTexture(wordTypes[RDM_WCLASS_NORMAL].texture);
     SDL_DestroyTexture(wordTypes[RDM_WCLASS_COMMAND].texture);
@@ -53,6 +60,7 @@ CharmapStamper::~CharmapStamper() {
     SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_SET].texture);
     SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_UNIQ].texture);
     SDL_DestroyTexture(wordTypes[RDM_WCLASS_OBJECT_EPIC].texture);
+    initSuccess = false;
   }
 }
 

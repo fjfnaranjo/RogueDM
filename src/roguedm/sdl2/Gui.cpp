@@ -46,8 +46,30 @@ Gui::Gui() {
 }
 
 Gui::~Gui() {
-  if(initSuccess)
+  resetGui();
+}
+
+bool Gui::initGui(SDL_Renderer *renderer) {
+
+  // Words, command line and history init
+  if(!initCharmaps(renderer))
+    return false;
+
+  // Clear color
+  SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
+
+  SDL_ShowCursor(true);
+
+  initSuccess = true;
+  return true;
+
+}
+
+void Gui::resetGui() {
+  if(initSuccess) {
     defaultStamper.reset();
+    initSuccess = false;
+  }
 }
 
 void Gui::update(SDL_Renderer *renderer) {
@@ -241,21 +263,6 @@ void Gui::update(SDL_Renderer *renderer) {
   // End of command line .......
 
   // TODO: Paint the command history if fits
-
-}
-
-bool Gui::initGui(SDL_Renderer *renderer) {
-
-  // Words, command line and history init
-  if(!initCharmaps(renderer))
-    return false;
-
-  // Clear color
-  SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
-
-  SDL_ShowCursor(true);
-
-  return true;
 
 }
 

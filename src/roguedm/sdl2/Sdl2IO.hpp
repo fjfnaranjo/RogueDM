@@ -59,6 +59,9 @@ class Sdl2IO :
     /** Init state and SDL2 resources. */
     bool initSdl2IO();
 
+    /** Clear the state and free SDL2 resources. */
+    void resetSdl2IO();
+
     /** Update the state each game tick and interact with SDL2. */
     void update() override;
 
