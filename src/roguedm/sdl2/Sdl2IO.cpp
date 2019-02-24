@@ -143,37 +143,32 @@ int Sdl2IO::autocomplete(roguedm::Sentence &a) const {
 
 }
 
-roguedm::SentenceListSharedPtr Sdl2IO::autocompleteListOptions(
+roguedm::SentenceList Sdl2IO::autocompleteListOptions(
   const roguedm::Sentence &a
 ) const {
+
+  roguedm::SentenceList options;
 
   roguedm::Word psayCmd;
   psayCmd.wordContent = RDM_CMD_PSAY;
   psayCmd.wordClass = RDM_WCLASS_COMMAND;
+  roguedm::Sentence psaySentence = {psayCmd};
 
   roguedm::Word quitCmd;
   quitCmd.wordContent = RDM_CMD_QUIT;
   quitCmd.wordClass = RDM_WCLASS_COMMAND;
+  roguedm::Sentence quitSentence = {quitCmd};
 
   if(a.size()==1 && multibyteLenght(a.begin()[0].wordContent)==0) {
 
-    roguedm::SentenceListSharedPtr l =
-        std::make_shared<roguedm::SentenceList>();
+    options.push_back(psaySentence);
+    options.push_back(quitSentence);
 
-    roguedm::SentenceSharedPtr o =
-        std::make_shared<roguedm::Sentence>();
-
-    o->push_back(psayCmd);
-    l->push_back(*o);
-
-    o->push_back(quitCmd);
-    l->push_back(*o);
-
-    return l;
+    return options;
 
   }
 
-  return std::make_shared<roguedm::SentenceList>();
+  return roguedm::SentenceList();
 
 }
 
@@ -314,17 +309,17 @@ void Sdl2IO::processKey(SDL_Event* event) {
 void Sdl2IO::tryAutocompletion() {
 
   roguedm::Sentence commandLine = gui->getCommandLine();
-  roguedm::SentenceListSharedPtr options;
 
   // check for empty line to list all commands
   if(0==gui->commandLength()) {
 
     for(const auto & commandHandler : commandHandlers) {
 
-      options = commandHandler->autocompleteListOptions(commandLine);
+      roguedm::SentenceList options =
+        commandHandler->autocompleteListOptions(commandLine);
 
-      if(!options->empty()) {
-        for(const auto & option : *options)
+      if(!options.empty()) {
+        for(const auto & option : options)
           gui->consoleHistoryPush(option);
       }
 
@@ -340,10 +335,11 @@ void Sdl2IO::tryAutocompletion() {
       break;
     }
 
-    options = commandHandler->autocompleteListOptions(commandLine);
+    roguedm::SentenceList options =
+      commandHandler->autocompleteListOptions(commandLine);
 
-    if(!options->empty()) {
-      for(const auto & option : *options)
+    if(!options.empty()) {
+      for(const auto & option : options)
         gui->consoleHistoryPush(option);
       break;
     }

@@ -72,8 +72,6 @@ class CommandHandlerInterface
      */
     virtual int autocomplete(Sentence& command) const =0;
 
-    // TODO: Check if we should return by copy instead
-
     /**
      * \brief Request a list of autocomplete options.
      *
@@ -82,7 +80,7 @@ class CommandHandlerInterface
      * \param command The current command.
      * \return The list of valid autocomplete options.
      */
-    virtual SentenceListSharedPtr autocompleteListOptions(
+    virtual SentenceList autocompleteListOptions(
       const Sentence& command
     ) const =0;
 

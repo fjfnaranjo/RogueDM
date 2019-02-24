@@ -65,7 +65,7 @@ class Network : CommandHandlerInterface, GameComponentInterface
     /**
      * Used to ask the command handler an autocomplete candidate list.
      */
-    SentenceListSharedPtr autocompleteListOptions(const Sentence&)
+    SentenceList autocompleteListOptions(const Sentence&)
       const override;
 
   private:

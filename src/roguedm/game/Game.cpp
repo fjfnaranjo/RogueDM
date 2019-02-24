@@ -28,10 +28,10 @@ int Game::autocomplete(roguedm::Sentence&) const {
   return RDM_COMMAND_AC_NEXT;
 }
 
-roguedm::SentenceListSharedPtr Game::autocompleteListOptions(
+roguedm::SentenceList Game::autocompleteListOptions(
   const roguedm::Sentence&
 ) const {
-  return std::make_shared<roguedm::SentenceList>();
+  return roguedm::SentenceList();
 }
 
 void Game::update() {}

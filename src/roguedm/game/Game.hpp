@@ -51,7 +51,7 @@ class Game :
     /**
      * Used to ask the command handler an autocomplete candidate list.
      */
-    roguedm::SentenceListSharedPtr autocompleteListOptions(
+    roguedm::SentenceList autocompleteListOptions(
       const roguedm::Sentence&
     ) const override;
 

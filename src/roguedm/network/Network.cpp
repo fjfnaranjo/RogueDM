@@ -53,10 +53,10 @@ int Network::autocomplete(Sentence&) const {
   return RDM_COMMAND_AC_NEXT;
 }
 
-SentenceListSharedPtr Network::autocompleteListOptions(
+SentenceList Network::autocompleteListOptions(
   const Sentence&
 ) const {
-  return std::make_shared<SentenceList>();
+  return SentenceList();
 }
 
 } // namespace roguedm
