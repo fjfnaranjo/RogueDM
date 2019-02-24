@@ -30,13 +30,12 @@
 namespace roguedm_gui {
 
 /**
- * \brief The interface management class.
+ * \brief Manages the fundamental SDL2 state and interactions between the GUI
+ *        and other IO classes.
  *
  * Manage the SDL interface with the player. The console graphical output and
  * the texts input. Also handles the vast majority of the console command line
  * features.
- *
- * Pattern Singleton.
  */
 class Sdl2IO :
     roguedm::CommandHandlerInterface,

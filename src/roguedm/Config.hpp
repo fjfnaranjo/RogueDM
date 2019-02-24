@@ -56,8 +56,6 @@ typedef std::map<std::string, ConfigSettings> ConfigSections;
  * \brief The configuration management class.
  *
  * Manage all operations related to load, store or change configuration.
- *
- * Pattern Singleton.
  */
 class Config
 {

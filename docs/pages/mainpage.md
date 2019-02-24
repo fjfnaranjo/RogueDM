@@ -23,9 +23,10 @@ with RogueDM development.
 [//]: # (General definitions not included as output in welcome page)
 
 \namespace roguedm
-\brief General namespace (for the local and network interfaces).
+\brief General namespace.
 
-This namespace is used for the general application operations and types.
+This namespace is used for the general application operations and types. Its
+also used for the CLI and network interfaces
 
 \namespace roguedm_gui
 \brief Namespace for the SDL2 graphical interface.

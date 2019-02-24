@@ -30,8 +30,6 @@ namespace roguedm {
  * \brief The network management class.
  *
  * Manage all networking related operations and abstract its complexity.
- *
- * Pattern Singleton.
  */
 class Network : CommandHandlerInterface, GameComponentInterface
 {

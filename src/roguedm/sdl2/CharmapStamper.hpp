@@ -29,6 +29,8 @@
 namespace roguedm_gui {
 
 /**
+ * \brief Write over the screen using a character map.
+ *
  * This class is responsible of storing a particular character map (charmap)
  * image and use it to write characters to the screen.
  */

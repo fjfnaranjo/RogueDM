@@ -15,13 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file Sentence.hpp
- * \brief Declarations for the Sentence type.
- *
- * A Sentence is a list of words.
- */
-
 #pragma once
 
 #include <memory>

@@ -25,6 +25,7 @@
 
 namespace roguedm_gui {
 
+/** \brief Manages the GUI interface graphical details. */
 class Gui {
 
   RDM_DECLARE_CLASS_AS_NOCPNOMV(Gui)

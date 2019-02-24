@@ -15,15 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file Word.hpp
- * \brief Declarations for the Word type.
- *
- * This type holds a 'kind' value to identify different words with different
- * purposes and an unique identifier to refer to particular elements in the
- * session state.
- */
-
 #pragma once
 
 #include <string>
@@ -56,7 +47,7 @@
 namespace roguedm {
 
 /**
- * Struct to define word kinds colors and enclosing decorations.
+ * \brief Struct to define word kinds colors and enclosing decorations.
  *
  * * fgColor: Color for the foreground.
  * * bgColor: Color for the background.
@@ -92,7 +83,13 @@ static WordKind wordKinds[] = {
     {{192, 192,  64, 0},{   0,   0,   0, 0}, u8"{"     , u8"}***"  },
 };
 
-/** \brief Struct to contain a word content, its kind and its id. */
+/**
+ * \brief Struct to contain a word content, its kind and its id.
+ *
+ * This type holds a 'kind' value (\ref WordKind) to identify different words
+ * with different purposes and an unique identifier to refer to particular
+ * elements in the session state.
+ */
 struct Word {
   std::string content;
   unsigned int kind;

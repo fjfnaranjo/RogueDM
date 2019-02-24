@@ -15,14 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * \file Command.hpp
- * \brief Declarations for the Command type.
- *
- * A Command consist in a name identifying the particular command (its function)
- * and a list of params.
- */
-
 #pragma once
 
 #include <string>
@@ -37,7 +29,12 @@
 
 namespace roguedm {
 
-/** \brief Struct to contain a command name and its parameters. */
+/**
+ * \brief Struct to contain a command name and its parameters.
+ *
+ * A Command consist in a name identifying the particular command (its function)
+ * and a list of params.
+ */
 struct Command {
   std::string name;
   Sentence params;

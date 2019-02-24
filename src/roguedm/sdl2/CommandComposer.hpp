@@ -26,6 +26,7 @@
 
 namespace roguedm_gui {
 
+/** \brief Helps with the editing and management of commands in the GUI. */
 class CommandComposer {
 
   RDM_DECLARE_CLASS_AS_NOCPNOMV(CommandComposer)
