@@ -61,7 +61,7 @@ struct WordKind {
   std::string rDecorator;
 };
 
-// TODO: If this has to be modified dynamically later, remember is bounded to
+// WARNING: If this has to be modified dynamically later, remember is bounded to
 // its compilation unit b/c static
 
 /** Table holding all the word kinds */

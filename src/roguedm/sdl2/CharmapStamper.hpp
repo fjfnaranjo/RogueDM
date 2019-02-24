@@ -192,12 +192,6 @@ class CharmapStamper {
     /** Define the static word types and colorize them. */
     void defineAndColorizeWordTypes(SDL_Renderer*, SDL_Surface*);
 
-    /**
-     * Define the table used to translate a UTF-8 input character to a ASCII 850
-     * page character set.
-     */
-    void initTransTable();
-
     /** Used to color the word types textures. */
     SDL_Texture* colorizeWordType(
       SDL_Renderer* renderer,
@@ -252,9 +246,6 @@ class CharmapStamper {
       int y,
       SDL_Renderer* renderer
     );
-
-    /** Table used to translate a UTF-8 input character to a ASCII 850 */
-    std::map<std::string,int> transUtf8;
 
     /** Characters texture chars-by-row. */
     int txtCpr;

@@ -20,6 +20,7 @@
 #include <SDL_image.h>
 
 #include "mbtools.hpp"
+#include "translations.hpp"
 #include "../commands/Word.hpp"
 #include "../strings.hpp"
 
@@ -85,8 +86,6 @@ bool CharmapStamper::loadDefaultCharmap(
 
   // Free reference surfaces
   SDL_FreeSurface(baseTexture);
-
-  initTransTable();
 
   initSuccess = true;
   return true;
@@ -221,132 +220,6 @@ void CharmapStamper::defineAndColorizeWordTypes(
       roguedm::wordKinds[kind].bgColor.g,
       roguedm::wordKinds[kind].bgColor.b*/
     ));
-}
-
-void CharmapStamper::initTransTable() {
-
-  transUtf8[u8" "] = 32;
-  transUtf8[u8"!"] = 33;
-  transUtf8[u8"\""]= 34;
-  transUtf8[u8"#"] = 35;
-  transUtf8[u8"$"] = 36;
-  transUtf8[u8"%"] = 37;
-  transUtf8[u8"&"] = 38;
-  transUtf8[u8"'"] = 39;
-  transUtf8[u8"("] = 40;
-  transUtf8[u8")"] = 41;
-  transUtf8[u8"*"] = 42;
-  transUtf8[u8"+"] = 43;
-  transUtf8[u8","] = 44;
-  transUtf8[u8"-"] = 45;
-  transUtf8[u8"."] = 46;
-  transUtf8[u8"/"] = 47;
-
-  transUtf8[u8"0"] = 48;
-  transUtf8[u8"1"] = 49;
-  transUtf8[u8"2"] = 50;
-  transUtf8[u8"3"] = 51;
-  transUtf8[u8"4"] = 52;
-  transUtf8[u8"5"] = 53;
-  transUtf8[u8"6"] = 54;
-  transUtf8[u8"7"] = 55;
-  transUtf8[u8"8"] = 56;
-  transUtf8[u8"9"] = 57;
-  transUtf8[u8":"] = 58;
-  transUtf8[u8";"] = 59;
-  transUtf8[u8"<"] = 60;
-  transUtf8[u8"="] = 61;
-  transUtf8[u8">"] = 62;
-  transUtf8[u8"?"] = 63;
-
-  transUtf8[u8"@"] = 64;
-  transUtf8[u8"A"] = 65;
-  transUtf8[u8"B"] = 66;
-  transUtf8[u8"C"] = 67;
-  transUtf8[u8"D"] = 68;
-  transUtf8[u8"E"] = 69;
-  transUtf8[u8"F"] = 70;
-  transUtf8[u8"G"] = 71;
-  transUtf8[u8"H"] = 72;
-  transUtf8[u8"I"] = 73;
-  transUtf8[u8"J"] = 74;
-  transUtf8[u8"K"] = 75;
-  transUtf8[u8"L"] = 76;
-  transUtf8[u8"M"] = 77;
-  transUtf8[u8"N"] = 78;
-  transUtf8[u8"O"] = 79;
-
-  transUtf8[u8"P"] = 80;
-  transUtf8[u8"Q"] = 81;
-  transUtf8[u8"R"] = 82;
-  transUtf8[u8"S"] = 83;
-  transUtf8[u8"T"] = 84;
-  transUtf8[u8"U"] = 85;
-  transUtf8[u8"V"] = 86;
-  transUtf8[u8"W"] = 87;
-  transUtf8[u8"X"] = 88;
-  transUtf8[u8"Y"] = 89;
-  transUtf8[u8"Z"] = 90;
-  transUtf8[u8"["] = 91;
-  transUtf8[u8"\\"]= 92;
-  transUtf8[u8"]"] = 93;
-  transUtf8[u8"^"] = 94;
-  transUtf8[u8"_"] = 95;
-
-  transUtf8[u8"`"] = 96;
-  transUtf8[u8"a"] = 97;
-  transUtf8[u8"b"] = 98;
-  transUtf8[u8"c"] = 99;
-  transUtf8[u8"d"] = 100;
-  transUtf8[u8"e"] = 101;
-  transUtf8[u8"f"] = 102;
-  transUtf8[u8"g"] = 103;
-  transUtf8[u8"h"] = 104;
-  transUtf8[u8"i"] = 105;
-  transUtf8[u8"j"] = 106;
-  transUtf8[u8"k"] = 107;
-  transUtf8[u8"l"] = 108;
-  transUtf8[u8"m"] = 109;
-  transUtf8[u8"n"] = 110;
-  transUtf8[u8"o"] = 111;
-
-  transUtf8[u8"p"] = 112;
-  transUtf8[u8"q"] = 113;
-  transUtf8[u8"r"] = 114;
-  transUtf8[u8"s"] = 115;
-  transUtf8[u8"t"] = 116;
-  transUtf8[u8"u"] = 117;
-  transUtf8[u8"v"] = 118;
-  transUtf8[u8"w"] = 119;
-  transUtf8[u8"x"] = 120;
-  transUtf8[u8"y"] = 121;
-  transUtf8[u8"z"] = 122;
-  transUtf8[u8"{"] = 123;
-  transUtf8[u8"|"] = 124;
-  transUtf8[u8"}"] = 125;
-  transUtf8[u8"~"] = 126;
-
-  transUtf8[u8"\u00c7"] = 128;
-  transUtf8[u8"\u00fc"] = 129;
-  transUtf8[u8"\u00e9"] = 130;
-  transUtf8[u8"\u00e7"] = 135;
-  transUtf8[u8"\u00c9"] = 144;
-  transUtf8[u8"\u00e1"] = 160;
-  transUtf8[u8"\u00ed"] = 161;
-  transUtf8[u8"\u00f3"] = 162;
-  transUtf8[u8"\u00fa"] = 163;
-  transUtf8[u8"\u00f1"] = 164;
-  transUtf8[u8"\u00d1"] = 165;
-  transUtf8[u8"\u00aa"] = 166;
-  transUtf8[u8"\u00ba"] = 167;
-  transUtf8[u8"\u00bf"] = 168;
-  transUtf8[u8"\u00a1"] = 173;
-  transUtf8[u8"\u00c1"] = 181;
-  transUtf8[u8"\u20ac"] = 213;
-  transUtf8[u8"\u00cd"] = 214;
-  transUtf8[u8"\u00d3"] = 224;
-  transUtf8[u8"\u00da"] = 233;
-
 }
 
 SDL_Texture* CharmapStamper::colorizeWordType(
