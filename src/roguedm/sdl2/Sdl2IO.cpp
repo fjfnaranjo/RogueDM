@@ -345,8 +345,6 @@ void Sdl2IO::tryAutocompletion() {
 
   }
 
-  gui->commandComposer.resetHistoryCurrent();
-
 }
 
 void Sdl2IO::processLine() {
@@ -361,10 +359,7 @@ void Sdl2IO::processLine() {
       gui->commandComposer.commandHistoryPush(currentCommand);
 
       // Reset the history pointer
-      gui->commandComposer.resetHistoryCurrent();
-
-      // Reset the command line
-      gui->commandComposer.resetLine();
+      gui->commandComposer.resetCommand();
     }
 
 }

@@ -51,9 +51,6 @@ class CommandComposer {
     /** Check if there is already a command in the command line. */
     bool hasCommand();
 
-    /** Reset the command line and its history navigation cursor */
-    void resetLine();
-
     /** Process pressing of key backspace. */
     void keyBackspace();
 
@@ -93,8 +90,8 @@ class CommandComposer {
     /** Add a new command to the command history. */
     void commandHistoryPush(roguedm::Command);
 
-    /** Reset the history explorer. */
-    void resetHistoryCurrent();
+    /** Reset the command line and its history navigation cursor */
+    void resetCommand();
 
     /** Paints the command line. */
     void paintCommandLine(

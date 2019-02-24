@@ -23,17 +23,11 @@ namespace roguedm_gui {
 
 CommandComposer::CommandComposer () {
 
-  currentWord = 0;
-  wordRShift = 0;
-
-  // Empty word
-  emptyWord.content = RDM_WEMPTY;
-  emptyWord.kind = RDM_WCLASS_NORMAL;
-
-  historyCurrent = 0;
+  resetCommand();
   historyBackup = roguedm::Sentence();
 
-  resetLine();
+  emptyWord.content = RDM_WEMPTY;
+  emptyWord.kind = RDM_WCLASS_NORMAL;
 
 }
 
@@ -62,6 +56,7 @@ roguedm::Sentence CommandComposer::getRawSentence() {
 }
 
 void CommandComposer::setCommand(const roguedm::Command& command) {
+  resetCommand();
   sentence = command2Sentence(command);
 }
 
@@ -80,13 +75,6 @@ bool CommandComposer::hasCommand() {
   if(0!=commandLength() && sentence[0].kind == RDM_WCLASS_COMMAND)
     return true;
   return false;
-}
-
-void CommandComposer::resetLine() {
-  sentence.clear();
-  sentence.push_back(emptyWord);
-  currentWord = 0;
-  wordRShift = 0;
 }
 
 void CommandComposer::keyBackspace() {
@@ -162,7 +150,6 @@ void CommandComposer::keyDelete() {
 void CommandComposer::keyLeft(bool fullWord) {
 
   // TODO: Fix fullWord implementation.
-
   if (!fullWord) {
     if(
       wordRShift<(int)multibyteLenght(sentence[currentWord].content)
@@ -189,6 +176,7 @@ void CommandComposer::keyLeft(bool fullWord) {
 
 void CommandComposer::keyRight(bool fullWord) {
 
+  // TODO: Fix fullWord implementation.
   if (!fullWord) {
     if(wordRShift>0)
       wordRShift--;
@@ -226,6 +214,7 @@ void CommandComposer::keyEnd() {
 }
 
 void CommandComposer::keyUp() {
+
   if(!history.empty()) {
     if(0==historyCurrent) {
       historyBackup = sentence;
@@ -240,9 +229,11 @@ void CommandComposer::keyUp() {
       wordRShift = 0;
     }
   }
+
 }
 
 void CommandComposer::keyDown() {
+
   if(!history.empty()) {
     if(historyCurrent) {
       if(historyCurrent<(int)history.size()) {
@@ -252,13 +243,14 @@ void CommandComposer::keyDown() {
         wordRShift = 0;
       } else {
         historyCurrent=0;
-        resetLine();
+        resetCommand();
         sentence = historyBackup;
         currentWord = sentence.size()-1;
         wordRShift = 0;
       }
     }
   }
+
 }
 
 void CommandComposer::keySpace() {
@@ -319,6 +311,10 @@ void CommandComposer::keyCharacter(std::string character) {
 }
 
 void CommandComposer::commandHistoryPush(roguedm::Command command) {
+
+  if(0!=historyCurrent)
+    resetCommand();
+
   history.push_back(command2Sentence(command));
 
   // Limit the command historic size
@@ -327,8 +323,14 @@ void CommandComposer::commandHistoryPush(roguedm::Command command) {
 
 }
 
-void CommandComposer::resetHistoryCurrent() {
+void CommandComposer::resetCommand() {
+
   historyCurrent = 0;
+  sentence.clear();
+  sentence.push_back(emptyWord);
+  currentWord = 0;
+  wordRShift = 0;
+
 }
 
 void CommandComposer::paintCommandLine(
