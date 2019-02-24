@@ -36,7 +36,7 @@ class CommandComposer {
     CommandComposer();
     ~CommandComposer();
 
-    /** \ref Command full sentence getter. */
+    /** \ref Command getter. */
     roguedm::Command getCommand();
 
     /** \ref Command full sentence getter. */
@@ -105,7 +105,10 @@ class CommandComposer {
 
   private:
 
+    /** Serialize a command as a sentence. */
     roguedm::Sentence command2Sentence(roguedm::Command);
+
+    /** Serialize a sentence as a command. */
     roguedm::Command sentence2Command(roguedm::Sentence);
 
     /** An empty command to signify the absence of command. */
