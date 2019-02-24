@@ -38,22 +38,15 @@ class Game :
 
     Game() =default;
 
-    /**
-     * Request to process a command.
-     */
+    /** Request to process a command. */
     bool processCommand(const roguedm::Sentence&) override;
 
-    /**
-     * Request to autocomplete a command.
-     */
+    /** Request to autocomplete a command. */
     bool autocomplete(roguedm::Sentence&) const override;
 
-    /**
-     * Used to ask the command handler an autocomplete candidate list.
-     */
-    roguedm::SentenceList autocompleteListOptions(
-      const roguedm::Sentence&
-    ) const override;
+    /** Used to ask the command handler an autocomplete candidate list. */
+    roguedm::SentenceList autocompleteListOptions(const roguedm::Sentence&)
+      const override;
 
     /**
      * Method used when the main app has time to allow a network management

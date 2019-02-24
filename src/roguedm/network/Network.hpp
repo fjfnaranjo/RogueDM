@@ -52,19 +52,13 @@ class Network : CommandHandlerInterface, GameComponentInterface
      */
     void update() override;
 
-    /**
-     * Request to process a command.
-     */
+    /** Request to process a command. */
     bool processCommand(const Sentence&) override;
 
-    /**
-     * Request to autocomplete a command.
-     */
+    /** Request to autocomplete a command. */
     bool autocomplete(Sentence&) const override;
 
-    /**
-     * Used to ask the command handler an autocomplete candidate list.
-     */
+    /** Used to ask the command handler an autocomplete candidate list. */
     SentenceList autocompleteListOptions(const Sentence&)
       const override;
 

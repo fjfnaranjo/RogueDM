@@ -56,31 +56,21 @@ class Sdl2IO :
     Sdl2IO();
     ~Sdl2IO();
 
-    /** SDL resources class initializer */
+    /** Init state and SDL2 resources. */
     bool initSdl2IO();
 
-    /**
-     * Method used when the main app has time to allow a network management
-     * step from the game loop.
-     */
+    /** Update the state each game tick and interact with SDL2. */
     void update() override;
 
-    /**
-     * Request to process a command.
-     */
+    /** Request to process a command. */
     bool processCommand(const roguedm::Sentence&) override;
 
-    /**
-     * Request to autocomplete a command.
-     */
+    /** Request to autocomplete a command. */
     bool autocomplete(roguedm::Sentence&) const override;
 
-    /**
-     * Used to ask the command handler an autocomplete candidate list.
-     */
-    roguedm::SentenceList autocompleteListOptions(
-      const roguedm::Sentence&
-    ) const override;
+    /** Used to ask the command handler an autocomplete candidate list. */
+    roguedm::SentenceList autocompleteListOptions(const roguedm::Sentence&)
+      const override;
 
     /**
      * Add a new command handler to the internal list, after erasing any

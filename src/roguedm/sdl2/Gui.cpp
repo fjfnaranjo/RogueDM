@@ -368,6 +368,8 @@ void Gui::keyDelete() {
 
 void Gui::keyLeft(bool fullWord) {
 
+  // TODO: Fix fullWord implementation.
+
   if (!fullWord) {
     if(
       wordRShift<(int)multibyteLenght(commandLine[currentWord].wordContent)

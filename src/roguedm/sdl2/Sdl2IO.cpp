@@ -358,7 +358,7 @@ void Sdl2IO::processLine() {
   roguedm::Sentence currentCommand = gui->getCommandLine();
 
   // TODO: Move this responsibility to other place
-  if(currentCommand[0].wordClass==RDM_WCLASS_NORMAL) {
+  if(!gui->hasCommand()) {
     roguedm::Word newPsayCommand;
     newPsayCommand.wordContent = RDM_CMD_PSAY;
     newPsayCommand.wordClass = RDM_WCLASS_COMMAND;

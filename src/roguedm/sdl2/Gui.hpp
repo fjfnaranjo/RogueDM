@@ -41,28 +41,71 @@ class Gui {
 
     Gui();
     ~Gui();
+
+    /** Update the state each game tick and interact with SDL2. */
     void update(SDL_Renderer*);
+
+    /** Init state and SDL2 resources. */
     bool initGui(SDL_Renderer*);
+
+    /** \ref commandLine getter. */
     roguedm::Sentence getCommandLine();
+
+    /** \ref commandLine setter. */
     void setCommandLine(const roguedm::Sentence&);
+
+    /** Get the current command full length. */
     int commandLength();
+
+    /** Check if there is already a command in the command line. */
     bool hasCommand();
-    void addReplaceCommand();
+
+    /** Add a new command to the command history. */
     void commandHistoryPush(roguedm::Sentence);
+
+    /** Add a new command to the console log. */
     void consoleHistoryPush(roguedm::Sentence);
+
+    /** Process pressing of key backspace. */
     void keyBackspace();
+
+    /** Process pressing of key delete. */
     void keyDelete();
-    void keyLeft(bool);
-    void keyRight(bool);
+
+    /**
+     * Process pressing of key left.
+     * \param fullWord Move in increments of full words.
+     */
+    void keyLeft(bool fullWord);
+
+    /**
+     * Process pressing of key right.
+     * \param fullWord Move in increments of full words.
+     */
+    void keyRight(bool fullWord);
+
+    /** Process pressing of key home. */
     void keyHome();
+
+    /** Process pressing of key end. */
     void keyEnd();
+
+    /** Process pressing of key up. */
     void keyUp();
+
+    /** Process pressing of key down. */
     void keyDown();
+
+    /** Process pressing of key space. */
     void keySpace();
+
+    /** Process pressing of any normal character key (not space). */
     void keyCharacter(std::string character);
+
+    /** Reset the history explorer. */
     void resetHistoryCurrent();
 
-    /** Reser the command line and its history navigation cursor */
+    /** Reset the command line and its history navigation cursor */
     void resetLine();
 
     /** Updates the screen if window resizes. */
