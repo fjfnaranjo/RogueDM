@@ -36,11 +36,14 @@ class CommandComposer {
     CommandComposer();
     ~CommandComposer();
 
-    /** \ref commandLine getter. */
-    roguedm::Sentence getCommandLine();
+    /** \ref Command full sentence getter. */
+    roguedm::Command getCommand();
 
-    /** \ref commandLine setter. */
-    void setCommandLine(const roguedm::Sentence&);
+    /** \ref Command full sentence getter. */
+    roguedm::Sentence getRawSentence();
+
+    /** \ref Command full sentence setter. */
+    void setCommand(const roguedm::Command&);
 
     /** Get the current command full length. */
     int commandLength();
@@ -88,7 +91,7 @@ class CommandComposer {
     void keyCharacter(std::string character);
 
     /** Add a new command to the command history. */
-    void commandHistoryPush(roguedm::Sentence);
+    void commandHistoryPush(roguedm::Command);
 
     /** Reset the history explorer. */
     void resetHistoryCurrent();
@@ -102,6 +105,9 @@ class CommandComposer {
 
   private:
 
+    roguedm::Sentence command2Sentence(roguedm::Command);
+    roguedm::Command sentence2Command(roguedm::Sentence);
+
     /** An empty command to signify the absence of command. */
     roguedm::Word emptyWord;
 
@@ -111,8 +117,13 @@ class CommandComposer {
     /** Line exploration current displacement in characters. */
     int wordRShift;
 
-    /** The current command line contents. */
-    roguedm::Sentence commandLine;
+    /**
+     * The current command sentence contents.
+     *
+     * For ease of manipulation this contains both the \ref Command name and the
+     * parameters in a single \ref Sentence object.
+     */
+    roguedm::Sentence sentence;
 
     /** Sentences vector for the history. */
     roguedm::SentenceList history;

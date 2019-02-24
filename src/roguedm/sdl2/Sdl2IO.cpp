@@ -133,6 +133,9 @@ bool Sdl2IO::processCommand(const roguedm::Command &command) {
     appDone = 1;
     return RDM_CMD_PROCESS_DONE;
   }
+  if(command.name==RDM_CMD_PSAY) {
+    return RDM_CMD_PROCESS_DONE;
+  }
   return RDM_CMD_PROCESS_UNKNOWN;
 }
 
@@ -303,87 +306,67 @@ void Sdl2IO::processKey(SDL_Event* event) {
       tryAutocompletion();
       break;
 
-
   }
 
 }
 
 void Sdl2IO::tryAutocompletion() {
-/*
-  roguedm::Sentence commandLine = gui->getCommandLine();
 
-  // check for empty line to list all commands
-  if(0==gui->commandLength()) {
+  // There is already a command
+  if(gui->commandComposer.hasCommand()) {
 
-    for(const auto & commandHandler : commandHandlers) {
-
-      roguedm::CommandList options =
-        commandHandler->getCompletionCandidates(commandLine);
-
-      if(!options.empty()) {
-        for(const auto & option : options)
-          gui->consoleHistoryPush(option);
-      }
-
+    // Try complete the current command
+    roguedm::Command command = gui->commandComposer.getCommand();
+    roguedm::CommandList candidateCommands;
+    for(const auto &commandHandler: commandHandlers) {
+      roguedm::CommandList posibleCandidates =
+        commandHandler->getCompletionCandidates(command);
+      for(const auto &possibleCandidate: posibleCandidates)
+        candidateCommands.insert(candidateCommands.end(), possibleCandidate);
     }
+    // TODO: Do more stuff with this list
+    if(1==candidateCommands.size())
+      gui->commandComposer.setCommand(candidateCommands[0]);
 
   }
 
-  // Process action
-  for(const auto & commandHandler : commandHandlers) {
+  // There is not a command
+  else {
 
-    if(RDM_COMMAND_AC_COMPLETED==commandHandler->autocomplete(commandLine)) {
-      gui->setCommandLine(commandLine);
-      break;
-    }
-
-    roguedm::SentenceList options =
-      commandHandler->autocompleteListOptions(commandLine);
-
-    if(!options.empty()) {
-      for(const auto & option : options)
-        gui->consoleHistoryPush(option);
-      break;
-    }
+    // Try to identify a command from the sentence
+    roguedm::Sentence sentence = gui->commandComposer.getRawSentence();
+    roguedm::Command candidateCommand;
+    for(const auto &commandHandler: commandHandlers)
+      if(
+        RDM_CMD_IDENTIFY_DONE==
+          commandHandler->identifyCommand(sentence, candidateCommand)
+      )
+        gui->commandComposer.setCommand(candidateCommand);
 
   }
 
-  gui->resetHistoryCurrent();
-*/
+  gui->commandComposer.resetHistoryCurrent();
+
 }
 
 void Sdl2IO::processLine() {
-/*
-  if(0==gui->commandLength())
-    return;
 
-  roguedm::Sentence currentCommand = gui->getCommandLine();
-
-  // TODO: Move this responsibility to other place
-  if(!gui->hasCommand()) {
-    roguedm::Word newPsayCommand;
-    newPsayCommand.content = RDM_CMD_PSAY;
-    newPsayCommand.kind = RDM_WCLASS_COMMAND;
-    currentCommand.insert(currentCommand.begin(), newPsayCommand);
-  }
+  roguedm::Command currentCommand = gui->commandComposer.getCommand();
 
   // Process action
-  for(const auto & commandHandler : commandHandlers)
+  for(const auto &commandHandler: commandHandlers)
     if(RDM_CMD_PROCESS_DONE==commandHandler->processCommand(currentCommand)) {
 
       // Push the command in the historic
-      gui->commandHistoryPush(currentCommand);
-
-      // Print the command to the console
-      gui->consoleHistoryPush(currentCommand);
+      gui->commandComposer.commandHistoryPush(currentCommand);
 
       // Reset the history pointer
-      gui->resetHistoryCurrent();
+      gui->commandComposer.resetHistoryCurrent();
 
       // Reset the command line
-      gui->resetLine();
+      gui->commandComposer.resetLine();
     }
-*/
+
 }
 
 } // namespace roguedm_gui
