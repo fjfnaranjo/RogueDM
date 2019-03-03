@@ -335,10 +335,13 @@ void CommandComposer::resetCommand() {
 
 void CommandComposer::paintCommandLine(
   SDL_Renderer *renderer, std::shared_ptr<CharmapStamper> stamper,
-  SDL_Rect dialogMain, SDL_Rect dialogCell, SDL_Rect dialogCreature,
-  SDL_Rect dialogText,
   int maxCols, int maxRows, int defaultCWidth, int defaultCHeight
 ) {
+
+  SDL_Rect dialogMain;
+  SDL_Rect dialogCell;
+  SDL_Rect dialogCreature;
+  SDL_Rect dialogText;
 
   // Panels
   // TODO: Move box drawing to other class or a helper function

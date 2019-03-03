@@ -76,21 +76,6 @@ class Gui {
     /** Screen size in rows. */
     int maxRows;
 
-    /** Coordinates for the main window inside the terminal. */
-    SDL_Rect dialogMain;
-
-    /** Coordinates for the cell info window inside the terminal. */
-    SDL_Rect dialogCell;
-
-    /** Coordinates for the creature info window inside the terminal. */
-    SDL_Rect dialogCreature;
-
-    /** Coordinates for the players info window inside the terminal. */
-    SDL_Rect dialogPlayers;
-
-    /** Coordinates for the text window inside the terminal. */
-    SDL_Rect dialogText;
-
     /** Shared pointer to the default charmap drawing class. */
     std::shared_ptr<CharmapStamper> defaultStamper;
 

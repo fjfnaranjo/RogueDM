@@ -63,7 +63,6 @@ void Gui::update(SDL_Renderer *renderer) {
 
   commandComposer.paintCommandLine(
     renderer, defaultStamper,
-    dialogMain, dialogCell, dialogCreature, dialogText,
     maxCols, maxRows, defaultCWidth, defaultCHeight
   );
 

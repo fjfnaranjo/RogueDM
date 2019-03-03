@@ -96,7 +96,6 @@ class CommandComposer {
     /** Paints the command line. */
     void paintCommandLine(
       SDL_Renderer*, std::shared_ptr<CharmapStamper>,
-      SDL_Rect, SDL_Rect, SDL_Rect, SDL_Rect,
       int, int, int, int
     );
 
