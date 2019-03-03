@@ -5,9 +5,10 @@ structured.
 
 * \subpage main-concepts
 * \subpage general-diagram
+ * \ref app-configuration
  * \ref program-execution
  * \ref sdl2-interface
- * \ref word-sentences-commands
+ * \ref cli-interface
  * \ref networking
  * \ref game-definitions
- * \ref app-configuration
+ * \ref word-sentences-commands

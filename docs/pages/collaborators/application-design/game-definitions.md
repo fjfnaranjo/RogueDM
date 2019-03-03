@@ -1,3 +1,3 @@
 \page game-definitions Game definitions
 
-\image html game.png
+\image html f-game.png

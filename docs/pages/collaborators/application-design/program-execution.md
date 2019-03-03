@@ -1,5 +1,7 @@
 \page program-execution Program execution
 
+\image html b-application.png
+
 ## The main function delegation
 
 The C++ main function delegates its two responsabilities (handling of program
@@ -20,3 +22,5 @@ a funtion to broadcast commands in the shared command bus.
  * \ref roguedm::CliIO
 * Implement the shared command bus broadcast and handle some commands:
 * Update a set of \ref roguedm::GameComponentInterface in a main loop.
+
+\image html h-interfaces.png

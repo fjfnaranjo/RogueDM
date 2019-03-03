@@ -31,7 +31,7 @@ This components implement the \ref roguedm::GameComponentInterface and the
 \ref roguedm::Application class is responsible of their definition and
 management of the loop.
 
-## The application "commands", the "command handlers" and the "shared command bus"
+## The application "commands", the "command handlers" and the "command bus"
 
 As an interactive application, RogueDM should respond to some kind of input
 events. Input events can be of different nature. They can be network input,
@@ -46,7 +46,7 @@ application components by the \ref roguedm::Application class. This propagation
 is a simple broadcast from all producers to all consumers.
 
 We are not using an explicit bus implementation here, but we will call this
-command propagation mechanishm "shared command bus" anyway.
+command propagation mechanishm "command bus" anyway.
 
 The \ref roguedm::Network component will handle how this commands are sent
 to another instances of RogueDM connected over the network.

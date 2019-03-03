@@ -50,6 +50,7 @@ class CommandHandlerInterface {
    * If a command handler returns \ref RDM_CMD_PROCESS_DONE, the command can
    * be considered completed. If it returns \ref RDM_CMD_PROCESS_UNKNOWN, the
    * command should be issued to another command handler.
+   *
    * \param command The command.
    * \return See method description.
    */
@@ -63,9 +64,10 @@ class CommandHandlerInterface {
    *
    * A command should also be provided. If the command can be identified, the
    * provided command will be modified to construct an equivalent to the
-   * sentence in command form and \ref RDM_CMD_IDENTIFY_UNKNOWN will be
-   * returned. If the command can't be identified, \ref RDM_CMD_IDENTIFY_DONE
+   * sentence in command form and \ref RDM_CMD_IDENTIFY_DONE will be
+   * returned. If the command can't be identified \ref RDM_CMD_IDENTIFY_UNKNOWN
    * will be returned.
+   *
    * \param sentence The sentence.
    * \param[out] command The command to be modified. See method description.
    * \return See method description.
@@ -78,6 +80,7 @@ class CommandHandlerInterface {
    *
    * This method builds an autocomplete candidate list for the provided
    * command or an empty list if there is not valid complete options.
+   *
    * \param command The current command.
    * \return The list of valid autocomplete options.
    */
