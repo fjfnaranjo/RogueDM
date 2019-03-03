@@ -23,5 +23,8 @@
 
 #pragma once
 
+#define RDM_PATH_HERE     "./"
+#define RDM_PATH_SEP      "/"
+
 #define RDM_PATH_CONFIG   "env/config"
 #define RDM_PATH_SHARE    "env/share"

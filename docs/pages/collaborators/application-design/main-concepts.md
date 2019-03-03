@@ -28,8 +28,8 @@ loop where a set of "components" are constantly updated to provide the illusion
 of realtime.
 
 This components implement the \ref roguedm::GameComponentInterface and the
-current stage (seen later in \ref program-execution) is responsible of their
-definition and management.
+\ref roguedm::Application class is responsible of their definition and
+management of the loop.
 
 ## The application "commands", the "command handlers" and the "shared command bus"
 
@@ -40,11 +40,10 @@ input from the command line interface or input from the GUI.
 This input events will always be represented as a text command and from now on
 we will call them just "commands".
 
-Interaction of this commandss and the application components is handled by the
+Interaction of this commands and the application components is handled by the
 \ref roguedm::CommandHandlerInterface. The commands will be propagated to the
-application components by the current stage (seen later in
-\ref program-execution). This propagation is a simple broadcast from all
-producers to all consumers.
+application components by the \ref roguedm::Application class. This propagation
+is a simple broadcast from all producers to all consumers.
 
 We are not using an explicit bus implementation here, but we will call this
 command propagation mechanishm "shared command bus" anyway.

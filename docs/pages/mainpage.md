@@ -7,7 +7,7 @@ inspired [virtual tabletop](http://rpgvirtualtabletop.wikidot.com/choosing-a-vt)
 You can play role-playing games with your friends over the network and RogueDM
 will take care of showing the action with its amazing text renderer.
 
-RogueDM was also heavily inspired by [Dwarf Fortress](http://www.bay12games.com/dwarves/).
+RogueDM interface in also heavily inspired by [Dwarf Fortress](http://www.bay12games.com/dwarves/).
 
 Finally, RogueDM is free (as in freedom) and licensed under the
 [GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html). Check the

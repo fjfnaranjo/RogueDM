@@ -20,6 +20,8 @@
 
 #include "strings.hpp"
 
+#define RDM_STR_MAX 255
+
 namespace roguedm {
 
 std::string format_string(const char* format, ...) {

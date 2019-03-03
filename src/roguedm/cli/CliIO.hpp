@@ -25,7 +25,7 @@ namespace roguedm {
 /**
  * \brief The CLI/dedicated server interface management class.
  *
- * This stage represents an advanced user or administrator running the
+ * This IO class represents an advanced user or administrator running the
  * application as a dedicated server or for scripting purposes.
  */
 class CliIO : CommandHandlerInterface, GameComponentInterface {

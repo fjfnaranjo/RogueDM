@@ -39,23 +39,17 @@
 #include "paths.hpp"
 #include "version.hpp"
 
-#define RDM_STR_MAX              255
-
-#define RDM_PATH_HERE            "./"
-#define RDM_PATH_SEP             "/"
-
 #define RDM_STR_VERSION_STRING   "Rogue's Dungeon Master Version %s .\n"
+
 #define RDM_STR_USAGE_VERSION    "--version"
 #define RDM_STR_USAGE_HELP       "--help"
 #define RDM_STR_USAGE_VERBOSE    "--verbose"
 #define RDM_STR_USAGE_LOCAL      "--local"
 #define RDM_STR_USAGE            "usage: %s [--version] [--help] [--verbose] [--local]\n"
-
 #define RDM_STR_USAGE_UKNOWN     "Unknown program argument: %s\n"
 
 #define RDM_STR_CFG_CREATE_NEW   "Existing config file not accessible, trying to create a new one.\n"
 #define RDM_STR_CFG_BASE_ERROR   "Can't access the basic config file. Check application paths.\n"
-#define RDM_STR_CFG_LOAD_ERROR   "Error loading settings: %s.\n"
 #define RDM_STR_CFG_DEBUG        "Section: %s Setting: %s Value: %s\n"
 
 #define RDM_STR_PARSER_INCP_SEC  "Incomplete section.\n"
@@ -69,11 +63,7 @@
 #define RDM_STR_SDL_NET_ERROR    "SDLNet error reported: %s\n"
 
 #define RDM_STR_NOT_NETWORKING   "Networking disabled...\n"
-
-#define RDM_ERR_SETTINGS_ERROR   1
-#define RDM_ERR_ARGS_ERROR       2
-#define RDM_ERR_SDL2_ERROR       3
-#define RDM_ERR_NETWORK_ERROR    4
+#define RDM_STR_CFG_LOAD_ERROR   "Error loading settings: %s.\n"
 
 namespace roguedm {
 

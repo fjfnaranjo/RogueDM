@@ -36,13 +36,13 @@ class CommandComposer {
     CommandComposer();
     ~CommandComposer();
 
-    /** \ref Command getter. */
+    /** \ref roguedm::Command getter. */
     roguedm::Command getCommand();
 
-    /** \ref Command full sentence getter. */
+    /** \ref roguedm::Command full sentence getter. */
     roguedm::Sentence getRawSentence();
 
-    /** \ref Command full sentence setter. */
+    /** \ref roguedm::Command full sentence setter. */
     void setCommand(const roguedm::Command&);
 
     /** Get the current command full length. */
@@ -120,8 +120,8 @@ class CommandComposer {
     /**
      * The current command sentence contents.
      *
-     * For ease of manipulation this contains both the \ref Command name and the
-     * parameters in a single \ref Sentence object.
+     * For ease of manipulation this contains both the \ref roguedm::Command
+     * name and the parameters in a single \ref roguedm::Sentence object.
      */
     roguedm::Sentence sentence;
 

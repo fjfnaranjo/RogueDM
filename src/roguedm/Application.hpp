@@ -27,15 +27,11 @@ namespace roguedm {
  * This class is used to parse the program arguments and do all the generic
  * steps expected on a CLI program launch (help text, I18N init, ...).
  *
- * It also runs the application stage loop. See \ref application-design.
+ * It also runs the application main loop.
  */
 class Application {
 
-  RDM_DECLARE_CLASS_AS_NOCPNOMV(Application)
-
   public:
-
-    Application();
 
     /**
      * Runs the actual program inner/main code.
@@ -47,8 +43,8 @@ class Application {
 
   private:
 
-    /** Do an early search for a --verbose param to enable detailed logging. */
-    void process_verbosity(int argc, char *argv[]);
+    /** Do an early search for a --verbose argument to enable logging. */
+    void parse_verbosity(int argc, char *argv[]);
 
     /**
      * Processes the program arguments.
@@ -61,14 +57,10 @@ class Application {
      * \param argv main() arguments values.
      * \param configuration Global configuration object.
      */
-    void process_arguments (
+    int parse_arguments (
       int argc, char* argv[],
       const ConfigSharedPtr& configuration
     );
-
-    int exitStatus;
-    bool keepRunning;
-    bool argumentsError;
 
 };
 

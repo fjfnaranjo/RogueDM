@@ -22,5 +22,8 @@
 
 #pragma once
 
+#define RDM_PATH_HERE     "./"
+#define RDM_PATH_SEP      "/"
+
 #define RDM_PATH_CONFIG   "${roguedm_CONFIG_DIRECTORY}"
 #define RDM_PATH_SHARE    "${roguedm_SHARE_DIRECTORY}"
