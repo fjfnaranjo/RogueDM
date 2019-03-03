@@ -273,4 +273,4 @@ class CharmapStamper {
 
 };
 
-} // namespace roguedm_gui
+}  // namespace roguedm_gui

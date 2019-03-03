@@ -36,4 +36,4 @@ roguedm::CommandList Game::getCompletionCandidates(
 
 void Game::update() {}
 
-} // namespace roguedm
+}  // namespace roguedm_game

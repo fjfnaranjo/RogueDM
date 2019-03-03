@@ -64,4 +64,4 @@ class Application {
 
 };
 
-} // namespace roguedm
+}  // namespace roguedm

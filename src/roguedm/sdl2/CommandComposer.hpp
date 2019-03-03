@@ -138,4 +138,4 @@ class CommandComposer {
 
 };
 
-} // namespace roguedm_gui
+}  // namespace roguedm_gui

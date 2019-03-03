@@ -20,6 +20,8 @@
 #include <algorithm>
 #include <cmath>
 #include <locale>
+#include <memory>
+#include <string>
 #include <vector>
 
 #include "mbtools.hpp"
@@ -53,7 +55,7 @@ Sdl2IO::~Sdl2IO() {
 
 bool Sdl2IO::initSdl2IO() {
 
-  if(0!=SDL_Init(SDL_INIT_VIDEO)) {
+  if (0 != SDL_Init(SDL_INIT_VIDEO)) {
     SDL_LogError(
       SDL_LOG_CATEGORY_APPLICATION,
       RDM_STR_SDL_ERROR,
@@ -69,7 +71,7 @@ bool Sdl2IO::initSdl2IO() {
     &renderer
   );
 
-  if(createStatus || NULL==window || NULL==renderer) {
+  if (createStatus || NULL == window || NULL == renderer) {
     SDL_LogError(
       SDL_LOG_CATEGORY_APPLICATION,
       RDM_STR_SDL_ERROR,
@@ -79,7 +81,7 @@ bool Sdl2IO::initSdl2IO() {
     return false;
   }
 
-  if(!gui->initGui(renderer)) {
+  if (!gui->initGui(renderer)) {
     SDL_LogError(
       SDL_LOG_CATEGORY_APPLICATION,
       RDM_STR_SDL_ERROR,
@@ -105,7 +107,7 @@ bool Sdl2IO::initSdl2IO() {
 }
 
 void Sdl2IO::resetSdl2IO() {
-  if(initSuccess) {
+  if (initSuccess) {
     gui->resetGui();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
@@ -134,11 +136,11 @@ void Sdl2IO::update() {
 }
 
 bool Sdl2IO::processCommand(const roguedm::Command &command) {
-  if(command.name==RDM_CMD_QUIT) {
+  if (command.name == RDM_CMD_QUIT) {
     appDone = 1;
     return RDM_CMD_PROCESS_DONE;
   }
-  if(command.name==RDM_CMD_PSAY) {
+  if (command.name == RDM_CMD_PSAY) {
     return RDM_CMD_PROCESS_DONE;
   }
   return RDM_CMD_PROCESS_UNKNOWN;
@@ -149,7 +151,7 @@ bool Sdl2IO::identifyCommand(
 ) const {
 
   // quit command completion
-  if(sentence.size()>0 && sentence[0].content==RDM_CMD_QUIT) {
+  if (sentence.size() > 0 && sentence[0].content == RDM_CMD_QUIT) {
     command.name = RDM_CMD_QUIT;
     command.params.clear();
     return RDM_CMD_IDENTIFY_DONE;
@@ -163,7 +165,7 @@ roguedm::CommandList Sdl2IO::getCompletionCandidates(
   const roguedm::Command &command
 ) const {
 
-  if(0==command.name.size() && 0==command.params.size()) {
+  if (0 == command.name.size() && 0 == command.params.size()) {
 
     roguedm::CommandList options;
 
@@ -200,7 +202,7 @@ int Sdl2IO::mustHalt() {
 
 void Sdl2IO::eventsManager() {
 
-  // TODO: Fix memory leak with event
+  // TODO(fjfnaranjo): Fix memory leak with event
 
   SDL_Event event;
 
@@ -216,7 +218,7 @@ void Sdl2IO::eventsManager() {
             break;
         }
         break;
-      // TODO: Resolve substitution/replace mode
+      // TODO(fjfnaranjo): Resolve substitution/replace mode
       case SDL_TEXTINPUT:
         processText(&event);
         break;
@@ -236,13 +238,13 @@ void Sdl2IO::processText(SDL_Event* event) {
 
   std::string text = event->text.text;
 
-  if(text == u8"") {
+  if (text == u8"") {
 
     gui->commandComposer->keySpace();
 
   } else {
 
-    // TODO: SDL2New Implement SDL2 text input support
+    // TODO(fjfnaranjo): SDL2New Implement SDL2 text input support
 
     gui->commandComposer->keyCharacter(text);
 
@@ -318,32 +320,30 @@ void Sdl2IO::processKey(SDL_Event* event) {
 void Sdl2IO::tryAutocompletion() {
 
   // There is already a command
-  if(gui->commandComposer->hasCommand()) {
+  if (gui->commandComposer->hasCommand()) {
 
     // Try complete the current command
     roguedm::Command command = gui->commandComposer->getCommand();
     roguedm::CommandList candidateCommands;
-    for(const auto &commandHandler: commandHandlers) {
+    for (const auto &commandHandler : commandHandlers) {
       roguedm::CommandList posibleCandidates =
         commandHandler->getCompletionCandidates(command);
-      for(const auto &possibleCandidate: posibleCandidates)
+      for (const auto &possibleCandidate : posibleCandidates)
         candidateCommands.insert(candidateCommands.end(), possibleCandidate);
     }
-    // TODO: Do more stuff with this list
-    if(1==candidateCommands.size())
+    // TODO(fjfnaranjo): Do more stuff with this list
+    if (1 == candidateCommands.size())
       gui->commandComposer->setCommand(candidateCommands[0]);
 
-  }
-
   // There is not a command
-  else {
+  } else {
 
     // Try to identify a command from the sentence
     roguedm::Sentence sentence = gui->commandComposer->getRawSentence();
     roguedm::Command candidateCommand;
-    for(const auto &commandHandler: commandHandlers)
-      if(
-        RDM_CMD_IDENTIFY_DONE==
+    for (const auto &commandHandler : commandHandlers)
+      if (
+        RDM_CMD_IDENTIFY_DONE ==
           commandHandler->identifyCommand(sentence, candidateCommand)
       )
         gui->commandComposer->setCommand(candidateCommand);
@@ -357,8 +357,10 @@ void Sdl2IO::processLine() {
   roguedm::Command currentCommand = gui->commandComposer->getCommand();
 
   // Process action
-  for(const auto &commandHandler: commandHandlers)
-    if(RDM_CMD_PROCESS_DONE==commandHandler->processCommand(currentCommand)) {
+  for (const auto &commandHandler : commandHandlers)
+    if (
+      RDM_CMD_PROCESS_DONE == commandHandler->processCommand(currentCommand)
+    ) {
 
       // Push the command in the historic
       gui->commandComposer->commandHistoryPush(currentCommand);
@@ -369,4 +371,4 @@ void Sdl2IO::processLine() {
 
 }
 
-} // namespace roguedm_gui
+}  // namespace roguedm_gui

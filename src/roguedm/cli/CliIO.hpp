@@ -28,8 +28,8 @@ namespace roguedm {
  * This IO class represents an advanced user or administrator running the
  * application as a dedicated server or for scripting purposes.
  */
-class CliIO : CommandHandlerInterface, GameComponentInterface {
+class CliIO : public CommandHandlerInterface, public GameComponentInterface {
   RDM_DECLARE_CLASS_AS_NOCPNOMV(CliIO)
 };
 
-} // namespace roguedm
+}  // namespace roguedm

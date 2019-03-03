@@ -28,8 +28,7 @@ namespace roguedm {
  * This interface declare the members required by the main game loop to work
  * properly. It includes the update() method.
  */
-class GameComponentInterface
-{
+class GameComponentInterface {
 
   RDM_DECLARE_CLASS_AS_INTERFACE(GameComponentInterface)
 
@@ -40,4 +39,4 @@ class GameComponentInterface
 
 };
 
-} // namespace roguedm
+}  // namespace roguedm

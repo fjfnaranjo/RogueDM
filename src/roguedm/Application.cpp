@@ -44,28 +44,24 @@ namespace roguedm {
 void Application::parse_verbosity(int argc, char* argv[]) {
   SDL_LogPriority level = SDL_LOG_PRIORITY_WARN;
   for (int c = 1; c < argc; c++)
-    if (0==std::string(argv[c]).compare(RDM_STR_USAGE_VERBOSE))
+    if (0 == std::string(argv[c]).compare(RDM_STR_USAGE_VERBOSE))
       level = SDL_LOG_PRIORITY_VERBOSE;
   SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, level);
 }
 
-int Application::parse_arguments (
+int Application::parse_arguments(
   int argc, char* argv[],
   const ConfigSharedPtr& configuration
 ) {
-
   for (int c = 1; c < argc; c++) {
-
     auto currentArgument = std::string(argv[c]);
 
-    if (0==currentArgument.compare(RDM_STR_USAGE_VERSION)) {    // --usage
+    if (0 == currentArgument.compare(RDM_STR_USAGE_VERSION)) {    // --usage
       std::cout << format_string(
-        RDM_STR_VERSION_STRING, RDM_STR_VERSION_FULL
-      );
+        RDM_STR_VERSION_STRING, RDM_STR_VERSION_FULL);
       return RDM_ARGS_EXIT;
-    }
 
-    else if (0==currentArgument.compare(RDM_STR_USAGE_HELP)) {  // --help
+    } else if (0 == currentArgument.compare(RDM_STR_USAGE_HELP)) {  // --help
       std::cout << format_string(
         RDM_STR_VERSION_STRING, RDM_STR_VERSION_FULL
       );
@@ -73,17 +69,15 @@ int Application::parse_arguments (
         RDM_STR_USAGE, argv[0]
       );
       return RDM_ARGS_EXIT;
-    }
 
-    else if (0==currentArgument.compare(RDM_STR_USAGE_LOCAL)) { // --local
+    } else if (0 == currentArgument.compare(RDM_STR_USAGE_LOCAL)) {  // --local
       configuration->setSettingBoolValue("general", "skipNetworking", true);
-    }
 
-    else if (0==currentArgument.compare(RDM_STR_USAGE_VERBOSE)) { // --verbose
-      ;
-    }
+    } else if (
+      0 == currentArgument.compare(RDM_STR_USAGE_VERBOSE)  // --verbose
+    ) {
 
-    else {                                                 // Unknown argument
+    } else {                                                 // Unknown argument
       SDL_LogError(
         SDL_LOG_CATEGORY_APPLICATION,
         RDM_STR_USAGE_UKNOWN,
@@ -108,7 +102,7 @@ int Application::run(int argc, char *argv[]) {
   ConfigSharedPtr config = Config::instance();
 
   // Load configuration
-  if(!config->loadFromFile()) {
+  if (!config->loadFromFile()) {
     SDL_LogError(
       SDL_LOG_CATEGORY_APPLICATION,
       RDM_STR_CFG_LOAD_ERROR,
@@ -119,11 +113,11 @@ int Application::run(int argc, char *argv[]) {
 
   // Parse program arguments
   int argsStatus = parse_arguments(argc, argv, config);
-  if(RDM_ARGS_ERROR==argsStatus)
+  if (RDM_ARGS_ERROR == argsStatus)
     return RDM_ERR_ARGS_ERROR;
 
   // Main application loop
-  if(RDM_ARGS_CONTINUE==argsStatus) {
+  if (RDM_ARGS_CONTINUE == argsStatus) {
 
     bool networkingEnabled =
       !config->getSettingBoolValue("general", "skipNetworking", false);
@@ -131,13 +125,13 @@ int Application::run(int argc, char *argv[]) {
     auto gameInstance = std::make_unique<roguedm_game::Game>();
 
     auto sdl2Io = std::make_unique<roguedm_gui::Sdl2IO>();
-    if(!sdl2Io->initSdl2IO()) {
+    if (!sdl2Io->initSdl2IO()) {
       return RDM_ERR_SDL2_ERROR;
     }
 
     auto network = std::make_unique<Network>();
-    if(networkingEnabled) {
-      if(!network->initNetwork()) {
+    if (networkingEnabled) {
+      if (!network->initNetwork()) {
         return RDM_ERR_NETWORK_ERROR;
       }
     } else {
@@ -146,12 +140,13 @@ int Application::run(int argc, char *argv[]) {
 
     // input checking and scene drawing (game loop)
     int done = 0;
-    while(!done) {
+    while (!done) {
       sdl2Io->update();
       done = sdl2Io->mustHalt();
-      if(networkingEnabled)
+      if (networkingEnabled)
         network->update();
-      // TODO: Check if remote and game instances should issue a 'done' also
+      // TODO(fjfnaranjo): Check if remote and game instances should issue a
+      // 'done' also
       // done = NetworkInstance->mustHalt();
       gameInstance->update();
       // done = gameInstance->mustHalt();
@@ -163,4 +158,4 @@ int Application::run(int argc, char *argv[]) {
 
 }
 
-} // namespace roguedm
+}  // namespace roguedm

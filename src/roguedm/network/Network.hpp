@@ -31,8 +31,7 @@ namespace roguedm {
  *
  * Manage all networking related operations and abstract its complexity.
  */
-class Network : CommandHandlerInterface, GameComponentInterface
-{
+class Network : public CommandHandlerInterface, public GameComponentInterface {
 
   RDM_DECLARE_CLASS_AS_NOCPNOMV(Network)
 
@@ -70,4 +69,4 @@ class Network : CommandHandlerInterface, GameComponentInterface
 
 };
 
-} // namespace roguedm
+}  // namespace roguedm

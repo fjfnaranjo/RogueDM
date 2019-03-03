@@ -36,8 +36,7 @@ namespace roguedm {
  * (auto completion).
  *
  */
-class CommandHandlerInterface
-{
+class CommandHandlerInterface {
 
   RDM_DECLARE_CLASS_AS_INTERFACE(CommandHandlerInterface)
 
@@ -88,4 +87,4 @@ class CommandHandlerInterface
 
 };
 
-} // namespace roguedm
+}  // namespace roguedm

@@ -157,4 +157,4 @@ static std::map<std::string,int> transUtf8 = {
 
 };
 
-} // namespace roguedm_gui
+}  // namespace roguedm_gui

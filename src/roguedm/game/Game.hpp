@@ -29,7 +29,7 @@ namespace roguedm_game {
  */
 class Game :
   public roguedm::CommandHandlerInterface,
-         roguedm::GameComponentInterface
+  public roguedm::GameComponentInterface
 {
 
   RDM_DECLARE_CLASS_AS_NOCPNOMV(Game)
@@ -57,4 +57,4 @@ class Game :
 
 };
 
-} // namespace roguedm
+}  // namespace roguedm

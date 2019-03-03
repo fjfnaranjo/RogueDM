@@ -1,3 +1,5 @@
+// Copyright 2018 Fco. Jose Fdez. Naranjo AKA github.com/fjfnaranjo
+
 #include "gtest/gtest.h"
 
 #include "../roguedm/network/Network.hpp"

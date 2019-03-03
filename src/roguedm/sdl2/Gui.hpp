@@ -86,4 +86,4 @@ class Gui {
 
 };
 
-} // namespace roguedm_gui
+}  // namespace roguedm_gui

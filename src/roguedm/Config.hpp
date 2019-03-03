@@ -57,8 +57,7 @@ typedef std::map<std::string, ConfigSettings> ConfigSections;
  *
  * Manage all operations related to load, store or change configuration.
  */
-class Config
-{
+class Config {
 
   RDM_DECLARE_CLASS_AS_SINGLETON(Config)
 
@@ -174,4 +173,4 @@ class Config
 
 typedef std::shared_ptr<Config> ConfigSharedPtr;
 
-} // namespace roguedm
+}  // namespace roguedm

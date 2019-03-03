@@ -17,6 +17,8 @@
 
 #include "CharmapStamper.hpp"
 
+#include <string>
+
 #include <SDL_image.h>
 
 #include "mbtools.hpp"
@@ -26,8 +28,7 @@
 
 namespace roguedm_gui {
 
-CharmapStamper::CharmapStamper () {
-
+CharmapStamper::CharmapStamper() {
   initSuccess = false;
 
   config = roguedm::Config::instance();
@@ -40,7 +41,6 @@ CharmapStamper::CharmapStamper () {
   txtWStart = 0;
 
   wordKindTexture = {};
-
 }
 
 CharmapStamper::~CharmapStamper() {
@@ -48,8 +48,8 @@ CharmapStamper::~CharmapStamper() {
 }
 
 void CharmapStamper::resetCharmapStamper() {
-  if(initSuccess) {
-    for(int kind = 0; kind < RDM_WCLASS_TOTAL; kind++)
+  if (initSuccess) {
+    for (int kind = 0; kind < RDM_WCLASS_TOTAL; kind++)
       SDL_DestroyTexture(wordKindTexture[kind]);
     initSuccess = false;
   }
@@ -59,15 +59,13 @@ bool CharmapStamper::loadDefaultCharmap(
   SDL_Renderer *renderer,
   std::string defaultCharmap
 ) {
-
   // Default charmap texture file path
   std::string defaultCharmapPath =
     std::string(RDM_PATH_HERE) +
     std::string(RDM_PATH_SHARE) +
     std::string(RDM_PATH_SEP) +
     config->getSettingValue(
-      defaultCharmap, "path", "imgs/codepage-850-9-14.png"
-    );
+      defaultCharmap, "path", "imgs/codepage-850-9-14.png");
 
   // Texture data
   txtCHeight = config->getSettingIntValue(defaultCharmap, "txtCHeight", 14);
@@ -81,7 +79,7 @@ bool CharmapStamper::loadDefaultCharmap(
   // Load base texture
   SDL_Surface *baseTexture;
   baseTexture = IMG_Load(defaultCharmapPath.c_str());
-  if(!baseTexture)
+  if (!baseTexture)
     return false;
 
   defineAndColorizeWordTypes(renderer, baseTexture);
@@ -91,7 +89,6 @@ bool CharmapStamper::loadDefaultCharmap(
 
   initSuccess = true;
   return true;
-
 }
 
 unsigned int CharmapStamper::decoratorsLength(int idx) const {
@@ -138,8 +135,7 @@ void CharmapStamper::stampLDecoratorChar(
 ) {
   stampChar(
     transChar(multibyteCharacterByIndex(roguedm::wordKinds[t].lDecorator, idx)),
-    t, x, y, renderer, mx, my
-  );
+    t, x, y, renderer, mx, my);
 }
 
 void CharmapStamper::stampRDecoratorChar(
@@ -153,8 +149,7 @@ void CharmapStamper::stampRDecoratorChar(
 ) {
   stampChar(
     transChar(multibyteCharacterByIndex(roguedm::wordKinds[t].rDecorator, idx)),
-    t, x, y, renderer, mx, my
-  );
+    t, x, y, renderer, mx, my);
 }
 
 void CharmapStamper::stampIp(SDL_Renderer *renderer, int x, int y) {
@@ -168,14 +163,14 @@ void CharmapStamper::drawBox(
   int h,
   SDL_Renderer *renderer
 ) {
-  mStampChar(201,0,x,y,renderer);
-  mStampChar(187,0,x+w,y,renderer);
-  mStampChar(200,0,x,y+h,renderer);
-  mStampChar(188,0,x+w,y+h,renderer);
-  for(int c=x+1;c<x+w;c++) mStampChar(205,0,c,y,renderer);
-  for(int c=x+1;c<x+w;c++) mStampChar(205,0,c,y+h,renderer);
-  for(int c=y+1;c<y+h;c++) mStampChar(186,0,x,c,renderer);
-  for(int c=y+1;c<y+h;c++) mStampChar(186,0,x+w,c,renderer);
+  mStampChar(201, 0, x, y, renderer);
+  mStampChar(187, 0, x+w, y, renderer);
+  mStampChar(200, 0, x, y+h, renderer);
+  mStampChar(188, 0, x+w, y+h, renderer);
+  for (int c=x+1; c < x+w; c++) mStampChar(205, 0, c, y, renderer);
+  for (int c=x+1; c < x+w; c++) mStampChar(205, 0, c, y+h, renderer);
+  for (int c=y+1; c < y+h; c++) mStampChar(186, 0, x, c, renderer);
+  for (int c=y+1; c < y+h; c++) mStampChar(186, 0, x+w, c, renderer);
 }
 
 void CharmapStamper::drawHSeparator(
@@ -184,9 +179,9 @@ void CharmapStamper::drawHSeparator(
   int s,
   SDL_Renderer *renderer
 ) {
-  mStampChar(204,0,x,y,renderer);
-  mStampChar(185,0,x+s,y,renderer);
-  for(int c=x+1;c<x+s;c++) mStampChar(205,0,c,y,renderer);
+  mStampChar(204, 0, x, y, renderer);
+  mStampChar(185, 0, x+s, y, renderer);
+  for (int c=x+1; c < x+s; c++) mStampChar(205, 0, c, y, renderer);
 }
 
 void CharmapStamper::drawVSeparator(
@@ -195,9 +190,9 @@ void CharmapStamper::drawVSeparator(
   int s,
   SDL_Renderer *renderer
 ) {
-  mStampChar(203,0,x,y,renderer);
-  mStampChar(202,0,x,y+s,renderer);
-  for(int c=y+1;c<y+s;c++) mStampChar(186,0,x,c,renderer);
+  mStampChar(203, 0, x, y, renderer);
+  mStampChar(202, 0, x, y+s, renderer);
+  for (int c=y+1; c < y+s; c++) mStampChar(186, 0, x, c, renderer);
 }
 
 void CharmapStamper::drawCross(
@@ -205,23 +200,23 @@ void CharmapStamper::drawCross(
   int y,
   SDL_Renderer *renderer
 ) {
-  mStampChar(206,0,x,y,renderer);
+  mStampChar(206, 0, x, y, renderer);
 }
 
 void CharmapStamper::defineAndColorizeWordTypes(
   SDL_Renderer *renderer, SDL_Surface *baseSurface
 ) {
-  for(int kind = 0; kind < RDM_WCLASS_TOTAL; kind++)
+  for (int kind = 0; kind < RDM_WCLASS_TOTAL; kind++)
     wordKindTexture.insert(wordKindTexture.end(), colorizeWordType(
       renderer,
       baseSurface,
       roguedm::wordKinds[kind].fgColor.r,
       roguedm::wordKinds[kind].fgColor.g,
-      roguedm::wordKinds[kind].fgColor.b/*,
-      roguedm::wordKinds[kind].bgColor.r,
-      roguedm::wordKinds[kind].bgColor.g,
-      roguedm::wordKinds[kind].bgColor.b*/
-    ));
+      roguedm::wordKinds[kind].fgColor.b));  //,
+      // roguedm::wordKinds[kind].bgColor.r,
+      // roguedm::wordKinds[kind].bgColor.g,
+      // roguedm::wordKinds[kind].bgColor.b
+    // ));
 }
 
 SDL_Texture* CharmapStamper::colorizeWordType(
@@ -229,25 +224,25 @@ SDL_Texture* CharmapStamper::colorizeWordType(
   SDL_Surface *srf,
   int fgr,
   int fgg,
-  int fgb/*,
-  int bgr,
-  int bgg,
-  int bgb*/
-) {
+  int fgb) {  //,
+  // int bgr,
+  // int bgg,
+  // int bgb
+// ) {
   SDL_Palette *palette = srf->format->palette;
-  for(int i=0;i < srf->format->palette->ncolors;i++) {
-    palette->colors[i].r=fgr;
-    palette->colors[i].g=fgg;
-    palette->colors[i].b=fgb;
+  for (int i=0; i < srf->format->palette->ncolors; i++) {
+    palette->colors[i].r = fgr;
+    palette->colors[i].g = fgg;
+    palette->colors[i].b = fgb;
   }
   return SDL_CreateTextureFromSurface(renderer, srf);
 }
 
 int CharmapStamper::transChar(std::string c) {
   for (auto const & entry : transUtf8)
-    if (0==c.compare(entry.first))
+    if (0 == c.compare(entry.first))
       return entry.second;
-  // TODO: Remove magic constants like this one
+  // TODO(fjfnaranjo): Remove magic constants like this one
   return 254;
 }
 
@@ -260,22 +255,22 @@ void CharmapStamper::stampChar(
   int maxCols,
   int maxRows
 ) {
-  while(n>255) n-=256;
-  while(x>maxCols) x-=maxCols+1;
-  while(y>maxRows) y-=maxRows+1;
+  while (n > 255) n -= 256;
+  while (x > maxCols) x -= maxCols + 1;
+  while (y > maxRows) y -= maxRows + 1;
   int columnNumber = n % txtCpr;
   int rowNumber = n / txtCpr;
   SDL_Rect srcrect;
-  srcrect.x=txtWStart+(txtWSep*columnNumber)+(txtCWidth*columnNumber);
-  srcrect.y=txtHStart+(txtHSep*rowNumber)+(txtCHeight*rowNumber);
-  srcrect.w=txtCWidth;
-  srcrect.h=txtCHeight;
+  srcrect.x = txtWStart+(txtWSep*columnNumber)+(txtCWidth*columnNumber);
+  srcrect.y = txtHStart+(txtHSep*rowNumber)+(txtCHeight*rowNumber);
+  srcrect.w = txtCWidth;
+  srcrect.h = txtCHeight;
   SDL_Rect dstrect;
-  dstrect.x=x*txtCWidth;
-  dstrect.y=y*txtCHeight;
-  dstrect.w=txtCWidth;
-  dstrect.h=txtCHeight;
-  SDL_RenderCopy(renderer,wordKindTexture[t],&srcrect,&dstrect);
+  dstrect.x = x*txtCWidth;
+  dstrect.y = y*txtCHeight;
+  dstrect.w = txtCWidth;
+  dstrect.h = txtCHeight;
+  SDL_RenderCopy(renderer, wordKindTexture[t], &srcrect, &dstrect);
 }
 
 void CharmapStamper::mStampChar(
@@ -285,20 +280,20 @@ void CharmapStamper::mStampChar(
   int y,
   SDL_Renderer *renderer
 ) {
-  while(n>255) n-=256;
+  while (n > 255) n -= 256;
   int columnNumber = n % txtCpr;
   int rowNumber = n / txtCpr;
   SDL_Rect srcrect;
-  srcrect.x=txtWStart+(txtWSep*columnNumber)+(txtCWidth*columnNumber);
-  srcrect.y=txtHStart+(txtHSep*rowNumber)+(txtCHeight*rowNumber);
-  srcrect.w=txtCWidth;
-  srcrect.h=txtCHeight;
+  srcrect.x = txtWStart+(txtWSep*columnNumber)+(txtCWidth*columnNumber);
+  srcrect.y = txtHStart+(txtHSep*rowNumber)+(txtCHeight*rowNumber);
+  srcrect.w = txtCWidth;
+  srcrect.h = txtCHeight;
   SDL_Rect dstrect;
-  dstrect.x=x*txtCWidth;
-  dstrect.y=y*txtCHeight;
-  dstrect.w=txtCWidth;
-  dstrect.h=txtCHeight;
-  SDL_RenderCopy(renderer,wordKindTexture[t],&srcrect,&dstrect);
+  dstrect.x = x*txtCWidth;
+  dstrect.y = y*txtCHeight;
+  dstrect.w = txtCWidth;
+  dstrect.h = txtCHeight;
+  SDL_RenderCopy(renderer, wordKindTexture[t], &srcrect, &dstrect);
 }
 
-} // namespace roguedm_gui
+}  // namespace roguedm_gui

@@ -30,12 +30,12 @@ Network::Network() {
 }
 
 Network::~Network() {
-  if(initSuccess)
+  if (initSuccess)
     SDLNet_Quit();
 }
 
 bool Network::initNetwork() {
-  if(-1==SDLNet_Init()) {
+  if (-1 == SDLNet_Init()) {
     SDL_Log(RDM_STR_SDL_NET_ERROR, SDLNet_GetError());
     return false;
   }
@@ -59,4 +59,4 @@ CommandList Network::getCompletionCandidates(
   return CommandList();
 }
 
-} // namespace roguedm
+}  // namespace roguedm

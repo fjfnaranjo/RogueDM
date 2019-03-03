@@ -17,6 +17,9 @@
 
 #include "Gui.hpp"
 
+#include <memory>
+#include <string>
+
 namespace roguedm_gui {
 
 Gui::Gui() {
@@ -42,7 +45,7 @@ Gui::~Gui() {
 bool Gui::initGui(SDL_Renderer *renderer) {
 
   // Words, command line and history init
-  if(!initCharmaps(renderer))
+  if (!initCharmaps(renderer))
     return false;
 
   // Clear color
@@ -56,7 +59,7 @@ bool Gui::initGui(SDL_Renderer *renderer) {
 }
 
 void Gui::resetGui() {
-  if(initSuccess) {
+  if (initSuccess) {
     defaultStamper.reset();
     initSuccess = false;
   }
@@ -69,7 +72,7 @@ void Gui::update(SDL_Renderer *renderer) {
     maxCols, maxRows, defaultCWidth, defaultCHeight
   );
 
-  // TODO: Paint the command history if fits
+  // TODO(fjfnaranjo): Paint the command history if fits
 
 }
 
@@ -80,8 +83,8 @@ void Gui::consoleHistoryPush(roguedm::Sentence command) {
 void Gui::resetScreenSize(SDL_Window *window) {
   int ww, wh;
   SDL_GetWindowSize(window, &ww, &wh);
-  maxCols=(int)floor(ww/defaultCWidth)-1;
-  maxRows=(int)floor(wh/defaultCHeight)-1;
+  maxCols = static_cast<int>(floor(ww/defaultCWidth)-1);
+  maxRows = static_cast<int>(floor(wh/defaultCHeight)-1);
 }
 
 bool Gui::initCharmaps(SDL_Renderer *renderer) {
@@ -93,7 +96,7 @@ bool Gui::initCharmaps(SDL_Renderer *renderer) {
     );
 
   defaultStamper = std::make_unique<CharmapStamper>();
-  if(!defaultStamper->loadDefaultCharmap(renderer, defaultCharmap))
+  if (!defaultStamper->loadDefaultCharmap(renderer, defaultCharmap))
     return false;
 
   defaultCHeight = defaultStamper->getCHeight();
@@ -103,4 +106,4 @@ bool Gui::initCharmaps(SDL_Renderer *renderer) {
 
 }
 
-} // namespace roguedm_gui
+}  // namespace roguedm_gui

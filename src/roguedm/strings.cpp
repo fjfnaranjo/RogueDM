@@ -33,4 +33,4 @@ std::string format_string(const char* format, ...) {
   return std::string(buffer);
 }
 
-}
+}  // namespace roguedm

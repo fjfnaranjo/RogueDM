@@ -19,6 +19,7 @@
 
 #include <cstring>
 #include <fstream>
+#include <string>
 
 #include <SDL.h>
 
@@ -33,9 +34,9 @@ Config::Config() {
 
 bool Config::loadFromFile() {
   std::ifstream cfgFile;
-  if(!openConfigFile(cfgFile))
+  if (!openConfigFile(cfgFile))
     return false;
-  if(!parseConfigFile(cfgFile))
+  if (!parseConfigFile(cfgFile))
     return false;
   return true;
 }
@@ -46,7 +47,7 @@ std::string Config::getConfigurationLoadError() const {
 
 bool Config::hasSection(const std::string &section) const {
   const auto sectionsIt = sections.find(section);
-  if(sectionsIt == sections.end())
+  if (sectionsIt == sections.end())
     return false;
   else
     return true;
@@ -56,11 +57,11 @@ bool Config::hasSetting(
   const std::string &section,
   const std::string &setting
 ) const {
-  if(!hasSection(section))
+  if (!hasSection(section))
     return false;
   const auto sectionsIt = sections.find(section);
   const auto settingsIt = sectionsIt->second.find(setting);
-  if(settingsIt == sectionsIt->second.end())
+  if (settingsIt == sectionsIt->second.end())
     return false;
   else
     return true;
@@ -71,9 +72,9 @@ void Config::setSettingValue(
   const std::string &setting,
   const std::string &value
 ) {
-  if(section.empty() || setting.empty() || value.empty())
+  if (section.empty() || setting.empty() || value.empty())
     return;
-  if(!hasSection(section)) {
+  if (!hasSection(section)) {
     ConfigSettings newSetting = {{setting, value}};
     sections[section] = newSetting;
   }
@@ -93,7 +94,7 @@ void Config::setSettingBoolValue(
   const std::string &setting,
   const bool &value
 ) {
-  if(value)
+  if (value)
     setSettingValue(section, setting, RDM_CFG_PARSER_TRUE);
   else
     setSettingValue(section, setting, RDM_CFG_PARSER_FALSE);
@@ -104,12 +105,13 @@ std::string Config::getSettingValue(
   const std::string &setting,
   const std::string &default_
 ) const {
-  if(hasSetting(section, setting)) {
+  if (hasSetting(section, setting)) {
     const auto sectionsIt = sections.find(section);
     const auto settingsIt = sectionsIt->second.find(setting);
     return settingsIt->second;
-  } else
+  } else {
     return default_;
+  }
 }
 
 int Config::getSettingIntValue(
@@ -127,7 +129,7 @@ bool Config::getSettingBoolValue(
   const std::string &setting,
   const bool &default_
 ) const {
-  if(RDM_CFG_PARSER_TRUE==getSettingValue(
+  if (RDM_CFG_PARSER_TRUE == getSettingValue(
     section,
     setting,
     default_ ? RDM_CFG_PARSER_TRUE : RDM_CFG_PARSER_FALSE)
@@ -143,7 +145,7 @@ bool Config::makeConfigFile() {
     RDM_PATH_HERE RDM_PATH_SHARE RDM_PATH_SEP "config.ini",
     std::ios_base::binary
   );
-  if(!cfgFileIn) {
+  if (!cfgFileIn) {
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, RDM_STR_CFG_BASE_ERROR);
     configurationLoadError = std::strerror(errno);
     return false;
@@ -153,13 +155,13 @@ bool Config::makeConfigFile() {
     RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
     std::ios_base::binary
   );
-  if(!cfgFileOut) {
+  if (!cfgFileOut) {
     configurationLoadError = std::strerror(errno);
     return false;
   }
 
   cfgFileOut << cfgFileIn.rdbuf();
-  if(!cfgFileOut || !cfgFileIn) {
+  if (!cfgFileOut || !cfgFileIn) {
     configurationLoadError = std::strerror(errno);
     return false;
   }
@@ -176,17 +178,17 @@ bool Config::openConfigFile(std::ifstream &aFile) {
   );
 
   // If opening the config file fails create a new one from the base.
-  if(!aFile) {
+  if (!aFile) {
 
     SDL_Log(RDM_STR_CFG_CREATE_NEW);
-    if(!makeConfigFile())
+    if (!makeConfigFile())
       return false;
 
     aFile.open(
       RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
       std::ios_base::in
     );
-    if(!aFile) {
+    if (!aFile) {
       configurationLoadError = std::strerror(errno);
       return false;
     }
@@ -211,11 +213,11 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
   while (aFile >> std::noskipws >> ch) {
 
     // tabs are simply ignored, whenever they appear
-    if(ch==RDM_CFG_PARSER_TAB)
+    if (ch == RDM_CFG_PARSER_TAB)
       continue;
 
     // if we find a end line ..
-    if (ch==RDM_CFG_PARSER_LINE_SEP || ch==RDM_CFG_PARSER_LINE_SEP_2) {
+    if (ch == RDM_CFG_PARSER_LINE_SEP || ch == RDM_CFG_PARSER_LINE_SEP_2) {
 
       // .. if we were in a comment consider the comment ended
       if (inComment) {
@@ -224,7 +226,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
       }
 
       // .. if we were parsing a section name, raise an error
-      if(inSection) {
+      if (inSection) {
         configurationLoadError = RDM_STR_PARSER_INCP_SEC;
         return false;
       }
@@ -253,9 +255,9 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
       continue;
 
     // detect a comment line
-    if (ch==RDM_CFG_PARSER_COMMENT) {
+    if (ch == RDM_CFG_PARSER_COMMENT) {
       // but fail if we were parsing something else
-      if(inSection || inValue || !currentContent.empty() ) {
+      if (inSection || inValue || !currentContent.empty() ) {
         configurationLoadError = RDM_STR_PARSER_CMT_OOP;
         return false;
       }
@@ -264,9 +266,9 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     }
 
     // detect a section start
-    if (ch==RDM_CFG_PARSER_GROUP_START) {
+    if (ch == RDM_CFG_PARSER_GROUP_START) {
       // but fail if we were parsing something else
-      if(inSection || inValue || !currentContent.empty() ) {
+      if (inSection || inValue || !currentContent.empty() ) {
         configurationLoadError = RDM_STR_PARSER_SEC_OOP;
         return false;
       }
@@ -275,14 +277,14 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     }
 
     // detect a section end and store its value
-    if (inSection && ch==RDM_CFG_PARSER_GROUP_END) {
+    if (inSection && ch == RDM_CFG_PARSER_GROUP_END) {
       // sections can't be empty
-      if(currentContent.empty()) {
+      if (currentContent.empty()) {
         configurationLoadError = RDM_STR_PARSER_SEC_EMTY;
         return false;
       }
       // section ends can't overlap values
-      if(inValue) {
+      if (inValue) {
         configurationLoadError = RDM_STR_PARSER_SEC_IVA;
         return false;
       }
@@ -293,9 +295,9 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     }
 
     // detect a section/value separator
-    if (ch==RDM_CFG_PARSER_VALUE_SEP) {
+    if (ch == RDM_CFG_PARSER_VALUE_SEP) {
       // fail if not after a setting
-      if(currentContent.empty()) {
+      if (currentContent.empty()) {
         configurationLoadError = RDM_STR_PARSER_VSP_OOP;
         return false;
       }
@@ -314,4 +316,4 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
 
 }
 
-} // namespace roguedm
+}  // namespace roguedm

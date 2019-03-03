@@ -19,4 +19,4 @@
 
 namespace roguedm {
 
-} // namespace roguedm
+}  // namespace roguedm

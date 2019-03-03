@@ -96,4 +96,4 @@ struct Word {
   unsigned int id;
 };
 
-} // namespace roguedm
+}  // namespace roguedm

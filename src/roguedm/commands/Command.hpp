@@ -46,4 +46,4 @@ typedef std::vector<Command> CommandList;
 /** \brief Shared pointer to a vector of commands. */
 typedef std::shared_ptr<CommandList> CommandListSharedPtr;
 
-} // namespace roguedm
+}  // namespace roguedm

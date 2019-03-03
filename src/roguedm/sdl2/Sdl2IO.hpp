@@ -38,8 +38,8 @@ namespace roguedm_gui {
  * features.
  */
 class Sdl2IO :
-    roguedm::CommandHandlerInterface,
-    roguedm::GameComponentInterface
+  public roguedm::CommandHandlerInterface,
+  public roguedm::GameComponentInterface
 {
 
   RDM_DECLARE_CLASS_AS_NOCPNOMV(Sdl2IO)
@@ -133,4 +133,4 @@ class Sdl2IO :
 
 };
 
-} // namespace roguedm_gui
+}  // namespace roguedm_gui

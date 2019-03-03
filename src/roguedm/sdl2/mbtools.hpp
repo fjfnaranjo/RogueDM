@@ -51,4 +51,4 @@ std::string multibyteCharacterByIndex(const std::string &string, const std::size
  */
 std::string multibyteSubstr(const std::string &string, const std::size_t start, const std::size_t size);
 
-} // namespace roguedm_gui
+}  // namespace roguedm_gui

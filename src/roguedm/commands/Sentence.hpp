@@ -36,4 +36,4 @@ typedef std::vector<Sentence> SentenceList;
 /** \brief Shared pointer to a vector of sentences. */
 typedef std::shared_ptr<SentenceList> SentenceListSharedPtr;
 
-} // namespace roguedm
+}  // namespace roguedm
