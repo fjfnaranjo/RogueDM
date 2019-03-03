@@ -29,6 +29,8 @@ CommandComposer::CommandComposer () {
   emptyWord.content = RDM_WEMPTY;
   emptyWord.kind = RDM_WCLASS_NORMAL;
 
+  sentence = roguedm::Sentence({emptyWord});
+
 }
 
 CommandComposer::~CommandComposer () {}
