@@ -29,7 +29,7 @@ namespace roguedm {
  * application as a dedicated server or for scripting purposes.
  */
 class CliIO : public CommandHandlerInterface, public GameComponentInterface {
-  RDM_DECLARE_CLASS_AS_NOCPNOMV(CliIO)
+RDM_DECLARE_CLASS_AS_NOCPNOMV(CliIO)
 };
 
 }  // namespace roguedm

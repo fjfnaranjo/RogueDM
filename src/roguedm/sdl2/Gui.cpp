@@ -67,10 +67,8 @@ void Gui::resetGui() {
 
 void Gui::update(SDL_Renderer *renderer) {
 
-  commandComposer->paintCommandLine(
-    renderer, defaultStamper,
-    maxCols, maxRows, defaultCWidth, defaultCHeight
-  );
+  commandComposer->paintCommandLine(renderer, defaultStamper, maxCols, maxRows,
+                                    defaultCWidth, defaultCHeight);
 
   // TODO(fjfnaranjo): Paint the command history if fits
 
@@ -83,17 +81,16 @@ void Gui::consoleHistoryPush(roguedm::Sentence command) {
 void Gui::resetScreenSize(SDL_Window *window) {
   int ww, wh;
   SDL_GetWindowSize(window, &ww, &wh);
-  maxCols = static_cast<int>(floor(ww/defaultCWidth)-1);
-  maxRows = static_cast<int>(floor(wh/defaultCHeight)-1);
+  maxCols = static_cast<int>(floor(ww / defaultCWidth) - 1);
+  maxRows = static_cast<int>(floor(wh / defaultCHeight) - 1);
 }
 
 bool Gui::initCharmaps(SDL_Renderer *renderer) {
 
   // Default charmap texture
   std::string defaultCharmap =
-    RDM_CFG_CHARMAP_PREFIX + config->getSettingValue(
-      "general", "charmaps", "default"
-    );
+  RDM_CFG_CHARMAP_PREFIX
+      + config->getSettingValue("general", "charmaps", "default");
 
   defaultStamper = std::make_unique<CharmapStamper>();
   if (!defaultStamper->loadDefaultCharmap(renderer, defaultCharmap))

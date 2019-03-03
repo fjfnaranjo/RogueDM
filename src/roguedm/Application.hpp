@@ -31,36 +31,34 @@ namespace roguedm {
  */
 class Application {
 
-  public:
+ public:
 
-    /**
-     * Runs the actual program inner/main code.
-     * \param argc main() arguments count.
-     * \param argv main() arguments values.
-     * \return Status code to be returned by main().
-     */
-    int run(int argc, char *argv[]);
+  /**
+   * Runs the actual program inner/main code.
+   * \param argc main() arguments count.
+   * \param argv main() arguments values.
+   * \return Status code to be returned by main().
+   */
+  int run(int argc, char *argv[]);
 
-  private:
+ private:
 
-    /** Do an early search for a --verbose argument to enable logging. */
-    void parse_verbosity(int argc, char *argv[]);
+  /** Do an early search for a --verbose argument to enable logging. */
+  void parse_verbosity(int argc, char *argv[]);
 
-    /**
-     * Processes the program arguments.
-     *
-     * * Sets configuration from arguments.
-     * * Prints usage information.
-     * * Prints version information.
-     *
-     * \param argc main() arguments count.
-     * \param argv main() arguments values.
-     * \param configuration Global configuration object.
-     */
-    int parse_arguments (
-      int argc, char* argv[],
-      const ConfigSharedPtr& configuration
-    );
+  /**
+   * Processes the program arguments.
+   *
+   * * Sets configuration from arguments.
+   * * Prints usage information.
+   * * Prints version information.
+   *
+   * \param argc main() arguments count.
+   * \param argv main() arguments values.
+   * \param configuration Global configuration object.
+   */
+  int parse_arguments(int argc, char* argv[],
+                      const ConfigSharedPtr& configuration);
 
 };
 

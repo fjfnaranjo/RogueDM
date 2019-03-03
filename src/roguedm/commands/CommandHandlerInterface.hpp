@@ -38,52 +38,50 @@ namespace roguedm {
  */
 class CommandHandlerInterface {
 
-  RDM_DECLARE_CLASS_AS_INTERFACE(CommandHandlerInterface)
+  RDM_DECLARE_CLASS_AS_INTERFACE (CommandHandlerInterface)
 
-  public:
+ public:
 
-    /**
-     * \brief Request to process a command.
-     *
-     * Used to ask a command handler to process a command if he can.
-     *
-     * If a command handler returns \ref RDM_CMD_PROCESS_DONE, the command can
-     * be considered completed. If it returns \ref RDM_CMD_PROCESS_UNKNOWN, the
-     * command should be issued to another command handler.
-     * \param command The command.
-     * \return See method description.
-     */
-    virtual bool processCommand(const Command& command) =0;
+  /**
+   * \brief Request to process a command.
+   *
+   * Used to ask a command handler to process a command if he can.
+   *
+   * If a command handler returns \ref RDM_CMD_PROCESS_DONE, the command can
+   * be considered completed. If it returns \ref RDM_CMD_PROCESS_UNKNOWN, the
+   * command should be issued to another command handler.
+   * \param command The command.
+   * \return See method description.
+   */
+  virtual bool processCommand(const Command& command) =0;
 
-    /**
-     * \brief Request to identify a command in a sentence.
-     *
-     * Used to ask a command handler to try to identify the command in a
-     * sentence. Usually using the first word.
-     *
-     * A command should also be provided. If the command can be identified, the
-     * provided command will be modified to construct an equivalent to the
-     * sentence in command form and \ref RDM_CMD_IDENTIFY_UNKNOWN will be
-     * returned. If the command can't be identified, \ref RDM_CMD_IDENTIFY_DONE
-     * will be returned.
-     * \param sentence The sentence.
-     * \param[out] command The command to be modified. See method description.
-     * \return See method description.
-     */
-    virtual bool identifyCommand(const Sentence& sentence, Command& command)
-      const =0;
+  /**
+   * \brief Request to identify a command in a sentence.
+   *
+   * Used to ask a command handler to try to identify the command in a
+   * sentence. Usually using the first word.
+   *
+   * A command should also be provided. If the command can be identified, the
+   * provided command will be modified to construct an equivalent to the
+   * sentence in command form and \ref RDM_CMD_IDENTIFY_UNKNOWN will be
+   * returned. If the command can't be identified, \ref RDM_CMD_IDENTIFY_DONE
+   * will be returned.
+   * \param sentence The sentence.
+   * \param[out] command The command to be modified. See method description.
+   * \return See method description.
+   */
+  virtual bool identifyCommand(const Sentence& sentence,
+                               Command& command) const =0;
 
-    /**
-     * \brief Request a list of autocomplete options for a command.
-     *
-     * This method builds an autocomplete candidate list for the provided
-     * command or an empty list if there is not valid complete options.
-     * \param command The current command.
-     * \return The list of valid autocomplete options.
-     */
-    virtual CommandList getCompletionCandidates(
-      const Command& command
-    ) const =0;
+  /**
+   * \brief Request a list of autocomplete options for a command.
+   *
+   * This method builds an autocomplete candidate list for the provided
+   * command or an empty list if there is not valid complete options.
+   * \param command The current command.
+   * \return The list of valid autocomplete options.
+   */
+  virtual CommandList getCompletionCandidates(const Command& command) const =0;
 
 };
 

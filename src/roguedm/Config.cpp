@@ -53,10 +53,8 @@ bool Config::hasSection(const std::string &section) const {
     return true;
 }
 
-bool Config::hasSetting(
-  const std::string &section,
-  const std::string &setting
-) const {
+bool Config::hasSetting(const std::string &section,
+                        const std::string &setting) const {
   if (!hasSection(section))
     return false;
   const auto sectionsIt = sections.find(section);
@@ -67,44 +65,35 @@ bool Config::hasSetting(
     return true;
 }
 
-void Config::setSettingValue(
-  const std::string &section,
-  const std::string &setting,
-  const std::string &value
-) {
+void Config::setSettingValue(const std::string &section,
+                             const std::string &setting,
+                             const std::string &value) {
   if (section.empty() || setting.empty() || value.empty())
     return;
   if (!hasSection(section)) {
-    ConfigSettings newSetting = {{setting, value}};
+    ConfigSettings newSetting = { { setting, value } };
     sections[section] = newSetting;
   }
   sections[section][setting] = value.substr(0, value.length());
 }
 
-void Config::setSettingIntValue(
-  const std::string &section,
-  const std::string &setting,
-  const int &value
-) {
+void Config::setSettingIntValue(const std::string &section,
+                                const std::string &setting, const int &value) {
   setSettingValue(section, setting, std::to_string(value));
 }
 
-void Config::setSettingBoolValue(
-  const std::string &section,
-  const std::string &setting,
-  const bool &value
-) {
+void Config::setSettingBoolValue(const std::string &section,
+                                 const std::string &setting,
+                                 const bool &value) {
   if (value)
     setSettingValue(section, setting, RDM_CFG_PARSER_TRUE);
   else
     setSettingValue(section, setting, RDM_CFG_PARSER_FALSE);
 }
 
-std::string Config::getSettingValue(
-  const std::string &section,
-  const std::string &setting,
-  const std::string &default_
-) const {
+std::string Config::getSettingValue(const std::string &section,
+                                    const std::string &setting,
+                                    const std::string &default_) const {
   if (hasSetting(section, setting)) {
     const auto sectionsIt = sections.find(section);
     const auto settingsIt = sectionsIt->second.find(setting);
@@ -114,26 +103,18 @@ std::string Config::getSettingValue(
   }
 }
 
-int Config::getSettingIntValue(
-  const std::string &section,
-  const std::string &setting,
-  const int &default_
-) const {
-  return std::stoi(
-    getSettingValue(section, setting, std::to_string(default_))
-  );
+int Config::getSettingIntValue(const std::string &section,
+                               const std::string &setting,
+                               const int &default_) const {
+  return std::stoi(getSettingValue(section, setting, std::to_string(default_)));
 }
 
-bool Config::getSettingBoolValue(
-  const std::string &section,
-  const std::string &setting,
-  const bool &default_
-) const {
-  if (RDM_CFG_PARSER_TRUE == getSettingValue(
-    section,
-    setting,
-    default_ ? RDM_CFG_PARSER_TRUE : RDM_CFG_PARSER_FALSE)
-  )
+bool Config::getSettingBoolValue(const std::string &section,
+                                 const std::string &setting,
+                                 const bool &default_) const {
+  if (RDM_CFG_PARSER_TRUE
+      == getSettingValue(section, setting,
+                         default_ ? RDM_CFG_PARSER_TRUE : RDM_CFG_PARSER_FALSE))
     return true;
   else
     return false;
@@ -142,9 +123,8 @@ bool Config::getSettingBoolValue(
 bool Config::makeConfigFile() {
 
   std::ifstream cfgFileIn(
-    RDM_PATH_HERE RDM_PATH_SHARE RDM_PATH_SEP "config.ini",
-    std::ios_base::binary
-  );
+      RDM_PATH_HERE RDM_PATH_SHARE RDM_PATH_SEP "config.ini",
+      std::ios_base::binary);
   if (!cfgFileIn) {
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, RDM_STR_CFG_BASE_ERROR);
     configurationLoadError = std::strerror(errno);
@@ -152,9 +132,8 @@ bool Config::makeConfigFile() {
   }
 
   std::ofstream cfgFileOut(
-    RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
-    std::ios_base::binary
-  );
+  RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
+                           std::ios_base::binary);
   if (!cfgFileOut) {
     configurationLoadError = std::strerror(errno);
     return false;
@@ -172,10 +151,8 @@ bool Config::makeConfigFile() {
 
 bool Config::openConfigFile(std::ifstream &aFile) {
 
-  aFile.open(
-    RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
-    std::ios_base::in
-  );
+  aFile.open(RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
+             std::ios_base::in);
 
   // If opening the config file fails create a new one from the base.
   if (!aFile) {
@@ -185,9 +162,8 @@ bool Config::openConfigFile(std::ifstream &aFile) {
       return false;
 
     aFile.open(
-      RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
-      std::ios_base::in
-    );
+    RDM_PATH_HERE RDM_PATH_CONFIG RDM_PATH_SEP "config.ini",
+               std::ios_base::in);
     if (!aFile) {
       configurationLoadError = std::strerror(errno);
       return false;
@@ -233,13 +209,10 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
 
       // .. if we were parsing a value, store the new value ..
       if (inValue) {
-        SDL_LogDebug(
-          SDL_LOG_CATEGORY_APPLICATION,
-          RDM_STR_CFG_DEBUG,
-          currentSection.c_str(),
-          currentSetting.c_str(),
-          currentContent.c_str()
-        );
+        SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION,
+        RDM_STR_CFG_DEBUG,
+                     currentSection.c_str(), currentSetting.c_str(),
+                     currentContent.c_str());
         setSettingValue(currentSection, currentSetting, currentContent);
         inValue = false;
       }
@@ -257,7 +230,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     // detect a comment line
     if (ch == RDM_CFG_PARSER_COMMENT) {
       // but fail if we were parsing something else
-      if (inSection || inValue || !currentContent.empty() ) {
+      if (inSection || inValue || !currentContent.empty()) {
         configurationLoadError = RDM_STR_PARSER_CMT_OOP;
         return false;
       }
@@ -268,7 +241,7 @@ bool Config::parseConfigFile(std::ifstream &aFile) {
     // detect a section start
     if (ch == RDM_CFG_PARSER_GROUP_START) {
       // but fail if we were parsing something else
-      if (inSection || inValue || !currentContent.empty() ) {
+      if (inSection || inValue || !currentContent.empty()) {
         configurationLoadError = RDM_STR_PARSER_SEC_OOP;
         return false;
       }

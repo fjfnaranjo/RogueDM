@@ -43,7 +43,8 @@ bool Network::initNetwork() {
   return true;
 }
 
-void Network::update() {}
+void Network::update() {
+}
 
 bool Network::processCommand(const Command&) {
   return RDM_CMD_PROCESS_UNKNOWN;
@@ -53,9 +54,7 @@ bool Network::identifyCommand(const Sentence&, Command&) const {
   return RDM_CMD_IDENTIFY_UNKNOWN;
 }
 
-CommandList Network::getCompletionCandidates(
-  const Command&
-) const {
+CommandList Network::getCompletionCandidates(const Command&) const {
   return CommandList();
 }
 

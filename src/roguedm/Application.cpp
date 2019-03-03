@@ -49,40 +49,33 @@ void Application::parse_verbosity(int argc, char* argv[]) {
   SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, level);
 }
 
-int Application::parse_arguments(
-  int argc, char* argv[],
-  const ConfigSharedPtr& configuration
-) {
+int Application::parse_arguments(int argc, char* argv[],
+                                 const ConfigSharedPtr& configuration) {
   for (int c = 1; c < argc; c++) {
     auto currentArgument = std::string(argv[c]);
 
-    if (0 == currentArgument.compare(RDM_STR_USAGE_VERSION)) {    // --usage
-      std::cout << format_string(
-        RDM_STR_VERSION_STRING, RDM_STR_VERSION_FULL);
+    if (0 == currentArgument.compare(RDM_STR_USAGE_VERSION)) {
+      // --usage
+      std::cout << format_string(RDM_STR_VERSION_STRING, RDM_STR_VERSION_FULL);
       return RDM_ARGS_EXIT;
 
-    } else if (0 == currentArgument.compare(RDM_STR_USAGE_HELP)) {  // --help
-      std::cout << format_string(
-        RDM_STR_VERSION_STRING, RDM_STR_VERSION_FULL
-      );
-      std::cout << format_string(
-        RDM_STR_USAGE, argv[0]
-      );
+    } else if (0 == currentArgument.compare(RDM_STR_USAGE_HELP)) {
+      // --help
+      std::cout << format_string(RDM_STR_VERSION_STRING, RDM_STR_VERSION_FULL);
+      std::cout << format_string(RDM_STR_USAGE, argv[0]);
       return RDM_ARGS_EXIT;
 
-    } else if (0 == currentArgument.compare(RDM_STR_USAGE_LOCAL)) {  // --local
+    } else if (0 == currentArgument.compare(RDM_STR_USAGE_LOCAL)) {
+      // --local
       configuration->setSettingBoolValue("general", "skipNetworking", true);
 
-    } else if (
-      0 == currentArgument.compare(RDM_STR_USAGE_VERBOSE)  // --verbose
-    ) {
+    } else if (0 == currentArgument.compare(RDM_STR_USAGE_VERBOSE)) {
+      // --verbose
 
-    } else {                                                 // Unknown argument
-      SDL_LogError(
-        SDL_LOG_CATEGORY_APPLICATION,
-        RDM_STR_USAGE_UKNOWN,
-        currentArgument.c_str()
-      );
+    } else {
+      // Unknown argument
+      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, RDM_STR_USAGE_UKNOWN,
+                   currentArgument.c_str());
       return RDM_ARGS_ERROR;
     }
 
@@ -103,11 +96,8 @@ int Application::run(int argc, char *argv[]) {
 
   // Load configuration
   if (!config->loadFromFile()) {
-    SDL_LogError(
-      SDL_LOG_CATEGORY_APPLICATION,
-      RDM_STR_CFG_LOAD_ERROR,
-      config->getConfigurationLoadError().c_str()
-    );
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, RDM_STR_CFG_LOAD_ERROR,
+                 config->getConfigurationLoadError().c_str());
     return RDM_ERR_SETTINGS_ERROR;
   }
 

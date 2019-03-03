@@ -27,33 +27,31 @@ namespace roguedm_game {
  *
  * This class manages the game rules and anything related to it.
  */
-class Game :
-  public roguedm::CommandHandlerInterface,
-  public roguedm::GameComponentInterface
-{
+class Game : public roguedm::CommandHandlerInterface,
+    public roguedm::GameComponentInterface {
 
-  RDM_DECLARE_CLASS_AS_NOCPNOMV(Game)
+RDM_DECLARE_CLASS_AS_NOCPNOMV(Game)
 
-  public:
+ public:
 
-    Game() =default;
+  Game() = default;
 
-    /** Request to process a command. */
-    bool processCommand(const roguedm::Command&) override;
+  /** Request to process a command. */
+  bool processCommand(const roguedm::Command&) override;
 
-    /** Request to identify a command in a sentence. */
-    bool identifyCommand(const roguedm::Sentence&, roguedm::Command&)
-      const override;
+  /** Request to identify a command in a sentence. */
+  bool identifyCommand(const roguedm::Sentence&, roguedm::Command&) const
+      override;
 
-    /** Request a list of autocomplete options for a command. */
-    roguedm::CommandList getCompletionCandidates(const roguedm::Command&)
-      const override;
+  /** Request a list of autocomplete options for a command. */
+  roguedm::CommandList getCompletionCandidates(const roguedm::Command&) const
+      override;
 
-    /**
-     * Method used when the main app has time to allow a network management
-     * step from the game loop.
-     */
-    void update() override;
+  /**
+   * Method used when the main app has time to allow a network management
+   * step from the game loop.
+   */
+  void update() override;
 
 };
 

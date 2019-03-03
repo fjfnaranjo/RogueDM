@@ -30,12 +30,12 @@ namespace roguedm {
  */
 class GameComponentInterface {
 
-  RDM_DECLARE_CLASS_AS_INTERFACE(GameComponentInterface)
+RDM_DECLARE_CLASS_AS_INTERFACE(GameComponentInterface)
 
-  public:
+ public:
 
-    /** Used by main loops to update a component. */
-    virtual void update() =0;
+  /** Used by main loops to update a component. */
+  virtual void update() =0;
 
 };
 

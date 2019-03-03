@@ -29,11 +29,11 @@ bool Game::identifyCommand(const roguedm::Sentence&, roguedm::Command&) const {
 }
 
 roguedm::CommandList Game::getCompletionCandidates(
-  const roguedm::Command&
-) const {
+    const roguedm::Command&) const {
   return roguedm::CommandList();
 }
 
-void Game::update() {}
+void Game::update() {
+}
 
 }  // namespace roguedm_game

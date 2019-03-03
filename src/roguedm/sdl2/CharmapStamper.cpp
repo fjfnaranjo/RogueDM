@@ -55,17 +55,13 @@ void CharmapStamper::resetCharmapStamper() {
   }
 }
 
-bool CharmapStamper::loadDefaultCharmap(
-  SDL_Renderer *renderer,
-  std::string defaultCharmap
-) {
+bool CharmapStamper::loadDefaultCharmap(SDL_Renderer *renderer,
+                                        std::string defaultCharmap) {
   // Default charmap texture file path
-  std::string defaultCharmapPath =
-    std::string(RDM_PATH_HERE) +
-    std::string(RDM_PATH_SHARE) +
-    std::string(RDM_PATH_SEP) +
-    config->getSettingValue(
-      defaultCharmap, "path", "imgs/codepage-850-9-14.png");
+  std::string defaultCharmapPath = std::string(RDM_PATH_HERE)
+      + std::string(RDM_PATH_SHARE) + std::string(RDM_PATH_SEP)
+      + config->getSettingValue(defaultCharmap, "path",
+                                "imgs/codepage-850-9-14.png");
 
   // Texture data
   txtCHeight = config->getSettingIntValue(defaultCharmap, "txtCHeight", 14);
@@ -92,9 +88,8 @@ bool CharmapStamper::loadDefaultCharmap(
 }
 
 unsigned int CharmapStamper::decoratorsLength(int idx) const {
-  return
-    multibyteLenght(roguedm::wordKinds[idx].lDecorator) +
-    multibyteLenght(roguedm::wordKinds[idx].rDecorator);
+  return multibyteLenght(roguedm::wordKinds[idx].lDecorator)
+      + multibyteLenght(roguedm::wordKinds[idx].rDecorator);
 }
 
 unsigned int CharmapStamper::lDecoratorsLength(int idx) const {
@@ -112,125 +107,93 @@ int CharmapStamper::getCWidth() const {
   return txtCWidth;
 }
 
-void CharmapStamper::stampInnerChar(
-  std::string c,
-  int t,
-  int x,
-  int y,
-  SDL_Renderer* renderer,
-  int mx,
-  int my
-) {
+void CharmapStamper::stampInnerChar(std::string c, int t, int x, int y,
+                                    SDL_Renderer* renderer, int mx, int my) {
   stampChar(transChar(c), t, x, y, renderer, mx, my);
 }
 
-void CharmapStamper::stampLDecoratorChar(
-  int idx,
-  int t,
-  int x,
-  int y,
-  SDL_Renderer* renderer,
-  int mx,
-  int my
-) {
+void CharmapStamper::stampLDecoratorChar(int idx, int t, int x, int y,
+                                         SDL_Renderer* renderer, int mx,
+                                         int my) {
   stampChar(
-    transChar(multibyteCharacterByIndex(roguedm::wordKinds[t].lDecorator, idx)),
-    t, x, y, renderer, mx, my);
+      transChar(
+          multibyteCharacterByIndex(roguedm::wordKinds[t].lDecorator, idx)),
+      t, x, y, renderer, mx, my);
 }
 
-void CharmapStamper::stampRDecoratorChar(
-  int idx,
-  int t,
-  int x,
-  int y,
-  SDL_Renderer* renderer,
-  int mx,
-  int my
-) {
+void CharmapStamper::stampRDecoratorChar(int idx, int t, int x, int y,
+                                         SDL_Renderer* renderer, int mx,
+                                         int my) {
   stampChar(
-    transChar(multibyteCharacterByIndex(roguedm::wordKinds[t].rDecorator, idx)),
-    t, x, y, renderer, mx, my);
+      transChar(
+          multibyteCharacterByIndex(roguedm::wordKinds[t].rDecorator, idx)),
+      t, x, y, renderer, mx, my);
 }
 
 void CharmapStamper::stampIp(SDL_Renderer *renderer, int x, int y) {
-  mStampChar(95, 0, x/txtCWidth, y/txtCHeight, renderer);
+  mStampChar(95, 0, x / txtCWidth, y / txtCHeight, renderer);
 }
 
-void CharmapStamper::drawBox(
-  int x,
-  int y,
-  int w,
-  int h,
-  SDL_Renderer *renderer
-) {
+void CharmapStamper::drawBox(int x, int y, int w, int h,
+                             SDL_Renderer *renderer) {
   mStampChar(201, 0, x, y, renderer);
-  mStampChar(187, 0, x+w, y, renderer);
-  mStampChar(200, 0, x, y+h, renderer);
-  mStampChar(188, 0, x+w, y+h, renderer);
-  for (int c=x+1; c < x+w; c++) mStampChar(205, 0, c, y, renderer);
-  for (int c=x+1; c < x+w; c++) mStampChar(205, 0, c, y+h, renderer);
-  for (int c=y+1; c < y+h; c++) mStampChar(186, 0, x, c, renderer);
-  for (int c=y+1; c < y+h; c++) mStampChar(186, 0, x+w, c, renderer);
+  mStampChar(187, 0, x + w, y, renderer);
+  mStampChar(200, 0, x, y + h, renderer);
+  mStampChar(188, 0, x + w, y + h, renderer);
+  for (int c = x + 1; c < x + w; c++)
+    mStampChar(205, 0, c, y, renderer);
+  for (int c = x + 1; c < x + w; c++)
+    mStampChar(205, 0, c, y + h, renderer);
+  for (int c = y + 1; c < y + h; c++)
+    mStampChar(186, 0, x, c, renderer);
+  for (int c = y + 1; c < y + h; c++)
+    mStampChar(186, 0, x + w, c, renderer);
 }
 
-void CharmapStamper::drawHSeparator(
-  int x,
-  int y,
-  int s,
-  SDL_Renderer *renderer
-) {
+void CharmapStamper::drawHSeparator(int x, int y, int s,
+                                    SDL_Renderer *renderer) {
   mStampChar(204, 0, x, y, renderer);
-  mStampChar(185, 0, x+s, y, renderer);
-  for (int c=x+1; c < x+s; c++) mStampChar(205, 0, c, y, renderer);
+  mStampChar(185, 0, x + s, y, renderer);
+  for (int c = x + 1; c < x + s; c++)
+    mStampChar(205, 0, c, y, renderer);
 }
 
-void CharmapStamper::drawVSeparator(
-  int x,
-  int y,
-  int s,
-  SDL_Renderer *renderer
-) {
+void CharmapStamper::drawVSeparator(int x, int y, int s,
+                                    SDL_Renderer *renderer) {
   mStampChar(203, 0, x, y, renderer);
-  mStampChar(202, 0, x, y+s, renderer);
-  for (int c=y+1; c < y+s; c++) mStampChar(186, 0, x, c, renderer);
+  mStampChar(202, 0, x, y + s, renderer);
+  for (int c = y + 1; c < y + s; c++)
+    mStampChar(186, 0, x, c, renderer);
 }
 
-void CharmapStamper::drawCross(
-  int x,
-  int y,
-  SDL_Renderer *renderer
-) {
+void CharmapStamper::drawCross(int x, int y, SDL_Renderer *renderer) {
   mStampChar(206, 0, x, y, renderer);
 }
 
-void CharmapStamper::defineAndColorizeWordTypes(
-  SDL_Renderer *renderer, SDL_Surface *baseSurface
-) {
+void CharmapStamper::defineAndColorizeWordTypes(SDL_Renderer *renderer,
+                                                SDL_Surface *baseSurface) {
   for (int kind = 0; kind < RDM_WCLASS_TOTAL; kind++)
-    wordKindTexture.insert(wordKindTexture.end(), colorizeWordType(
-      renderer,
-      baseSurface,
-      roguedm::wordKinds[kind].fgColor.r,
-      roguedm::wordKinds[kind].fgColor.g,
-      roguedm::wordKinds[kind].fgColor.b));  //,
-      // roguedm::wordKinds[kind].bgColor.r,
-      // roguedm::wordKinds[kind].bgColor.g,
-      // roguedm::wordKinds[kind].bgColor.b
-    // ));
+    wordKindTexture.insert(
+        wordKindTexture.end(),
+        colorizeWordType(renderer, baseSurface,
+                         roguedm::wordKinds[kind].fgColor.r,
+                         roguedm::wordKinds[kind].fgColor.g,
+                         roguedm::wordKinds[kind].fgColor.b));  //,
+  // roguedm::wordKinds[kind].bgColor.r,
+  // roguedm::wordKinds[kind].bgColor.g,
+  // roguedm::wordKinds[kind].bgColor.b
+  // ));
 }
 
-SDL_Texture* CharmapStamper::colorizeWordType(
-  SDL_Renderer *renderer,
-  SDL_Surface *srf,
-  int fgr,
-  int fgg,
-  int fgb) {  //,
+SDL_Texture* CharmapStamper::colorizeWordType(SDL_Renderer *renderer,
+                                              SDL_Surface *srf, int fgr,
+                                              int fgg, int fgb) {  //,
   // int bgr,
   // int bgg,
   // int bgb
 // ) {
   SDL_Palette *palette = srf->format->palette;
-  for (int i=0; i < srf->format->palette->ncolors; i++) {
+  for (int i = 0; i < srf->format->palette->ncolors; i++) {
     palette->colors[i].r = fgr;
     palette->colors[i].g = fgg;
     palette->colors[i].b = fgb;
@@ -246,51 +209,44 @@ int CharmapStamper::transChar(std::string c) {
   return 254;
 }
 
-void CharmapStamper::stampChar(
-  int n,
-  int t,
-  int x,
-  int y,
-  SDL_Renderer *renderer,
-  int maxCols,
-  int maxRows
-) {
-  while (n > 255) n -= 256;
-  while (x > maxCols) x -= maxCols + 1;
-  while (y > maxRows) y -= maxRows + 1;
+void CharmapStamper::stampChar(int n, int t, int x, int y,
+                               SDL_Renderer *renderer, int maxCols,
+                               int maxRows) {
+  while (n > 255)
+    n -= 256;
+  while (x > maxCols)
+    x -= maxCols + 1;
+  while (y > maxRows)
+    y -= maxRows + 1;
   int columnNumber = n % txtCpr;
   int rowNumber = n / txtCpr;
   SDL_Rect srcrect;
-  srcrect.x = txtWStart+(txtWSep*columnNumber)+(txtCWidth*columnNumber);
-  srcrect.y = txtHStart+(txtHSep*rowNumber)+(txtCHeight*rowNumber);
+  srcrect.x = txtWStart + (txtWSep * columnNumber) + (txtCWidth * columnNumber);
+  srcrect.y = txtHStart + (txtHSep * rowNumber) + (txtCHeight * rowNumber);
   srcrect.w = txtCWidth;
   srcrect.h = txtCHeight;
   SDL_Rect dstrect;
-  dstrect.x = x*txtCWidth;
-  dstrect.y = y*txtCHeight;
+  dstrect.x = x * txtCWidth;
+  dstrect.y = y * txtCHeight;
   dstrect.w = txtCWidth;
   dstrect.h = txtCHeight;
   SDL_RenderCopy(renderer, wordKindTexture[t], &srcrect, &dstrect);
 }
 
-void CharmapStamper::mStampChar(
-  int n,
-  int t,
-  int x,
-  int y,
-  SDL_Renderer *renderer
-) {
-  while (n > 255) n -= 256;
+void CharmapStamper::mStampChar(int n, int t, int x, int y,
+                                SDL_Renderer *renderer) {
+  while (n > 255)
+    n -= 256;
   int columnNumber = n % txtCpr;
   int rowNumber = n / txtCpr;
   SDL_Rect srcrect;
-  srcrect.x = txtWStart+(txtWSep*columnNumber)+(txtCWidth*columnNumber);
-  srcrect.y = txtHStart+(txtHSep*rowNumber)+(txtCHeight*rowNumber);
+  srcrect.x = txtWStart + (txtWSep * columnNumber) + (txtCWidth * columnNumber);
+  srcrect.y = txtHStart + (txtHSep * rowNumber) + (txtCHeight * rowNumber);
   srcrect.w = txtCWidth;
   srcrect.h = txtCHeight;
   SDL_Rect dstrect;
-  dstrect.x = x*txtCWidth;
-  dstrect.y = y*txtCHeight;
+  dstrect.x = x * txtCWidth;
+  dstrect.y = y * txtCHeight;
   dstrect.w = txtCWidth;
   dstrect.h = txtCHeight;
   SDL_RenderCopy(renderer, wordKindTexture[t], &srcrect, &dstrect);

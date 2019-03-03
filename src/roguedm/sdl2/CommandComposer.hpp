@@ -29,112 +29,110 @@ namespace roguedm_gui {
 /** \brief Helps with the editing and management of commands in the GUI. */
 class CommandComposer {
 
-  RDM_DECLARE_CLASS_AS_NOCPNOMV(CommandComposer)
+RDM_DECLARE_CLASS_AS_NOCPNOMV(CommandComposer)
 
-  public:
+ public:
 
-    CommandComposer();
-    ~CommandComposer();
+  CommandComposer();
+  ~CommandComposer();
 
-    /** \ref roguedm::Command getter. */
-    roguedm::Command getCommand();
+  /** \ref roguedm::Command getter. */
+  roguedm::Command getCommand();
 
-    /** \ref roguedm::Command full sentence getter. */
-    roguedm::Sentence getRawSentence();
+  /** \ref roguedm::Command full sentence getter. */
+  roguedm::Sentence getRawSentence();
 
-    /** \ref roguedm::Command full sentence setter. */
-    void setCommand(const roguedm::Command&);
+  /** \ref roguedm::Command full sentence setter. */
+  void setCommand(const roguedm::Command&);
 
-    /** Get the current command full length. */
-    int commandLength();
+  /** Get the current command full length. */
+  int commandLength();
 
-    /** Check if there is already a command in the command line. */
-    bool hasCommand();
+  /** Check if there is already a command in the command line. */
+  bool hasCommand();
 
-    /** Process pressing of key backspace. */
-    void keyBackspace();
+  /** Process pressing of key backspace. */
+  void keyBackspace();
 
-    /** Process pressing of key delete. */
-    void keyDelete();
+  /** Process pressing of key delete. */
+  void keyDelete();
 
-    /**
-     * Process pressing of key left.
-     * \param fullWord Move in increments of full words.
-     */
-    void keyLeft(bool fullWord);
+  /**
+   * Process pressing of key left.
+   * \param fullWord Move in increments of full words.
+   */
+  void keyLeft(bool fullWord);
 
-    /**
-     * Process pressing of key right.
-     * \param fullWord Move in increments of full words.
-     */
-    void keyRight(bool fullWord);
+  /**
+   * Process pressing of key right.
+   * \param fullWord Move in increments of full words.
+   */
+  void keyRight(bool fullWord);
 
-    /** Process pressing of key home. */
-    void keyHome();
+  /** Process pressing of key home. */
+  void keyHome();
 
-    /** Process pressing of key end. */
-    void keyEnd();
+  /** Process pressing of key end. */
+  void keyEnd();
 
-    /** Process pressing of key up. */
-    void keyUp();
+  /** Process pressing of key up. */
+  void keyUp();
 
-    /** Process pressing of key down. */
-    void keyDown();
+  /** Process pressing of key down. */
+  void keyDown();
 
-    /** Process pressing of key space. */
-    void keySpace();
+  /** Process pressing of key space. */
+  void keySpace();
 
-    /** Process pressing of any normal character key (not space). */
-    void keyCharacter(std::string character);
+  /** Process pressing of any normal character key (not space). */
+  void keyCharacter(std::string character);
 
-    /** Add a new command to the command history. */
-    void commandHistoryPush(roguedm::Command);
+  /** Add a new command to the command history. */
+  void commandHistoryPush(roguedm::Command);
 
-    /** Reset the command line and its history navigation cursor */
-    void resetCommand();
+  /** Reset the command line and its history navigation cursor */
+  void resetCommand();
 
-    /** Paints the command line. */
-    void paintCommandLine(
-      SDL_Renderer*, std::shared_ptr<CharmapStamper>,
-      int, int, int, int
-    );
+  /** Paints the command line. */
+  void paintCommandLine(SDL_Renderer*, std::shared_ptr<CharmapStamper>, int,
+                        int, int, int);
 
-  private:
+ private:
 
-    /** Serialize a command as a sentence. */
-    roguedm::Sentence command2Sentence(roguedm::Command);
+  /** Serialize a command as a sentence. */
+  roguedm::Sentence command2Sentence(roguedm::Command);
 
-    /** Serialize a sentence as a command. */
-    roguedm::Command sentence2Command(roguedm::Sentence);
+  /** Serialize a sentence as a command. */
+  roguedm::Command sentence2Command(roguedm::Sentence);
 
-    /** An empty command to signify the absence of command. */
-    roguedm::Word emptyWord;
+  /** An empty command to signify the absence of command. */
+  roguedm::Word emptyWord;
 
-    /** Line exploration current displacement in words. */
-    int currentWord;
+  /** Line exploration current displacement in words. */
+  int currentWord;
 
-    /** Line exploration current displacement in characters. */
-    int wordRShift;
+  /** Line exploration current displacement in characters. */
+  int wordRShift;
 
-    /**
-     * The current command sentence contents.
-     *
-     * For ease of manipulation this contains both the \ref roguedm::Command
-     * name and the parameters in a single \ref roguedm::Sentence object.
-     */
-    roguedm::Sentence sentence;
+  /**
+   * The current command sentence contents.
+   *
+   * For ease of manipulation this contains both the \ref roguedm::Command
+   * name and the parameters in a single \ref roguedm::Sentence object.
+   */
+  roguedm::Sentence sentence;
 
-    /** Sentences vector for the history. */
-    roguedm::SentenceList history;
+  /** Sentences vector for the history. */
+  roguedm::SentenceList history;
 
-    /** Current history position when using up-down keys. */
-    int historyCurrent;
+  /** Current history position when using up-down keys. */
+  int historyCurrent;
 
-    /**
-     * Sentence currently written when the player starts using the history
-     * exploration control
-     */
-    roguedm::Sentence historyBackup;
+  /**
+   * Sentence currently written when the player starts using the history
+   * exploration control
+   */
+  roguedm::Sentence historyBackup;
 
 };
 

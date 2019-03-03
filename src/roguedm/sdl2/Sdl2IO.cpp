@@ -56,37 +56,27 @@ Sdl2IO::~Sdl2IO() {
 bool Sdl2IO::initSdl2IO() {
 
   if (0 != SDL_Init(SDL_INIT_VIDEO)) {
-    SDL_LogError(
-      SDL_LOG_CATEGORY_APPLICATION,
-      RDM_STR_SDL_ERROR,
-      SDL_GetError()
-    );
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+    RDM_STR_SDL_ERROR,
+                 SDL_GetError());
     return false;
   }
 
-  int createStatus = SDL_CreateWindowAndRenderer(
-    800, 500,
-    SDL_WINDOW_RESIZABLE,
-    &window,
-    &renderer
-  );
+  int createStatus = SDL_CreateWindowAndRenderer(800, 500, SDL_WINDOW_RESIZABLE,
+                                                 &window, &renderer);
 
   if (createStatus || NULL == window || NULL == renderer) {
-    SDL_LogError(
-      SDL_LOG_CATEGORY_APPLICATION,
-      RDM_STR_SDL_ERROR,
-      SDL_GetError()
-    );
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+    RDM_STR_SDL_ERROR,
+                 SDL_GetError());
     SDL_Quit();
     return false;
   }
 
   if (!gui->initGui(renderer)) {
-    SDL_LogError(
-      SDL_LOG_CATEGORY_APPLICATION,
-      RDM_STR_SDL_ERROR,
-      SDL_GetError()
-    );
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+    RDM_STR_SDL_ERROR,
+                 SDL_GetError());
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
@@ -146,9 +136,8 @@ bool Sdl2IO::processCommand(const roguedm::Command &command) {
   return RDM_CMD_PROCESS_UNKNOWN;
 }
 
-bool Sdl2IO::identifyCommand(
-  const roguedm::Sentence& sentence, roguedm::Command &command
-) const {
+bool Sdl2IO::identifyCommand(const roguedm::Sentence& sentence,
+                             roguedm::Command &command) const {
 
   // quit command completion
   if (sentence.size() > 0 && sentence[0].content == RDM_CMD_QUIT) {
@@ -162,8 +151,7 @@ bool Sdl2IO::identifyCommand(
 }
 
 roguedm::CommandList Sdl2IO::getCompletionCandidates(
-  const roguedm::Command &command
-) const {
+    const roguedm::Command &command) const {
 
   if (0 == command.name.size() && 0 == command.params.size()) {
 
@@ -191,9 +179,8 @@ void Sdl2IO::registerCommandHandler(CommandHandlerInterface *c) {
 
 void Sdl2IO::unregisterCommandHandler(CommandHandlerInterface *c) {
   commandHandlers.erase(
-    std::remove(commandHandlers.begin(), commandHandlers.end(), c),
-    commandHandlers.end()
-  );
+      std::remove(commandHandlers.begin(), commandHandlers.end(), c),
+      commandHandlers.end());
 }
 
 int Sdl2IO::mustHalt() {
@@ -206,19 +193,19 @@ void Sdl2IO::eventsManager() {
 
   SDL_Event event;
 
-  while ( SDL_PollEvent(&event) ) {
+  while (SDL_PollEvent(&event)) {
     switch (event.type) {
       case SDL_QUIT:
         appDone = 1;
         break;
       case SDL_WINDOWEVENT:
-        switch (event.window.event)  {
+        switch (event.window.event) {
           case SDL_WINDOWEVENT_SIZE_CHANGED:
             gui->resetScreenSize(window);
             break;
         }
         break;
-      // TODO(fjfnaranjo): Resolve substitution/replace mode
+        // TODO(fjfnaranjo): Resolve substitution/replace mode
       case SDL_TEXTINPUT:
         processText(&event);
         break;
@@ -256,26 +243,26 @@ void Sdl2IO::processKey(SDL_Event* event) {
 
   SDL_KeyboardEvent kevent = event->key;
 
-  switch(kevent.keysym.sym) {
+  switch (kevent.keysym.sym) {
 
     // Enter
     case SDLK_RETURN:
       processLine();
       break;
 
-    // Backspace
+      // Backspace
     case SDLK_BACKSPACE:
       gui->commandComposer->keyBackspace();
       break;
 
-    // Delete
+      // Delete
     case SDLK_DELETE:
       gui->commandComposer->keyDelete();
       break;
 
-    // H-movement keys
+      // H-movement keys
     case SDLK_LEFT:
-      if (!(kevent.keysym.mod&KMOD_CTRL)) {
+      if (!(kevent.keysym.mod & KMOD_CTRL)) {
         gui->commandComposer->keyLeft(false);
       } else {
         gui->commandComposer->keyLeft(true);
@@ -283,14 +270,14 @@ void Sdl2IO::processKey(SDL_Event* event) {
       break;
 
     case SDLK_RIGHT:
-      if (!(kevent.keysym.mod&KMOD_CTRL)) {
+      if (!(kevent.keysym.mod & KMOD_CTRL)) {
         gui->commandComposer->keyRight(false);
       } else {
         gui->commandComposer->keyRight(true);
       }
       break;
 
-    // Far-long h-movement keys
+      // Far-long h-movement keys
     case SDLK_HOME:
       gui->commandComposer->keyHome();
       break;
@@ -299,7 +286,7 @@ void Sdl2IO::processKey(SDL_Event* event) {
       gui->commandComposer->keyEnd();
       break;
 
-    // History keys
+      // History keys
     case SDLK_UP:
       gui->commandComposer->keyUp();
       break;
@@ -308,7 +295,7 @@ void Sdl2IO::processKey(SDL_Event* event) {
       gui->commandComposer->keyDown();
       break;
 
-    // TAB
+      // TAB
     case SDLK_TAB:
       tryAutocompletion();
       break;
@@ -326,8 +313,8 @@ void Sdl2IO::tryAutocompletion() {
     roguedm::Command command = gui->commandComposer->getCommand();
     roguedm::CommandList candidateCommands;
     for (const auto &commandHandler : commandHandlers) {
-      roguedm::CommandList posibleCandidates =
-        commandHandler->getCompletionCandidates(command);
+      roguedm::CommandList posibleCandidates = commandHandler
+          ->getCompletionCandidates(command);
       for (const auto &possibleCandidate : posibleCandidates)
         candidateCommands.insert(candidateCommands.end(), possibleCandidate);
     }
@@ -335,7 +322,7 @@ void Sdl2IO::tryAutocompletion() {
     if (1 == candidateCommands.size())
       gui->commandComposer->setCommand(candidateCommands[0]);
 
-  // There is not a command
+    // There is not a command
   } else {
 
     // Try to identify a command from the sentence
@@ -343,9 +330,8 @@ void Sdl2IO::tryAutocompletion() {
     roguedm::Command candidateCommand;
     for (const auto &commandHandler : commandHandlers)
       if (
-        RDM_CMD_IDENTIFY_DONE ==
-          commandHandler->identifyCommand(sentence, candidateCommand)
-      )
+      RDM_CMD_IDENTIFY_DONE
+          == commandHandler->identifyCommand(sentence, candidateCommand))
         gui->commandComposer->setCommand(candidateCommand);
 
   }
@@ -359,8 +345,7 @@ void Sdl2IO::processLine() {
   // Process action
   for (const auto &commandHandler : commandHandlers)
     if (
-      RDM_CMD_PROCESS_DONE == commandHandler->processCommand(currentCommand)
-    ) {
+    RDM_CMD_PROCESS_DONE == commandHandler->processCommand(currentCommand)) {
 
       // Push the command in the historic
       gui->commandComposer->commandHistoryPush(currentCommand);

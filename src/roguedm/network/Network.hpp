@@ -33,39 +33,38 @@ namespace roguedm {
  */
 class Network : public CommandHandlerInterface, public GameComponentInterface {
 
-  RDM_DECLARE_CLASS_AS_NOCPNOMV(Network)
+RDM_DECLARE_CLASS_AS_NOCPNOMV(Network)
 
-  public:
+ public:
 
-    Network();
-    ~Network();
+  Network();
+  ~Network();
 
-    /** SDL resources class initializer */
-    bool initNetwork();
+  /** SDL resources class initializer */
+  bool initNetwork();
 
-    /**
-     * Method used when the main app has time to allow a network management
-     * step from the game loop.
-     */
-    void update() override;
+  /**
+   * Method used when the main app has time to allow a network management
+   * step from the game loop.
+   */
+  void update() override;
 
-    /** Request to process a command. */
-    bool processCommand(const Command&) override;
+  /** Request to process a command. */
+  bool processCommand(const Command&) override;
 
-    /** Request to identify a command in a sentence. */
-    bool identifyCommand(const Sentence&, Command&) const override;
+  /** Request to identify a command in a sentence. */
+  bool identifyCommand(const Sentence&, Command&) const override;
 
-    /** Request a list of autocomplete options for a command. */
-    CommandList getCompletionCandidates(const Command&)
-      const override;
+  /** Request a list of autocomplete options for a command. */
+  CommandList getCompletionCandidates(const Command&) const override;
 
-  private:
+ private:
 
-    /** Stores if SDL resources have been initialized successfully. */
-    bool initSuccess;
+  /** Stores if SDL resources have been initialized successfully. */
+  bool initSuccess;
 
-    /** Link to configuration class */
-    ConfigSharedPtr config;
+  /** Link to configuration class */
+  ConfigSharedPtr config;
 
 };
 

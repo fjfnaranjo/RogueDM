@@ -41,7 +41,8 @@ std::size_t multibyteLenght(const std::string &string);
  *
  * \return A single character or an empty string if something failed.
  */
-std::string multibyteCharacterByIndex(const std::string &string, const std::size_t position);
+std::string multibyteCharacterByIndex(const std::string &string,
+                                      const std::size_t position);
 
 /**
  * Get a substr by index and size in a std::string having the current multibyte
@@ -49,6 +50,7 @@ std::string multibyteCharacterByIndex(const std::string &string, const std::size
  *
  * \return The substr or an empty string if something failed.
  */
-std::string multibyteSubstr(const std::string &string, const std::size_t start, const std::size_t size);
+std::string multibyteSubstr(const std::string &string, const std::size_t start,
+                            const std::size_t size);
 
 }  // namespace roguedm_gui

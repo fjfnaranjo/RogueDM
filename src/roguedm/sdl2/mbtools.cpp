@@ -28,14 +28,14 @@ std::size_t multibyteLenght(const std::string &string) {
   do {
     currentShift += bytesReaded;
     bytesReaded = mbrtowc(NULL, &string[currentShift], MB_CUR_MAX, NULL);
-    if (bytesReaded > 0) characterCount++;
+    if (bytesReaded > 0)
+      characterCount++;
   } while (bytesReaded > 0);
   return (bytesReaded < 0) ? bytesReaded : characterCount;
 }
 
-std::string multibyteCharacterByIndex(
-  const std::string &string, const std::size_t position
-) {
+std::string multibyteCharacterByIndex(const std::string &string,
+                                      const std::size_t position) {
   std::string lastCharacterString(MB_CUR_MAX, '\0');
   wchar_t lastCharacter;
   std::size_t characterCount = 0;
@@ -44,10 +44,11 @@ std::string multibyteCharacterByIndex(
   int bytesReaded = 0;
   do {
     currentShift += bytesReaded;
-    bytesReaded =
-      mbrtowc(&lastCharacter, &string[currentShift], MB_CUR_MAX, NULL);
-    if (bytesReaded > 0) characterCount++;
-    if ((characterCount-1) == position) {
+    bytesReaded = mbrtowc(&lastCharacter, &string[currentShift], MB_CUR_MAX,
+    NULL);
+    if (bytesReaded > 0)
+      characterCount++;
+    if ((characterCount - 1) == position) {
       characterSize = wcrtomb(&lastCharacterString[0], lastCharacter, NULL);
       lastCharacterString.resize(characterSize);
       return lastCharacterString;
@@ -56,11 +57,11 @@ std::string multibyteCharacterByIndex(
   return u8"";
 }
 
-std::string multibyteSubstr(
-  const std::string &string, const std::size_t start, const std::size_t size
-) {
-  if (size == 0)
+std::string multibyteSubstr(const std::string &string, const std::size_t start,
+                            const std::size_t size) {
+  if (size == 0) {
     return u8"";
+  }
   std::string newString;
   int startByte = 0;
   std::size_t characterCount = 0;
@@ -71,15 +72,16 @@ std::string multibyteSubstr(
     bytesReaded = mbrtowc(NULL, &string[currentShift], MB_CUR_MAX, NULL);
     if (bytesReaded > 0) characterCount++;
     if ((characterCount-1) == start && bytesReaded > 0)
-      startByte = currentShift;
+    startByte = currentShift;
     if ((characterCount-1) == start+size)
-      return string.substr(startByte, currentShift-startByte);
+    return string.substr(startByte, currentShift-startByte);
     if (bytesReaded == 0 && startByte > 0)
-      return string.substr(startByte, currentShift-startByte);
+    return string.substr(startByte, currentShift-startByte);
     if (bytesReaded == 0)
-      return u8"";
-  } while (bytesReaded > 0);
+    return u8"";
+  }while (bytesReaded > 0);
   return u8"";
 }
 
-}  // namespace roguedm_gui
+}
+// namespace roguedm_gui
