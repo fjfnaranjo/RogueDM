@@ -30,6 +30,9 @@ Gui::Gui() {
   maxCols = 0;
   maxRows = 0;
 
+  commandComposer = std::make_unique<CommandComposer>();
+  consoleHistory = {};
+
 }
 
 Gui::~Gui() {
@@ -61,7 +64,7 @@ void Gui::resetGui() {
 
 void Gui::update(SDL_Renderer *renderer) {
 
-  commandComposer.paintCommandLine(
+  commandComposer->paintCommandLine(
     renderer, defaultStamper,
     maxCols, maxRows, defaultCWidth, defaultCHeight
   );

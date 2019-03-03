@@ -27,7 +27,7 @@
 namespace roguedm {
 
 Config::Config() {
-  configurationLoadError = std::string();
+  configurationLoadError = "";
   sections = {};
 }
 

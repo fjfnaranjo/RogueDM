@@ -39,6 +39,8 @@ CharmapStamper::CharmapStamper () {
   txtHStart = 0;
   txtWStart = 0;
 
+  wordKindTexture = {};
+
 }
 
 CharmapStamper::~CharmapStamper() {

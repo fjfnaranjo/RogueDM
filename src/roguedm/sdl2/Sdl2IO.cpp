@@ -40,6 +40,11 @@ Sdl2IO::Sdl2IO() {
 
   ticks = 0;
 
+  window = nullptr;
+  renderer = nullptr;
+
+  commandHandlers = {};
+
 }
 
 Sdl2IO::~Sdl2IO() {
@@ -233,13 +238,13 @@ void Sdl2IO::processText(SDL_Event* event) {
 
   if(text == u8"") {
 
-    gui->commandComposer.keySpace();
+    gui->commandComposer->keySpace();
 
   } else {
 
     // TODO: SDL2New Implement SDL2 text input support
 
-    gui->commandComposer.keyCharacter(text);
+    gui->commandComposer->keyCharacter(text);
 
   }
 
@@ -258,47 +263,47 @@ void Sdl2IO::processKey(SDL_Event* event) {
 
     // Backspace
     case SDLK_BACKSPACE:
-      gui->commandComposer.keyBackspace();
+      gui->commandComposer->keyBackspace();
       break;
 
     // Delete
     case SDLK_DELETE:
-      gui->commandComposer.keyDelete();
+      gui->commandComposer->keyDelete();
       break;
 
     // H-movement keys
     case SDLK_LEFT:
       if (!(kevent.keysym.mod&KMOD_CTRL)) {
-        gui->commandComposer.keyLeft(false);
+        gui->commandComposer->keyLeft(false);
       } else {
-        gui->commandComposer.keyLeft(true);
+        gui->commandComposer->keyLeft(true);
       }
       break;
 
     case SDLK_RIGHT:
       if (!(kevent.keysym.mod&KMOD_CTRL)) {
-        gui->commandComposer.keyRight(false);
+        gui->commandComposer->keyRight(false);
       } else {
-        gui->commandComposer.keyRight(true);
+        gui->commandComposer->keyRight(true);
       }
       break;
 
     // Far-long h-movement keys
     case SDLK_HOME:
-      gui->commandComposer.keyHome();
+      gui->commandComposer->keyHome();
       break;
 
     case SDLK_END:
-      gui->commandComposer.keyEnd();
+      gui->commandComposer->keyEnd();
       break;
 
     // History keys
     case SDLK_UP:
-      gui->commandComposer.keyUp();
+      gui->commandComposer->keyUp();
       break;
 
     case SDLK_DOWN:
-      gui->commandComposer.keyDown();
+      gui->commandComposer->keyDown();
       break;
 
     // TAB
@@ -313,10 +318,10 @@ void Sdl2IO::processKey(SDL_Event* event) {
 void Sdl2IO::tryAutocompletion() {
 
   // There is already a command
-  if(gui->commandComposer.hasCommand()) {
+  if(gui->commandComposer->hasCommand()) {
 
     // Try complete the current command
-    roguedm::Command command = gui->commandComposer.getCommand();
+    roguedm::Command command = gui->commandComposer->getCommand();
     roguedm::CommandList candidateCommands;
     for(const auto &commandHandler: commandHandlers) {
       roguedm::CommandList posibleCandidates =
@@ -326,7 +331,7 @@ void Sdl2IO::tryAutocompletion() {
     }
     // TODO: Do more stuff with this list
     if(1==candidateCommands.size())
-      gui->commandComposer.setCommand(candidateCommands[0]);
+      gui->commandComposer->setCommand(candidateCommands[0]);
 
   }
 
@@ -334,14 +339,14 @@ void Sdl2IO::tryAutocompletion() {
   else {
 
     // Try to identify a command from the sentence
-    roguedm::Sentence sentence = gui->commandComposer.getRawSentence();
+    roguedm::Sentence sentence = gui->commandComposer->getRawSentence();
     roguedm::Command candidateCommand;
     for(const auto &commandHandler: commandHandlers)
       if(
         RDM_CMD_IDENTIFY_DONE==
           commandHandler->identifyCommand(sentence, candidateCommand)
       )
-        gui->commandComposer.setCommand(candidateCommand);
+        gui->commandComposer->setCommand(candidateCommand);
 
   }
 
@@ -349,17 +354,17 @@ void Sdl2IO::tryAutocompletion() {
 
 void Sdl2IO::processLine() {
 
-  roguedm::Command currentCommand = gui->commandComposer.getCommand();
+  roguedm::Command currentCommand = gui->commandComposer->getCommand();
 
   // Process action
   for(const auto &commandHandler: commandHandlers)
     if(RDM_CMD_PROCESS_DONE==commandHandler->processCommand(currentCommand)) {
 
       // Push the command in the historic
-      gui->commandComposer.commandHistoryPush(currentCommand);
+      gui->commandComposer->commandHistoryPush(currentCommand);
 
       // Reset the history pointer
-      gui->commandComposer.resetCommand();
+      gui->commandComposer->resetCommand();
     }
 
 }

@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <SDL.h>
 
 #include "CharmapStamper.hpp"
@@ -51,7 +53,7 @@ class Gui {
     void resetScreenSize(SDL_Window*);
 
     /** The command composer for this GUI. */
-    CommandComposer commandComposer;
+    std::unique_ptr<CommandComposer> commandComposer;
 
   private:
 

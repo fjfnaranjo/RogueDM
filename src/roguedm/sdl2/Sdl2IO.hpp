@@ -123,10 +123,10 @@ class Sdl2IO :
     std::vector<CommandHandlerInterface*> commandHandlers;
 
     /** SDL window */
-    SDL_Window *window = nullptr;
+    SDL_Window *window;
 
     /** SDL main rendering surface */
-    SDL_Renderer *renderer = nullptr;
+    SDL_Renderer *renderer;
 
     /** Unique pointer to the default GUI drawing class. */
     std::unique_ptr<Gui> gui;
