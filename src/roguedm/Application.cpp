@@ -24,6 +24,7 @@
 
 #include <SDL.h>
 
+#include "commands/CommandHandlers.hpp"
 #include "game/Game.hpp"
 #include "network/Network.hpp"
 #include "sdl2/Sdl2IO.hpp"
@@ -109,17 +110,20 @@ int Application::run(int argc, char *argv[]) {
   // Main application loop
   if (RDM_ARGS_CONTINUE == argsStatus) {
 
-    bool networkingEnabled =
-      !config->getSettingBoolValue("general", "skipNetworking", false);
+    bool networkingEnabled = !config->getSettingBoolValue("general",
+                                                          "skipNetworking",
+                                                          false);
 
-    auto gameInstance = std::make_unique<roguedm_game::Game>();
+    auto gameInstance = std::make_shared<roguedm_game::Game>();
 
-    auto sdl2Io = std::make_unique<roguedm_gui::Sdl2IO>();
+    auto sdl2Io = std::make_shared<roguedm_gui::Sdl2IO>();
     if (!sdl2Io->initSdl2IO()) {
       return RDM_ERR_SDL2_ERROR;
     }
 
-    auto network = std::make_unique<Network>();
+    roguedm::CommandHandlers::instance()->registerCommandHandler(sdl2Io);
+
+    auto network = std::make_shared<Network>();
     if (networkingEnabled) {
       if (!network->initNetwork()) {
         return RDM_ERR_NETWORK_ERROR;

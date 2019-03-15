@@ -17,7 +17,6 @@
 
 #pragma once
 
-#include <map>
 #include <memory>
 
 #include <SDL.h>
@@ -68,19 +67,6 @@ RDM_DECLARE_CLASS_AS_NOCPNOMV(Sdl2IO)
       override;
 
   /**
-   * Add a new command handler to the internal list, after erasing any
-   * previous occurrence of that handler.
-   * \param c The command handler.
-   */
-  void registerCommandHandler(CommandHandlerInterface *c);
-
-  /**
-   * Remove all references to the command handler from the internal list.
-   * \param c The command handler.
-   */
-  void unregisterCommandHandler(CommandHandlerInterface *c);
-
-  /**
    * Tell the outside that the user wants to quit the app.
    * \return 1 if user want to quit, 0 if not
    */
@@ -116,9 +102,6 @@ RDM_DECLARE_CLASS_AS_NOCPNOMV(Sdl2IO)
 
   /** Keep the SDL_GetTicks return value to implement a FPS lock. */
   int ticks;
-
-  /** The command handlers list. */
-  std::vector<CommandHandlerInterface*> commandHandlers;
 
   /** SDL window */
   SDL_Window *window;

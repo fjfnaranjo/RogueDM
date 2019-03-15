@@ -17,6 +17,9 @@
 
 #pragma once
 
+#include <memory>
+#include <vector>
+
 #include "Command.hpp"
 
 #define RDM_CMD_PROCESS_UNKNOWN  false
@@ -38,7 +41,7 @@ namespace roguedm {
  */
 class CommandHandlerInterface {
 
-  RDM_DECLARE_CLASS_AS_INTERFACE (CommandHandlerInterface)
+RDM_DECLARE_CLASS_AS_INTERFACE (CommandHandlerInterface)
 
  public:
 
@@ -87,5 +90,9 @@ class CommandHandlerInterface {
   virtual CommandList getCompletionCandidates(const Command& command) const =0;
 
 };
+
+typedef std::shared_ptr<CommandHandlerInterface> CommandHandlerSharedPtr;
+
+typedef std::vector<CommandHandlerSharedPtr> CommandHandlerList;
 
 }  // namespace roguedm

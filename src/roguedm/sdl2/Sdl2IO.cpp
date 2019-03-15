@@ -22,11 +22,11 @@
 #include <locale>
 #include <memory>
 #include <string>
-#include <vector>
 
 #include "mbtools.hpp"
 #include "../macros.hpp"
 #include "../strings.hpp"
+#include "../commands/CommandHandlers.hpp"
 
 namespace roguedm_gui {
 
@@ -44,8 +44,6 @@ Sdl2IO::Sdl2IO() {
 
   window = nullptr;
   renderer = nullptr;
-
-  commandHandlers = {};
 
 }
 
@@ -82,9 +80,6 @@ bool Sdl2IO::initSdl2IO() {
     SDL_Quit();
     return false;
   }
-
-  // Local command handler
-  registerCommandHandler(this);
 
   // More SDL Init
   ticks = SDL_GetTicks();
@@ -170,17 +165,6 @@ roguedm::CommandList Sdl2IO::getCompletionCandidates(
 
   return roguedm::CommandList();
 
-}
-
-void Sdl2IO::registerCommandHandler(CommandHandlerInterface *c) {
-  unregisterCommandHandler(c);
-  commandHandlers.push_back(c);
-}
-
-void Sdl2IO::unregisterCommandHandler(CommandHandlerInterface *c) {
-  commandHandlers.erase(
-      std::remove(commandHandlers.begin(), commandHandlers.end(), c),
-      commandHandlers.end());
 }
 
 int Sdl2IO::mustHalt() {
@@ -305,6 +289,8 @@ void Sdl2IO::processKey(SDL_Event* event) {
 }
 
 void Sdl2IO::tryAutocompletion() {
+  auto commandHandlers = roguedm::CommandHandlers::instance()
+      ->getCommandHandlers();
 
   // There is already a command
   if (gui->commandComposer->hasCommand()) {
@@ -339,6 +325,8 @@ void Sdl2IO::tryAutocompletion() {
 }
 
 void Sdl2IO::processLine() {
+  auto commandHandlers = roguedm::CommandHandlers::instance()
+      ->getCommandHandlers();
 
   roguedm::Command currentCommand = gui->commandComposer->getCommand();
 
