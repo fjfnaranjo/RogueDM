@@ -21,7 +21,6 @@
 #include <vector>
 
 #include "Sentence.hpp"
-#include "Word.hpp"
 
 // Command's words.
 #define RDM_CMD_QUIT         u8"quit"       // End app.
