@@ -45,7 +45,7 @@ include_directories(BEFORE ${roguedm_BINARY_DIR}/src)
 file(GLOB_RECURSE roguedm_SOURCES "roguedm/*.cpp")
 file(GLOB_RECURSE roguedm_SOURCES_MAIN "roguedm/main/*.cpp")
 add_library (roguedm_lib ${roguedm_SOURCES} ${roguedm_SOURCES_MAIN})
-add_executable(roguedm_app main.cpp)
+add_executable(roguedm_app main_python.cpp)
 
 # Dynamic libraries and linking
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${roguedm_SOURCE_DIR}/../cmake")
@@ -53,14 +53,17 @@ find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_net REQUIRED)
+find_package(PythonLibs REQUIRED Development)
 include_directories(${SDL2_INCLUDE_DIR}
                     ${SDL2_IMAGE_INCLUDE_DIR}
                     ${SDL2_TTF_INCLUDE_DIR}
-                    ${SDL2_NET_INCLUDE_DIR})
+                    ${SDL2_NET_INCLUDE_DIR}
+                    ${PYTHON_INCLUDE_DIR})
 target_link_libraries(roguedm_lib ${SDL2_LIBRARY}
                                   ${SDL2_IMAGE_LIBRARIES}
                                   ${SDL2_TTF_LIBRARIES}
-                                  ${SDL2_NET_LIBRARIES})
+                                  ${SDL2_NET_LIBRARIES}
+                                  ${PYTHON_LIBRARY})
 target_link_libraries(roguedm_app roguedm_lib)
 
 if(ROGUEDM_TESTING)
