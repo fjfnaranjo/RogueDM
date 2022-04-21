@@ -1,0 +1,30 @@
+The PNG in this directory was sourced from Wikimedia Commons
+(https://commons.wikimedia.org/wiki/File:Codepage-850.png).
+
+User Incnis Mrsi (https://commons.wikimedia.org/wiki/User:Incnis_Mrsi) created
+the file and released it into the public domain with the following note:
+
+- Source: Own work, using a self-made program and cp850-8x14.psf.gz from
+  console-tools which I hope is in the public domain.
+
+As of 2022-04-18 both Ubuntu and Debian console-tools package license start by
+the following text:
+
+
+This is the Debian-Linux prepackaged version of the data for the Linux
+Console Data.
+
+This package was put together by Yann Dirson <dirson@debian.org>, from
+sources you can get from:
+ ftp://lct.sourceforge.net/pub/lct/
+
+Packaging is copyright 1999-2001 Yann Dirson	<dirson@debian.org>
+	     copyright 2001 Alcove		http://www.alcove.fr/
+
+
+The Linux Console Tools data are derived from the data files provided
+by the latest version of the kbd package, and are covered by the GPL
+version 2.0 (see /usr/share/common-licenses/GPL-2 for details).
+
+The Latin-1 *.psf fonts were developed by H. Peter Anvin, and the
+Latin-2 ones by Pavel Zaboj.
