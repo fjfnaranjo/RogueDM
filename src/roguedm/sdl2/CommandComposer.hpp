@@ -17,9 +17,12 @@
 
 #pragma once
 
+#include <SDL.h>
+
 #include "CharmapStamper.hpp"
 #include "../macros.hpp"
 #include "../commands/CommandHandlerInterface.hpp"
+#include "../commands/Sentence.hpp"
 
 // Max command history lines..
 #define RDM_CL_MAX_HISTORY         128
@@ -27,7 +30,7 @@
 namespace roguedm_gui {
 
 /** \brief Helps with the editing and management of commands in the GUI. */
-class CommandComposer {
+class CommandComposer : public roguedm::CommandHandlerInterface {
 
 RDM_DECLARE_CLASS_AS_NOCPNOMV(CommandComposer)
 
@@ -35,6 +38,17 @@ RDM_DECLARE_CLASS_AS_NOCPNOMV(CommandComposer)
 
   CommandComposer();
   ~CommandComposer();
+
+  /** Request to process a command. */
+  bool processCommand(const roguedm::Command&) override;
+
+  /** Request to identify a command in a sentence. */
+  bool identifyCommand(const roguedm::Sentence&, roguedm::Command&) const
+      override;
+
+  /** Request a list of autocomplete options for a command. */
+  roguedm::CommandList getCompletionCandidates(const roguedm::Command&) const
+      override;
 
   /** \ref roguedm::Command getter. */
   roguedm::Command getCommand();
@@ -50,6 +64,24 @@ RDM_DECLARE_CLASS_AS_NOCPNOMV(CommandComposer)
 
   /** Check if there is already a command in the command line. */
   bool hasCommand();
+
+  /** Process pressing of a text key. */
+  void composeText(SDL_Event);
+
+  /** Process pressing of a control key. */
+  void composeKey(SDL_KeyboardEvent);
+
+  /** Add a new command to the command history. */
+  void commandHistoryPush(roguedm::Command);
+
+  /** Reset the command line and its history navigation cursor */
+  void resetCommand();
+
+  /** Paints the command line. */
+  void paintCommandLine(SDL_Renderer*, std::shared_ptr<CharmapStamper>, int,
+                        int, int, int);
+
+ private:
 
   /** Process pressing of key backspace. */
   void keyBackspace();
@@ -86,18 +118,6 @@ RDM_DECLARE_CLASS_AS_NOCPNOMV(CommandComposer)
 
   /** Process pressing of any normal character key (not space). */
   void keyCharacter(std::string character);
-
-  /** Add a new command to the command history. */
-  void commandHistoryPush(roguedm::Command);
-
-  /** Reset the command line and its history navigation cursor */
-  void resetCommand();
-
-  /** Paints the command line. */
-  void paintCommandLine(SDL_Renderer*, std::shared_ptr<CharmapStamper>, int,
-                        int, int, int);
-
- private:
 
   /** Serialize a command as a sentence. */
   roguedm::Sentence command2Sentence(roguedm::Command);

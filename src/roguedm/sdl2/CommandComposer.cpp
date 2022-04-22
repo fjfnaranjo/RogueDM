@@ -37,6 +37,46 @@ CommandComposer::CommandComposer() {
 CommandComposer::~CommandComposer() {
 }
 
+bool CommandComposer::processCommand(const roguedm::Command &command) {
+  if (command.name == RDM_CMD_PSAY) {
+    return RDM_CMD_PROCESS_DONE;
+  }
+  return RDM_CMD_PROCESS_UNKNOWN;
+}
+
+bool CommandComposer::identifyCommand(const roguedm::Sentence& sentence,
+                             roguedm::Command &command) const {
+
+  // psay command completion
+  if (sentence.size() > 0 && sentence[0].content == RDM_CMD_PSAY) {
+    command.name = RDM_CMD_PSAY;
+    command.params.clear();
+    return RDM_CMD_IDENTIFY_DONE;
+  }
+
+  return RDM_CMD_IDENTIFY_UNKNOWN;
+
+}
+
+roguedm::CommandList CommandComposer::getCompletionCandidates(
+    const roguedm::Command &command) const {
+
+  if (0 == command.name.size() && 0 == command.params.size()) {
+
+    roguedm::CommandList options;
+
+    roguedm::Command psayCmd;
+    psayCmd.name = RDM_CMD_PSAY;
+    options.push_back(psayCmd);
+
+    return options;
+
+  }
+
+  return roguedm::CommandList();
+
+}
+
 roguedm::Command CommandComposer::getCommand() {
   if (hasCommand()) {
     return sentence2Command(sentence);
@@ -78,6 +118,76 @@ bool CommandComposer::hasCommand() {
   if (0 != commandLength() && sentence[0].kind == RDM_WCLASS_COMMAND)
     return true;
   return false;
+}
+
+void CommandComposer::composeText(SDL_Event event) {
+
+  roguedm::Word emptyWord;
+  emptyWord.content = RDM_WEMPTY;
+  emptyWord.kind = RDM_WCLASS_NORMAL;
+
+  std::string text = event.text.text;
+
+  if (text == u8"") {
+
+    keySpace();
+
+  } else {
+
+    // TODO(fjfnaranjo): SDL2New Implement SDL2 text input support
+
+    keyCharacter(text);
+
+  }
+
+}
+
+void CommandComposer::composeKey(SDL_KeyboardEvent keyEvent) {
+
+  switch (keyEvent.keysym.sym) {
+
+    case SDLK_BACKSPACE:
+      keyBackspace();
+      break;
+
+    case SDLK_DELETE:
+      keyDelete();
+      break;
+
+    case SDLK_LEFT:
+      if (!(keyEvent.keysym.mod & KMOD_CTRL)) {
+        keyLeft(false);
+      } else {
+        keyLeft(true);
+      }
+      break;
+
+    case SDLK_RIGHT:
+      if (!(keyEvent.keysym.mod & KMOD_CTRL)) {
+        keyRight(false);
+      } else {
+        keyRight(true);
+      }
+      break;
+
+    case SDLK_HOME:
+      keyHome();
+      break;
+
+    case SDLK_END:
+      keyEnd();
+      break;
+
+    case SDLK_UP:
+      keyUp();
+      break;
+
+    case SDLK_DOWN:
+      keyDown();
+      break;
+
+  }
+
 }
 
 void CommandComposer::keyBackspace() {

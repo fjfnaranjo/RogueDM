@@ -22,9 +22,9 @@
 #include <SDL.h>
 
 #include "Gui.hpp"
-#include "../Config.hpp"
 #include "../GameComponentInterface.hpp"
 #include "../commands/CommandHandlerInterface.hpp"
+#include "../commands/Sentence.hpp"
 
 namespace roguedm_gui {
 
@@ -81,21 +81,6 @@ RDM_DECLARE_CLASS_AS_NOCPNOMV(Sdl2IO)
    * Method internally called to manage the SDL event queue.
    */
   void eventsManager();
-
-  /** Manage a text composition from the SDL events manager */
-  void processText(SDL_Event*);
-
-  /** Manage a key sent from the SDL events manager */
-  void processKey(SDL_Event*);
-
-  /** Try to find a valid autocompletion for the current command. */
-  void tryAutocompletion();
-
-  /** Process the command line. */
-  void processLine();
-
-  /** App configuration singleton reference. */
-  roguedm::ConfigSharedPtr config;
 
   /** True when user wants to quit. */
   int appDone;

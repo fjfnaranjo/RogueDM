@@ -46,14 +46,14 @@ RDM_DECLARE_CLASS_AS_NOCPNOMV(Gui)
   /** Update the state each game tick and interact with SDL2. */
   void update(SDL_Renderer*);
 
-  /** Add a new command to the console log. */
-  void consoleHistoryPush(roguedm::Sentence);
-
   /** Updates the screen if window resizes. */
   void resetScreenSize(SDL_Window*);
 
-  /** The command composer for this GUI. */
-  std::unique_ptr<CommandComposer> commandComposer;
+  /** Manage a text composition from the SDL events manager */
+  void processText(SDL_Event);
+
+  /** Manage a key sent from the SDL events manager */
+  void processKey(SDL_KeyboardEvent);
 
  private:
 
@@ -81,8 +81,18 @@ RDM_DECLARE_CLASS_AS_NOCPNOMV(Gui)
   /** Shared pointer to the default charmap drawing class. */
   std::shared_ptr<CharmapStamper> defaultStamper;
 
-  /** The current command line contents. */
-  roguedm::SentenceList consoleHistory;
+  /** Paints the interface. */
+  void paintInterface(SDL_Renderer*, std::shared_ptr<CharmapStamper>, int,
+                        int, int, int);
+
+  /** The command composer for this GUI. */
+  std::shared_ptr<CommandComposer> commandComposer;
+
+  /** Process the command line. */
+  void processLine();
+
+  /** Try to find a valid autocompletion for the current command. */
+  void tryAutocompletion();
 
 };
 

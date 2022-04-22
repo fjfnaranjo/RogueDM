@@ -22,6 +22,8 @@
 
 namespace roguedm {
 
+// TODO(fjfnaranjo): This is missing docs and a mech to unregister handlers
+
 class CommandHandlers {
 
 RDM_DECLARE_CLASS_AS_SINGLETON(CommandHandlers)

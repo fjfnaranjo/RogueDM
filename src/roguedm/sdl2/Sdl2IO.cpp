@@ -34,8 +34,6 @@ Sdl2IO::Sdl2IO() {
 
   initSuccess = false;
 
-  config = roguedm::Config::instance();
-
   gui = std::make_unique<Gui>();
 
   appDone = 0;
@@ -125,9 +123,6 @@ bool Sdl2IO::processCommand(const roguedm::Command &command) {
     appDone = 1;
     return RDM_CMD_PROCESS_DONE;
   }
-  if (command.name == RDM_CMD_PSAY) {
-    return RDM_CMD_PROCESS_DONE;
-  }
   return RDM_CMD_PROCESS_UNKNOWN;
 }
 
@@ -152,9 +147,6 @@ roguedm::CommandList Sdl2IO::getCompletionCandidates(
 
     roguedm::CommandList options;
 
-    roguedm::Command psayCmd;
-    psayCmd.name = RDM_CMD_PSAY;
-    options.push_back(psayCmd);
     roguedm::Command quitCmd;
     quitCmd.name = RDM_CMD_QUIT;
     options.push_back(quitCmd);
@@ -189,158 +181,15 @@ void Sdl2IO::eventsManager() {
             break;
         }
         break;
-        // TODO(fjfnaranjo): Resolve substitution/replace mode
+      // TODO(fjfnaranjo): Resolve substitution/replace mode
       case SDL_TEXTINPUT:
-        processText(&event);
+        gui->processText(event);
         break;
       case SDL_KEYDOWN:
-        processKey(&event);
+        gui->processKey(event.key);
         break;
     }
   }
-
-}
-
-void Sdl2IO::processText(SDL_Event* event) {
-
-  roguedm::Word emptyWord;
-  emptyWord.content = RDM_WEMPTY;
-  emptyWord.kind = RDM_WCLASS_NORMAL;
-
-  std::string text = event->text.text;
-
-  if (text == u8"") {
-
-    gui->commandComposer->keySpace();
-
-  } else {
-
-    // TODO(fjfnaranjo): SDL2New Implement SDL2 text input support
-
-    gui->commandComposer->keyCharacter(text);
-
-  }
-
-}
-
-void Sdl2IO::processKey(SDL_Event* event) {
-
-  SDL_KeyboardEvent kevent = event->key;
-
-  switch (kevent.keysym.sym) {
-
-    // Enter
-    case SDLK_RETURN:
-      processLine();
-      break;
-
-      // Backspace
-    case SDLK_BACKSPACE:
-      gui->commandComposer->keyBackspace();
-      break;
-
-      // Delete
-    case SDLK_DELETE:
-      gui->commandComposer->keyDelete();
-      break;
-
-      // H-movement keys
-    case SDLK_LEFT:
-      if (!(kevent.keysym.mod & KMOD_CTRL)) {
-        gui->commandComposer->keyLeft(false);
-      } else {
-        gui->commandComposer->keyLeft(true);
-      }
-      break;
-
-    case SDLK_RIGHT:
-      if (!(kevent.keysym.mod & KMOD_CTRL)) {
-        gui->commandComposer->keyRight(false);
-      } else {
-        gui->commandComposer->keyRight(true);
-      }
-      break;
-
-      // Far-long h-movement keys
-    case SDLK_HOME:
-      gui->commandComposer->keyHome();
-      break;
-
-    case SDLK_END:
-      gui->commandComposer->keyEnd();
-      break;
-
-      // History keys
-    case SDLK_UP:
-      gui->commandComposer->keyUp();
-      break;
-
-    case SDLK_DOWN:
-      gui->commandComposer->keyDown();
-      break;
-
-      // TAB
-    case SDLK_TAB:
-      tryAutocompletion();
-      break;
-
-  }
-
-}
-
-void Sdl2IO::tryAutocompletion() {
-  auto commandHandlers = roguedm::CommandHandlers::instance()
-      ->getCommandHandlers();
-
-  // There is already a command
-  if (gui->commandComposer->hasCommand()) {
-
-    // Try complete the current command
-    roguedm::Command command = gui->commandComposer->getCommand();
-    roguedm::CommandList candidateCommands;
-    for (const auto &commandHandler : commandHandlers) {
-      roguedm::CommandList posibleCandidates = commandHandler
-          ->getCompletionCandidates(command);
-      for (const auto &possibleCandidate : posibleCandidates)
-        candidateCommands.insert(candidateCommands.end(), possibleCandidate);
-    }
-    // TODO(fjfnaranjo): Do more stuff with this list
-    if (1 == candidateCommands.size())
-      gui->commandComposer->setCommand(candidateCommands[0]);
-
-    // There is not a command
-  } else {
-
-    // Try to identify a command from the sentence
-    roguedm::Sentence sentence = gui->commandComposer->getRawSentence();
-    roguedm::Command candidateCommand;
-    for (const auto &commandHandler : commandHandlers)
-      if (
-      RDM_CMD_IDENTIFY_DONE
-          == commandHandler->identifyCommand(sentence, candidateCommand))
-        gui->commandComposer->setCommand(candidateCommand);
-
-  }
-
-}
-
-void Sdl2IO::processLine() {
-  auto commandHandlers = roguedm::CommandHandlers::instance()
-      ->getCommandHandlers();
-
-  roguedm::Command currentCommand = gui->commandComposer->getCommand();
-
-  // Process action
-  for (const auto &commandHandler : commandHandlers)
-    if (
-    RDM_CMD_PROCESS_DONE == commandHandler->processCommand(currentCommand)) {
-
-      // Push the command in the historic
-      gui->commandComposer->commandHistoryPush(currentCommand);
-
-      // Reset the history pointer
-      gui->commandComposer->resetCommand();
-    }
 
 }
 
