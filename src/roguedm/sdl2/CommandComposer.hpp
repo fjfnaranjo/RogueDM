@@ -29,7 +29,7 @@
 
 namespace roguedm_gui {
 
-/** \brief Helps with the editing and management of commands in the GUI. */
+/** \brief Handles the command editor panel in the GUI. */
 class CommandComposer : public roguedm::CommandHandlerInterface {
 
 RDM_DECLARE_CLASS_AS_NOCPNOMV(CommandComposer)
