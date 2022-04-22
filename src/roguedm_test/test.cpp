@@ -1,4 +1,4 @@
-// Copyright 2018 Fco. Jose Fdez. Naranjo AKA github.com/fjfnaranjo
+// Copyright 2022 Fco. Jose Fdez. Naranjo AKA github.com/fjfnaranjo
 
 #include "gtest/gtest.h"
 
