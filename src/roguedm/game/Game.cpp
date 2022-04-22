@@ -15,9 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "../game/Game.hpp"
-
-#include <memory>
+#include "Game.hpp"
 
 namespace roguedm_game {
 

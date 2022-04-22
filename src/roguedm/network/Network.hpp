@@ -17,11 +17,11 @@
 
 #pragma once
 
-#include <memory>
-
 #include "../Config.hpp"
-#include "../GameComponentInterface.hpp"
+#include "../commands/Command.hpp"
 #include "../commands/CommandHandlerInterface.hpp"
+#include "../commands/Sentence.hpp"
+#include "../GameComponentInterface.hpp"
 #include "../macros.hpp"
 
 namespace roguedm {

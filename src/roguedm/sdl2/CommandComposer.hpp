@@ -20,9 +20,10 @@
 #include <SDL.h>
 
 #include "CharmapStamper.hpp"
-#include "../macros.hpp"
+#include "../commands/Command.hpp"
 #include "../commands/CommandHandlerInterface.hpp"
 #include "../commands/Sentence.hpp"
+#include "../macros.hpp"
 
 // Max command history lines..
 #define RDM_CL_MAX_HISTORY         128

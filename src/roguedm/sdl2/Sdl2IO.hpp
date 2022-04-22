@@ -22,9 +22,10 @@
 #include <SDL.h>
 
 #include "Gui.hpp"
-#include "../GameComponentInterface.hpp"
+#include "../commands/Command.hpp"
 #include "../commands/CommandHandlerInterface.hpp"
 #include "../commands/Sentence.hpp"
+#include "../GameComponentInterface.hpp"
 
 namespace roguedm_gui {
 

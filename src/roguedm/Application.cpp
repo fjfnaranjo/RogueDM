@@ -29,6 +29,7 @@
 #include "network/Network.hpp"
 #include "sdl2/Sdl2IO.hpp"
 #include "strings.hpp"
+#include "version.hpp"
 
 #define RDM_ARGS_CONTINUE 0
 #define RDM_ARGS_EXIT     1

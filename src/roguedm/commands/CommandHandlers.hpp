@@ -17,8 +17,8 @@
 
 #pragma once
 
-#include "../macros.hpp"
 #include "CommandHandlerInterface.hpp"
+#include "../macros.hpp"
 
 namespace roguedm {
 

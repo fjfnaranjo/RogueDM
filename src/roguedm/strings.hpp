@@ -36,9 +36,6 @@
 
 #include <string>
 
-#include "paths.hpp"
-#include "version.hpp"
-
 #define RDM_STR_VERSION_STRING   "Rogue's Dungeon Master Version %s .\n"
 
 #define RDM_STR_USAGE_VERSION    "--version"

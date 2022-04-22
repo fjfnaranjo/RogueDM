@@ -22,6 +22,7 @@
 
 #pragma once
 
+// Included here to avoid missing or tracking the inclusion in user files
 #include <memory>
 
 // Interface declaration macro.

@@ -23,6 +23,7 @@
 
 #include <SDL.h>
 
+#include "paths.hpp"
 #include "strings.hpp"
 
 namespace roguedm {

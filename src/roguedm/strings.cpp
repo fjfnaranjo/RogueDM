@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "strings.hpp"
+
 #include <cstdarg>
 #include <string>
-
-#include "strings.hpp"
 
 #define RDM_STR_MAX 255
 

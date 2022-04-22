@@ -24,9 +24,10 @@
 #include <string>
 
 #include "mbtools.hpp"
+#include "../commands/CommandHandlers.hpp"
 #include "../macros.hpp"
 #include "../strings.hpp"
-#include "../commands/CommandHandlers.hpp"
+#include "../version.hpp"
 
 namespace roguedm_gui {
 

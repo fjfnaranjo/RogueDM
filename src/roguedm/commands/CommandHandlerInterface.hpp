@@ -21,6 +21,8 @@
 #include <vector>
 
 #include "Command.hpp"
+#include "Sentence.hpp"
+#include "../macros.hpp"
 
 #define RDM_CMD_PROCESS_UNKNOWN  false
 #define RDM_CMD_PROCESS_DONE     true

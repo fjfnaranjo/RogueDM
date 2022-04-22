@@ -19,11 +19,13 @@
 
 #include <string>
 
+#include <SDL.h>
 #include <SDL_image.h>
 
 #include "mbtools.hpp"
 #include "translations.hpp"
 #include "../commands/Word.hpp"
+#include "../paths.hpp"
 #include "../strings.hpp"
 
 namespace roguedm_gui {
