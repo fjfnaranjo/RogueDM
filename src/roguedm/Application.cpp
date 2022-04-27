@@ -58,12 +58,12 @@ int Application::parse_arguments(int argc, char* argv[],
 
     if (0 == currentArgument.compare(RDM_STR_USAGE_VERSION)) {
       // --usage
-      std::cout << format_string(RDM_STR_VERSION_STRING, RDM_STR_VERSION_FULL);
+      std::cout << format_string(RDM_STR_VERSION_STRING, RDM_STR_VERSION);
       return RDM_ARGS_EXIT;
 
     } else if (0 == currentArgument.compare(RDM_STR_USAGE_HELP)) {
       // --help
-      std::cout << format_string(RDM_STR_VERSION_STRING, RDM_STR_VERSION_FULL);
+      std::cout << format_string(RDM_STR_VERSION_STRING, RDM_STR_VERSION);
       std::cout << format_string(RDM_STR_USAGE, argv[0]);
       return RDM_ARGS_EXIT;
 

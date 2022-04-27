@@ -25,8 +25,4 @@
 
 #pragma once
 
-#define RDM_STR_VERSION_FULL    "1.0a1.dev9999"
-#define RDM_STR_VERSION_MAJOR   "1"
-#define RDM_STR_VERSION_MINOR   "0"
-#define RDM_STR_VERSION_PRE     "a1"
-#define RDM_STR_VERSION_DEV     "dev9999"
+#define RDM_STR_VERSION "0.1.dev.0"

@@ -25,8 +25,4 @@
 
 #pragma once
 
-#define RDM_STR_VERSION_FULL    "${roguedm_VERSION_MAJOR}.${roguedm_VERSION_MINOR}${roguedm_VERSION_PRE}.${roguedm_VERSION_DEV}"
-#define RDM_STR_VERSION_MAJOR   "${roguedm_VERSION_MAJOR}"
-#define RDM_STR_VERSION_MINOR   "${roguedm_VERSION_MINOR}"
-#define RDM_STR_VERSION_PRE     "${roguedm_VERSION_PRE}"
-#define RDM_STR_VERSION_DEV     "${roguedm_VERSION_DEV}"
+#define RDM_STR_VERSION "${RogueDM_VERSION}"

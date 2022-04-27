@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with RogueDM.  If not, see <http://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.18)
 
+project(RogueDM)
+
+# RogueDM C++ sources
 add_subdirectory(src)

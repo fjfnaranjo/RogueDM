@@ -17,8 +17,7 @@
 
 /**
  * \file paths.hpp
- * \brief File containing the paths used by the application and overridden at
- *        compile time.
+ * \brief File containing the platform dependent paths prefixes.
  */
 
 #pragma once
