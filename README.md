@@ -11,8 +11,8 @@ RogueDM uses CMake's. You can build the project the usual way...
     cmake ..
     make
 
-Building RogueDM requires CMake and the SDL2 lib (with the `image`, `ttf` and
-`net` projects).
+Building RogueDM requires CMake, the SDL2 library (with the `image`, `ttf` and
+`net` projects) and the Lua 5.3 library.
 
 ## Building the docs
 

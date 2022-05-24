@@ -27,12 +27,14 @@ Also, you need a basic C++ building environment with the next libraries:
 * SDL2_image
 * SDL2_net
 * SDL2_ttf
+* lua5.3
 
-We use the [SDL 2](https://www.libsdl.org) library for the graphical interface.
+We use the [SDL 2](https://www.libsdl.org) library for the graphical interface
+and the Lua 5.3 library to allow scripting of the game ruleset.
 
-On Ubuntu you can install all with the next command:
+On Debian 10 you can install all with the next command:
 
-`sudo apt install build-essential cmake libsdl2-dev libsdl2-image-dev libsdl2-net-dev libsdl2-ttf-dev`
+`sudo apt install build-essential cmake libsdl2-dev libsdl2-image-dev libsdl2-net-dev libsdl2-ttf-dev liblua5.3-dev`
 
 ## Actual build
 
