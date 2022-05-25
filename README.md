@@ -6,10 +6,8 @@ A simple networked RPG virtual tabletop.
 
 RogueDM uses CMake's. You can build the project the usual way...
 
-    mkdir build
-    cd build
-    cmake ..
-    make
+    cmake -B build
+    cmake --build build
 
 Building RogueDM requires CMake, the SDL2 library (with the `image`, `ttf` and
 `net` projects) and the Lua 5.3 library.
